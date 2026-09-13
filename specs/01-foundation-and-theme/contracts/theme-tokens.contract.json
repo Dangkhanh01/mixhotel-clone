@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ThemeTokensContract",
+  "description": "Hợp đồng bắt buộc cho file theme.json của mixhotel-theme",
+  "type": "object",
+  "required": ["$schema", "version", "settings"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "integer", "enum": [3] },
+    "settings": {
+      "type": "object",
+      "required": ["color", "typography", "layout"],
+      "properties": {
+        "color": {
+          "type": "object",
+          "required": ["palette"],
+          "properties": {
+            "palette": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["slug", "color", "name"],
+                "properties": {
+                  "slug": { "type": "string" },
+                  "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+                  "name": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "typography": {
+          "type": "object",
+          "required": ["fontFamilies", "fontSizes"],
+          "properties": {
+            "fontFamilies": { "type": "array" },
+            "fontSizes": { "type": "array" }
+          }
+        },
+        "layout": {
+          "type": "object",
+          "required": ["contentSize", "wideSize"],
+          "properties": {
+            "contentSize": { "type": "string" },
+            "wideSize": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

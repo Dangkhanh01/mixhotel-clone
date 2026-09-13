@@ -1,0 +1,75 @@
+# ==============================================================================
+# 1. REFERENCE TOOLS & EXTERNAL CLONES
+# ==============================================================================
+# Thư mục UI clone dùng làm tài liệu tham khảo giao diện
+ui/
+
+# ==============================================================================
+# 2. WORDPRESS ENVIRONMENT & RUNTIME ARTIFACTS
+# ==============================================================================
+# Thư mục uploads (ảnh, tài liệu media dung lượng lớn)
+wp-content/uploads/
+wp-content/blogs.dir/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/backup-db/
+wp-content/backups/
+
+# Logs & Debugging (Tuân thủ AGENTS.md & bảo mật)
+wp-content/debug.log
+*.log
+
+# Cấu hình nhạy cảm / Secrets
+wp-config.php
+wp-config-local.php
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Database dumps
+*.sql
+*.sql.gz
+*.sqlite
+
+# Docker local overrides
+docker-compose.override.yml
+
+# ==============================================================================
+# 3. NODE & FRONTEND BUILD ARTIFACTS
+# ==============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.next/
+dist/
+build/
+.cache/
+
+# ==============================================================================
+# 4. OS & IDE ARTIFACTS
+# ==============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+
+# IDEs
+.idea/
+*.sublime-workspace
+*.sublime-project
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json

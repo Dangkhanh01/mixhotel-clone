@@ -1,0 +1,64 @@
+services:
+  # ==============================================================================
+  # 1. DATABASE CONTAINER (MySQL 8.0)
+  # ==============================================================================
+  database:
+    image: mysql:8.0
+    container_name: store_db
+    restart: always
+    ports:
+      # Mở cổng 3307 ra máy thật để kết nối DBeaver / DataGrip / Navicat
+      # (Tránh đụng cổng 3306 của Laragon / XAMPP)
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_123
+      MYSQL_DATABASE: store_db_demo
+      MYSQL_USER: store_user
+      MYSQL_PASSWORD: store_password_123
+    volumes:
+      - db_store_data:/var/lib/mysql
+
+  # ==============================================================================
+  # 2. WORDPRESS CONTAINER (PHP + Apache + WP Core)
+  # ==============================================================================
+  wordpress:
+    depends_on:
+      - database
+    image: wordpress:latest
+    container_name: store_app
+    restart: always
+    ports:
+      # Mở cổng 8888 ra máy thật để truy cập Web (Tránh đụng cổng 80 của Moodle/Web khác)
+      - "8888:80"
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_USER: store_user
+      WORDPRESS_DB_PASSWORD: store_password_123
+      WORDPRESS_DB_NAME: store_db_demo
+      # Tối ưu cấu hình PHP: Tăng RAM lên 512MB & Timeout 300s để import template không bị lỗi
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_MEMORY_LIMIT', '512M');
+        define('WP_MAX_MEMORY_LIMIT', '512M');
+        @ini_set('max_execution_time', '300');
+    volumes:
+      # Mount thư mục wp-content ra máy thật để code custom theme, plugin
+      - ./wp-content:/var/www/html/wp-content
+
+  # ==============================================================================
+  # 3. PHPMYADMIN (Giao diện web trực quan quản lý Database)
+  # ==============================================================================
+  phpmyadmin:
+    depends_on:
+      - database
+    image: phpmyadmin/phpmyadmin
+    container_name: store_pma
+    restart: always
+    ports:
+      # Mở cổng 8889 ra máy thật để vào phpMyAdmin
+      - "8889:80"
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: root_password_123
+
+volumes:
+  db_store_data:
