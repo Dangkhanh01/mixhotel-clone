@@ -45,7 +45,10 @@ pnpm-debug.log*
 .next/
 dist/
 build/
+out/
 .cache/
+*.tsbuildinfo
+next-env.d.ts
 
 # ==============================================================================
 # 4. OS & IDE ARTIFACTS
