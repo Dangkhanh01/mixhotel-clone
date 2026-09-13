@@ -1,0 +1,97 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-gold: #c5a880;
+  --color-gold-hover: #dfc299;
+  --color-crimson: #c92a2a;
+  --font-heading: var(--font-questrial), sans-serif;
+  --font-body: var(--font-roboto), sans-serif;
+}
+
+:root {
+  --background: #0f0f12;
+  --foreground: #ffffff;
+  --card: #17171c;
+  --card-foreground: #ffffff;
+  --border: #22222a;
+  --gold: #c5a880;
+  --gold-hover: #dfc299;
+  --crimson: #c92a2a;
+}
+
+@layer base {
+  body {
+    background-color: #0f0f12;
+    color: #ffffff;
+    font-family: var(--font-roboto), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    font-family: var(--font-questrial), sans-serif;
+  }
+}
+
+/* Animations from mixhotel.vn */
+@keyframes bigshake_1 {
+  0% { width: 35px; height: 35px; opacity: 1; }
+  50% { width: 45px; height: 45px; }
+  100% { width: 55px; height: 55px; opacity: 0; }
+}
+
+@keyframes bigshake_2 {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+  50% { transform: translate(-50%, -50%) scale(1.18); opacity: 0.4; }
+  100% { transform: translate(-50%, -50%) scale(1.35); opacity: 0; }
+}
+
+@keyframes latdat_2 {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(20deg); }
+  80% { transform: rotate(-20deg); }
+  100% { transform: rotate(-5deg); }
+}
+
+@keyframes pageUpAni {
+  0% { transform: translateY(0px); opacity: 1; }
+  50% { transform: translateY(-8px); opacity: 0.6; }
+  100% { transform: translateY(0px); opacity: 1; }
+}
+
+@keyframes pulseAura {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.08); }
+}
+
+.animate-pulse-aura {
+  animation: pulseAura 7s ease-in-out infinite;
+}
+
+.animate-wobble-phone {
+  animation: latdat_2 0.8s ease-in-out infinite;
+}
+
+.animate-bounce-up {
+  animation: pageUpAni 1.2s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f0f12;
+}
+::-webkit-scrollbar-thumb {
+  background: #2b2b36;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c5a880;
+}
