@@ -1,0 +1,117 @@
+/*
+Theme Name: Mix Boutique Hotel Theme
+Theme URI: https://mixhotel.vn
+Author: Antigravity & Team
+Author URI: https://mixhotel.vn
+Description: Full Site Editing (FSE) Block Theme for Mix Boutique Hotel clone project. Pure vanilla CSS, theme.json design tokens, dark luxury boutique aesthetics.
+Version: 1.0.0
+Requires at least: 6.5
+Tested up to: 6.7
+Requires PHP: 8.1
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: mixhotel-theme
+Tags: full-site-editing, block-patterns, dark-theme, custom-colors, custom-typography
+*/
+
+/* ==========================================================================
+   Base & Reset Styles
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--wp--preset--color--dark-primary, #0f0f12);
+  color: var(--wp--preset--color--text-bright, #ffffff);
+  font-family: var(--wp--preset--font-family--roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6,
+.font-heading {
+  font-family: var(--wp--preset--font-family--questrial, 'Questrial', sans-serif);
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================================================
+   Animations from mixhotel.vn
+   ========================================================================== */
+@keyframes bigshake_1 {
+  0% { width: 35px; height: 35px; opacity: 1; }
+  50% { width: 45px; height: 45px; }
+  100% { width: 55px; height: 55px; opacity: 0; }
+}
+
+@keyframes bigshake_2 {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+  50% { transform: translate(-50%, -50%) scale(1.18); opacity: 0.4; }
+  100% { transform: translate(-50%, -50%) scale(1.35); opacity: 0; }
+}
+
+@keyframes latdat_2 {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(20deg); }
+  80% { transform: rotate(-20deg); }
+  100% { transform: rotate(-20deg); }
+}
+
+@keyframes pageUpAni {
+  0% { transform: translateY(0px); opacity: 1; }
+  50% { transform: translateY(-8px); opacity: 0.6; }
+  100% { transform: translateY(0px); opacity: 1; }
+}
+
+@keyframes pulseAura {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.08); }
+}
+
+.animate-pulse-aura {
+  animation: pulseAura 7s ease-in-out infinite;
+}
+
+.animate-wobble-phone {
+  animation: latdat_2 0.8s ease-in-out infinite;
+}
+
+.animate-bounce-up {
+  animation: pageUpAni 1.2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   Custom Scrollbar
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f0f12;
+}
+::-webkit-scrollbar-thumb {
+  background: #2b2b36;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c5a880;
+}
