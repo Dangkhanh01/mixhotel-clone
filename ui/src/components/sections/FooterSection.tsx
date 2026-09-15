@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Building, Phone, Mail, Globe } from "lucide-react";
 
 function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -39,12 +40,12 @@ export default function FooterSection() {
               THÔNG TIN KHÁCH SẠN
             </h3>
 
-            <div className="flex items-start gap-2.5 text-zinc-300">
+            <div className="flex items-start gap-2.5 text-zinc-200">
               <Building className="w-4 h-4 text-[#c5a880] shrink-0 mt-0.5" />
-              <p className="font-medium">CÔNG TY TNHH THƯƠNG MẠI VÀ DỊCH VỤ LINH KHANH</p>
+              <p className="font-semibold text-[#fff8ec]">CÔNG TY TNHH THƯƠNG MẠI VÀ DỊCH VỤ LINH KHANH</p>
             </div>
 
-            <div className="space-y-1.5 text-zinc-400 pl-6 border-l border-zinc-800">
+            <div className="space-y-1.5 text-zinc-300 pl-6 border-l border-zinc-700">
               <p>GPKD: 0108646173 (Cấp ngày 13/03/2019)</p>
               <p>Nơi cấp: Sở Kế Hoạch Đầu Tư TP. Hà Nội</p>
               <p>CS1: Ngách 29 Ngõ 49 Huỳnh Thúc Kháng, Láng, Hà Nội</p>
@@ -53,21 +54,21 @@ export default function FooterSection() {
             <div className="space-y-2 pt-1">
               <a
                 href="tel:0383104010"
-                className="flex items-center gap-2.5 text-zinc-300 hover:text-[#c5a880] transition-colors"
+                className="flex items-center gap-2.5 text-zinc-200 hover:text-[#ffe2a0] transition-colors"
               >
                 <Phone className="w-4 h-4 text-[#c5a880]" />
-                <span>038 310 4010</span>
+                <span className="font-medium">038 310 4010</span>
               </a>
 
               <a
                 href="mailto:Mixboutique.marketing@gmail.com"
-                className="flex items-center gap-2.5 text-zinc-300 hover:text-[#c5a880] transition-colors"
+                className="flex items-center gap-2.5 text-zinc-200 hover:text-[#ffe2a0] transition-colors"
               >
                 <Mail className="w-4 h-4 text-[#c5a880]" />
                 <span>Mixboutique.marketing@gmail.com</span>
               </a>
 
-              <div className="flex items-center gap-2.5 text-zinc-300">
+              <div className="flex items-center gap-2.5 text-zinc-200">
                 <Globe className="w-4 h-4 text-[#c5a880]" />
                 <span>https://mixhotel.vn/</span>
               </div>
@@ -96,40 +97,40 @@ export default function FooterSection() {
 
           {/* Col 2: Thông tin hỗ trợ & Social */}
           <div className="space-y-4">
-            <h3 className="font-heading font-bold text-white text-sm tracking-wider uppercase">
+            <h3 className="font-heading font-bold text-[#fff8ec] text-sm tracking-wider uppercase">
               THÔNG TIN HỖ TRỢ
             </h3>
 
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 text-[13px]">
               <li>
-                <a href="#top" className="hover:text-[#c5a880] transition-colors">
+                <Link href="/" className="text-zinc-300 hover:text-[#ffe2a0] transition-colors block">
                   Trang chủ
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#why" className="hover:text-[#c5a880] transition-colors">
+                <Link href="/gioi-thieu" className="text-zinc-300 hover:text-[#ffe2a0] transition-colors block">
                   Giới thiệu Mix Boutique
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#concept" className="hover:text-[#c5a880] transition-colors">
+                <Link href="/khach-san-tinh-yeu" className="text-zinc-300 hover:text-[#ffe2a0] transition-colors block">
                   Danh sách phòng concept
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#branches" className="hover:text-[#c5a880] transition-colors">
+                <Link href="/khach-san-tinh-yeu" className="text-zinc-300 hover:text-[#ffe2a0] transition-colors block">
                   Hệ thống 3 chi nhánh
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#prices" className="hover:text-[#c5a880] transition-colors">
+                <Link href="/#prices" className="text-zinc-300 hover:text-[#ffe2a0] transition-colors block">
                   Bảng giá phòng & Thêm giờ
-                </a>
+                </Link>
               </li>
             </ul>
 
             <div className="pt-4 space-y-2">
-              <span className="text-xs font-heading font-bold text-white uppercase tracking-wider block">
+              <span className="text-xs font-heading font-bold text-[#fff8ec] uppercase tracking-wider block">
                 FOLLOW ME
               </span>
               <div className="flex items-center gap-2.5">
@@ -164,38 +165,38 @@ export default function FooterSection() {
 
           {/* Col 3: Chính sách */}
           <div className="space-y-4">
-            <h3 className="font-heading font-bold text-white text-sm tracking-wider uppercase">
+            <h3 className="font-heading font-bold text-[#fff8ec] text-sm tracking-wider uppercase">
               CHÍNH SÁCH
             </h3>
 
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 text-[13px]">
               <li>
-                <a href="#" className="hover:text-[#c5a880] transition-colors">
+                <a href="/chinh-sach-thanh-toan" className="text-zinc-300 hover:text-[#ffe2a0] transition-colors block">
                   Chính sách thanh toán
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-[#c5a880] transition-colors">
+                <a href="/chinh-sach-bao-mat-thong-tin" className="text-zinc-300 hover:text-[#ffe2a0] transition-colors block">
                   Chính sách bảo mật thông tin
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-[#c5a880] transition-colors">
+                <a href="/chinh-sach-dat-tra-phong" className="text-zinc-300 hover:text-[#ffe2a0] transition-colors block">
                   Chính sách đặt trả phòng
                 </a>
               </li>
             </ul>
 
-            <div className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-1.5 mt-4">
-              <span className="font-bold text-white block">Hộ Kinh Doanh Mix Boutique:</span>
-              <p>GPKD Số: 01E8034179</p>
-              <p>Địa điểm: Số 186 phố Hoàng Ngân, P. Trung Hòa, Q. Cầu Giấy, TP. Hà Nội</p>
+            <div className="p-4 rounded-xl bg-zinc-900/90 border border-zinc-700/80 space-y-1.5 mt-4 text-xs text-zinc-300 shadow-md">
+              <span className="font-bold text-[#ffe2a0] block">Hộ Kinh Doanh Mix Boutique:</span>
+              <p className="text-zinc-300">GPKD Số: 01E8034179</p>
+              <p className="text-zinc-300">Địa điểm: Số 186 phố Hoàng Ngân, P. Trung Hòa, Q. Cầu Giấy, TP. Hà Nội</p>
             </div>
           </div>
 
           {/* Col 4: Kết nối Facebook */}
           <div className="space-y-4">
-            <h3 className="font-heading font-bold text-white text-sm tracking-wider uppercase">
+            <h3 className="font-heading font-bold text-[#fff8ec] text-sm tracking-wider uppercase">
               KẾT NỐI MIX BOUTIQUE
             </h3>
 
@@ -216,7 +217,7 @@ export default function FooterSection() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 text-center text-xs text-zinc-500 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="pt-8 text-center text-xs text-zinc-400 flex flex-col md:flex-row items-center justify-between gap-4">
           <p>
             Copyright © 2020 mixhotel.vn. All Rights Reserved.
           </p>
@@ -226,7 +227,7 @@ export default function FooterSection() {
               href="https://fagoagency.vn/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#c5a880] font-semibold hover:underline"
+              className="text-[#ffe2a0] font-semibold hover:underline"
             >
               FAGO AGENCY
             </a>

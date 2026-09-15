@@ -54,7 +54,7 @@ export default function BookingStepsSection() {
                 className="p-8 rounded-2xl bg-[#17171c] border border-[#272733] hover:border-[#c5a880]/50 shadow-xl space-y-5 transition-all duration-300 hover:-translate-y-1 group"
               >
                 <div className="flex items-center justify-between border-b border-zinc-800/80 pb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#c5a880]/15 text-[#c5a880] flex items-center justify-center group-hover:bg-[#c5a880] group-hover:text-black transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-[#c5a880]/15 text-[#c5a880] flex items-center justify-center group-hover:bg-[#c5a880] group-hover:text-[#110d0a] transition-colors">
                     <Icon className="w-6 h-6" />
                   </div>
                   <span className="text-3xl font-heading font-extrabold text-[#c5a880]">

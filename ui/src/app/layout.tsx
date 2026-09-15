@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Questrial, Roboto } from "next/font/google";
 import "./globals.css";
+import "./mixhotel-luxury.css";
 
 const questrial = Questrial({
   weight: "400",

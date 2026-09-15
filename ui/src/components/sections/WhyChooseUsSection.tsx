@@ -57,10 +57,10 @@ export default function WhyChooseUsSection() {
                 className="p-6 md:p-7 rounded-2xl bg-[#1a1a22] border border-[#272733] hover:border-[#c5a880]/50 shadow-xl flex flex-col justify-between space-y-4 group transition-all duration-300 hover:-translate-y-1.5"
               >
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-xl bg-[#c5a880]/15 text-[#c5a880] flex items-center justify-center group-hover:bg-[#c5a880] group-hover:text-black transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-[#c5a880]/15 text-[#c5a880] flex items-center justify-center group-hover:bg-[#c5a880] group-hover:text-[#110d0a] transition-colors">
                     <Icon className="w-6 h-6" />
                   </div>
-                  <span className="text-3xl font-heading font-extrabold text-zinc-700 group-hover:text-[#c5a880]/40 transition-colors">
+                  <span className="text-3xl font-heading font-extrabold text-zinc-500 group-hover:text-[#c5a880]/60 transition-colors">
                     0{item.number}
                   </span>
                 </div>
