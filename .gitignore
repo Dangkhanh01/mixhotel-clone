@@ -49,6 +49,9 @@ out/
 .cache/
 *.tsbuildinfo
 next-env.d.ts
+scratch/
+ui/scratch/
+
 
 # ==============================================================================
 # 4. OS & IDE ARTIFACTS

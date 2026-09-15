@@ -84,7 +84,7 @@ export default function DesktopHeader({ onOpenBooking }: DesktopHeaderProps) {
             >
               <li>
                 <Link
-                  href="/khach-san-tinh-yeu#branch-mix-boutique-premium-hotel"
+                  href="/mix-boutique-premium-hotel"
                   onClick={closeDropdown}
                   className="block px-4 py-2.5 text-[13px] font-bold !text-[#fff8ec] hover:!text-[#ffe2a0] hover:bg-[#c88922]/10 transition-colors font-philosopher tracking-wide uppercase"
                 >
@@ -93,7 +93,7 @@ export default function DesktopHeader({ onOpenBooking }: DesktopHeaderProps) {
               </li>
               <li>
                 <Link
-                  href="/khach-san-tinh-yeu#branch-mix-boutique-hotel-256b-dang-tien-dong"
+                  href="/mix-boutique-hotel-256b-dang-tien-dong"
                   onClick={closeDropdown}
                   className="block px-4 py-2.5 text-[13px] font-bold !text-[#fff8ec] hover:!text-[#ffe2a0] hover:bg-[#c88922]/10 transition-colors font-philosopher tracking-wide uppercase"
                 >
@@ -102,7 +102,7 @@ export default function DesktopHeader({ onOpenBooking }: DesktopHeaderProps) {
               </li>
               <li>
                 <Link
-                  href="/khach-san-tinh-yeu#branch-mix-boutique-hotel-20-phuc-la-ha-dong"
+                  href="/mix-boutique-hotel-20-phuc-la-ha-dong"
                   onClick={closeDropdown}
                   className="block px-4 py-2.5 text-[13px] font-bold !text-[#fff8ec] hover:!text-[#ffe2a0] hover:bg-[#c88922]/10 transition-colors font-philosopher tracking-wide uppercase"
                 >

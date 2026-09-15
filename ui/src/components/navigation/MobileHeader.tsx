@@ -127,7 +127,7 @@ export default function MobileHeader({ onOpenBooking }: MobileHeaderProps) {
                       TẤT CẢ CHI NHÁNH & PHÒNG
                     </Link>
                     <Link
-                      href="/khach-san-tinh-yeu#branch-mix-boutique-premium-hotel"
+                      href="/mix-boutique-premium-hotel"
                       onClick={closeDrawer}
                       style={{ color: '#d4d4d8' }}
                       className="block text-xs font-medium hover:text-[#ffe2a0] uppercase"
@@ -135,7 +135,7 @@ export default function MobileHeader({ onOpenBooking }: MobileHeaderProps) {
                       MIX BOUTIQUE PREMIUM
                     </Link>
                     <Link
-                      href="/khach-san-tinh-yeu#branch-mix-boutique-hotel-256b-dang-tien-dong"
+                      href="/mix-boutique-hotel-256b-dang-tien-dong"
                       onClick={closeDrawer}
                       style={{ color: '#d4d4d8' }}
                       className="block text-xs font-medium hover:text-[#ffe2a0] uppercase"
@@ -143,7 +143,7 @@ export default function MobileHeader({ onOpenBooking }: MobileHeaderProps) {
                       MIX 256B ĐẶNG TIẾN ĐÔNG
                     </Link>
                     <Link
-                      href="/khach-san-tinh-yeu#branch-mix-boutique-hotel-20-phuc-la-ha-dong"
+                      href="/mix-boutique-hotel-20-phuc-la-ha-dong"
                       onClick={closeDrawer}
                       style={{ color: '#d4d4d8' }}
                       className="block text-xs font-medium hover:text-[#ffe2a0] uppercase"
