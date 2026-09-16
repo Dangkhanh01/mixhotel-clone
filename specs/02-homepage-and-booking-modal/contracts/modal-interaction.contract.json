@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ContactModalInteractionContract",
+  "description": "Hợp đồng kỹ thuật khóa cứng cấu trúc, ID, data attributes và events cho Contact Modal (#popupContact_1)",
+  "version": "1.0.0",
+
+  "modal": {
+    "id": "popupContact_1",
+    "wrapperClass": "mix-contact-modal",
+    "activeClass": "is-active",
+    "bodyLockClass": "modal-open",
+    "overlaySelector": ".mix-contact-modal__overlay",
+    "contentSelector": ".mix-contact-modal__content",
+    "closeSelector": ".mix-contact-modal__close",
+    "zIndex": {
+      "overlay": 1000,
+      "content": 1050
+    }
+  },
+
+  "triggerAttributes": {
+    "action": "data-contact-action",
+    "branchId": "data-branch-id",
+    "roomTitle": "data-room-title"
+  },
+
+  "supportedContactTypes": ["phone", "zalo", "messenger", "sms", "booking"],
+
+  "branches": [
+    {
+      "id": "branch-premium",
+      "wpSlug": "mix-boutique-premium-hotel",
+      "name": "Mix Boutique Premium",
+      "address": "Ngách 29 Ngõ 49 Huỳnh Thúc Kháng, Đống Đa, Hà Nội",
+      "phone": "038 310 4010",
+      "phoneTel": "tel:+84383104010",
+      "zaloUrl": "https://zalo.me/+84383104010",
+      "messengerUrl": "https://m.me/602986296805550/",
+      "smsTel": "sms:+84383104010"
+    },
+    {
+      "id": "branch-dangtiendong",
+      "wpSlug": "mix-boutique-hotel-256b-dang-tien-dong",
+      "name": "Mix Boutique Hotel 256B Đặng Tiến Đông",
+      "address": "256B Đặng Tiến Đông, Chợ Dừa, Đống Đa, Hà Nội",
+      "phone": "039 330 7030",
+      "phoneTel": "tel:+84393307030",
+      "zaloUrl": "https://zalo.me/+84393307030",
+      "messengerUrl": "https://m.me/111428390604292/",
+      "smsTel": "sms:+84393307030"
+    },
+    {
+      "id": "branch-phucla",
+      "wpSlug": "mix-boutique-hotel-20-phuc-la-ha-dong",
+      "name": "Mix Boutique Hotel 20 Phúc La Hà Đông",
+      "address": "20 Phúc La, KĐT Xa La, Hà Đông, Hà Nội",
+      "phone": "035 366 0966",
+      "phoneTel": "tel:+84353660966",
+      "zaloUrl": "https://zalo.me/+84353660966",
+      "messengerUrl": "https://m.me/114361207416511",
+      "smsTel": "sms:+84353660966"
+    }
+  ],
+
+  "events": {
+    "open": "mixhotel:modal:open",
+    "close": "mixhotel:modal:close",
+    "branchSelect": "mixhotel:modal:branch-select"
+  },
+
+  "accessibility": {
+    "role": "dialog",
+    "ariaModal": true,
+    "ariaLabelledBy": "mix-modal-title",
+    "trapFocus": true,
+    "closeOnEscape": true,
+    "closeOnOverlayClick": true,
+    "restoreFocusOnClose": true
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HeroBookingFormContract",
+  "description": "Hợp đồng kỹ thuật khóa cứng cấu trúc HTML, field names, validation rules và submit behavior của Hero Booking Form. Contract này được thiết kế sẵn sàng cho Spec 04 (AJAX Backend Integration).",
+  "version": "1.0.0",
+
+  "form": {
+    "id": "hero-booking-form",
+    "wrapperClass": "mix-hero-reserve",
+    "method": "POST",
+    "action": "",
+    "nonceField": {
+      "name": "mixhotel_booking_nonce",
+      "action": "mixhotel_submit_booking"
+    },
+    "honeypotField": {
+      "name": "mixhotel_hp_email",
+      "type": "text",
+      "style": "display:none;position:absolute;left:-9999px;",
+      "tabindex": -1,
+      "autocomplete": "off"
+    }
+  },
+
+  "fields": {
+    "customer_name": {
+      "name": "customer_name",
+      "type": "text",
+      "placeholder": "Họ tên *",
+      "required": true,
+      "maxLength": 100,
+      "sanitize": "sanitize_text_field",
+      "cssClass": "mix-input"
+    },
+    "customer_phone": {
+      "name": "customer_phone",
+      "type": "tel",
+      "placeholder": "Điện thoại *",
+      "required": true,
+      "pattern": "^(0[3|5|7|8|9])+([0-9]{8})$",
+      "patternTitle": "Vui lòng nhập số điện thoại Việt Nam hợp lệ (10 chữ số, bắt đầu 03/05/07/08/09)",
+      "maxLength": 15,
+      "sanitize": "sanitize_text_field",
+      "cssClass": "mix-input"
+    },
+    "branch_id": {
+      "name": "branch_id",
+      "type": "select",
+      "required": true,
+      "cssClass": "mix-input",
+      "options": [
+        {
+          "value": "branch-premium",
+          "label": "CS1: Huỳnh Thúc Kháng (Mix Premium)"
+        },
+        {
+          "value": "branch-dangtiendong",
+          "label": "CS2: 256B Đặng Tiến Đông, Đống Đa"
+        },
+        {
+          "value": "branch-phucla",
+          "label": "CS3: 20 Phúc La, Hà Đông"
+        }
+      ]
+    },
+    "booking_demand": {
+      "name": "booking_demand",
+      "type": "select",
+      "required": false,
+      "cssClass": "mix-input",
+      "options": [
+        { "value": "rest-hourly", "label": "Nghỉ giờ (từ 2h)" },
+        { "value": "overnight", "label": "Nghỉ qua đêm" },
+        { "value": "event-decoration", "label": "Trang trí sinh nhật / kỷ niệm" },
+        { "value": "consult-concept", "label": "Tư vấn concept phù hợp" }
+      ]
+    }
+  },
+
+  "submitButton": {
+    "text": "GỬI YÊU CẦU GIỮ PHÒNG",
+    "cssClass": "mix-btn mix-btn--primary mix-btn--full",
+    "type": "submit"
+  },
+
+  "spec02Behavior": {
+    "description": "Trong Spec 02 (Frontend Only): Form submit sẽ preventDefault, thu thập dữ liệu, mở Contact Modal kênh Zalo với message pre-filled. Không gọi AJAX.",
+    "contactChannel": "zalo",
+    "messageTemplate": "Chào Mix, tôi là {customer_name} ({customer_phone}), muốn đặt phòng tại {branch_label}, gói: {demand_label}"
+  },
+
+  "spec04Behavior": {
+    "description": "Trong Spec 04 (Backend Integration): Form submit sẽ gửi AJAX POST đến wp_ajax_nopriv_submit_booking kèm Nonce. Response JSON success → hiển thị modal xác nhận. Response JSON error → hiển thị thông báo lỗi inline.",
+    "ajaxAction": "submit_booking",
+    "ajaxUrl": "admin-ajax.php"
+  }
+}
