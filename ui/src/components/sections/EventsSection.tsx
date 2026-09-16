@@ -2,11 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
-import { Sparkles, MessageSquare } from "lucide-react";
+import { useModal } from "@/context/ModalContext";
 import type { EventPackage } from "@/types/mixhotel";
 
 interface EventsSectionProps {
-  onOpenConsult: () => void;
+  onOpenConsult?: () => void;
 }
 
 const eventPackages: EventPackage[] = [
@@ -17,20 +17,30 @@ const eventPackages: EventPackage[] = [
 ];
 
 export default function EventsSection({ onOpenConsult }: EventsSectionProps) {
+  const { openBranchSelect } = useModal();
+
+  const handleConsult = () => {
+    if (onOpenConsult) {
+      onOpenConsult();
+    } else {
+      openBranchSelect("zalo");
+    }
+  };
+
   return (
-    <section id="events" className="py-20 md:py-28 bg-[#121216] relative overflow-hidden">
+    <section id="events" className="mixEvents py-20 md:py-28 bg-[#121216] relative overflow-hidden">
       {/* Background radial glow */}
       <div className="absolute top-1/2 right-10 w-[450px] h-[450px] rounded-full bg-[#c92a2a]/10 blur-[140px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+      <div className="container max-w-7xl mx-auto px-4 md:px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Copy & Pricing Panel */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-2">
               <span className="text-xs font-mono uppercase tracking-widest text-[#c5a880] font-semibold">
-                Trang trí sự kiện
+                TRANG TRÍ SỰ KIỆN
               </span>
-              <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-white tracking-tight">
+              <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
                 Thêm bất ngờ cho sinh nhật, kỷ niệm hoặc cầu hôn
               </h2>
               <p className="text-sm md:text-base text-zinc-400 leading-relaxed">
@@ -39,9 +49,9 @@ export default function EventsSection({ onOpenConsult }: EventsSectionProps) {
             </div>
 
             {/* Price Table Card */}
-            <div className="p-6 rounded-2xl bg-[#17171c] border border-[#2b2b36] shadow-xl space-y-4">
+            <div className="mixEventsPanel p-6 rounded-2xl bg-[#17171c] border border-[#2b2b36] shadow-xl space-y-4">
               <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-                <h3 className="font-heading font-bold text-white text-base">Bảng giá trang trí mẫu</h3>
+                <h3 className="font-bold text-white text-base">Bảng giá trang trí mẫu</h3>
                 <span className="text-[11px] text-zinc-400">Giá tham khảo theo set</span>
               </div>
 
@@ -49,7 +59,7 @@ export default function EventsSection({ onOpenConsult }: EventsSectionProps) {
                 {eventPackages.map((pkg, idx) => (
                   <div key={idx} className="pt-3 first:pt-0 flex items-center justify-between gap-4 text-xs md:text-sm">
                     <span className="text-zinc-300 flex items-center gap-2">
-                      <Sparkles className="w-3.5 h-3.5 text-[#c5a880] shrink-0" />
+                      <i className="fa fa-star text-[#c5a880] text-xs shrink-0"></i>
                       {pkg.name}
                     </span>
                     <strong className="text-[#c5a880] font-semibold whitespace-nowrap">
@@ -61,10 +71,11 @@ export default function EventsSection({ onOpenConsult }: EventsSectionProps) {
 
               <div className="pt-2">
                 <button
-                  onClick={onOpenConsult}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#c5a880] to-[#dfc299] text-black font-semibold text-xs tracking-wider uppercase hover:shadow-[0_0_20px_rgba(197,168,128,0.3)] transition-all cursor-pointer flex items-center justify-center gap-2"
+                  type="button"
+                  onClick={handleConsult}
+                  className="callContactLocate w-full py-3 rounded-xl bg-gradient-to-r from-[#c5a880] to-[#dfc299] text-black font-semibold text-xs tracking-wider uppercase hover:shadow-[0_0_20px_rgba(197,168,128,0.3)] transition-all cursor-pointer flex items-center justify-center gap-2 border-none"
                 >
-                  <MessageSquare className="w-3.5 h-3.5 fill-current" />
+                  <i className="fa fa-commenting text-sm"></i>
                   <span>Tư Vấn Set Trang Trí Riêng</span>
                 </button>
               </div>
@@ -73,7 +84,7 @@ export default function EventsSection({ onOpenConsult }: EventsSectionProps) {
 
           {/* Right Column: 4 Asymmetric Real Event Photos */}
           <div className="lg:col-span-7 grid grid-cols-2 gap-4">
-            <div className="relative aspect-[4/3] col-span-2 rounded-2xl overflow-hidden border border-zinc-800 group shadow-lg">
+            <div className="mixEventsPhotoLarge relative aspect-[4/3] col-span-2 rounded-2xl overflow-hidden border border-zinc-800 group shadow-lg">
               <Image
                 src="/images/event-1.jpg"
                 alt="Trang trí phòng Mix Boutique"

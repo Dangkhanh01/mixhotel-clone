@@ -17,8 +17,7 @@ import type { Article } from "@/data/articlesData";
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
 import TableOfContents from "./TableOfContents";
 import ArticleShareButtons from "./ArticleShareButtons";
@@ -33,13 +32,11 @@ export default function ArticleDetailClient({
   article,
   relatedArticles,
 }: ArticleDetailClientProps) {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-[#070503] text-[#fff8ec] selection:bg-[#c88922] selection:text-black">
       {/* Navigation Headers */}
-      <DesktopHeader onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* Main Container */}
       <main className="pt-28 md:pt-32 pb-20">
@@ -219,9 +216,8 @@ export default function ArticleDetailClient({
       </main>
 
       {/* Floating CTA elements */}
-      <DesktopContactBar onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileBottomNav onOpenBooking={() => setIsBookingOpen(true)} />
-      <ContactModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <DesktopContactBar />
+      <MobileActionBar />
 
       {/* Global Footer */}
       <FooterSection />

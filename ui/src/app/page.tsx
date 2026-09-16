@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
 import MobileActionBar from "@/components/floating/MobileActionBar";
-import ContactModal from "@/components/floating/ContactModal";
 
 import HeroSection from "@/components/sections/HeroSection";
 import RealPhotosSection from "@/components/sections/RealPhotosSection";
@@ -21,50 +20,37 @@ import FinalCtaSection from "@/components/sections/FinalCtaSection";
 import FooterSection from "@/components/sections/FooterSection";
 
 export default function Home() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [contactType, setContactType] = useState<"phone" | "zalo" | "messenger" | "sms" | "booking">("zalo");
-  const [activeRoomTitle, setActiveRoomTitle] = useState<string | undefined>(undefined);
-
-  const openContact = (
-    type: "phone" | "zalo" | "messenger" | "sms" | "booking" = "zalo",
-    roomTitle?: string
-  ) => {
-    setContactType(type);
-    setActiveRoomTitle(roomTitle);
-    setModalOpen(true);
-  };
-
   return (
-    <div className="relative min-h-screen bg-[#0f0f12] text-white selection:bg-[#c5a880] selection:text-black font-body">
+    <div className="relative min-h-screen bg-[#0f0f12] text-white selection:bg-[#c5a880] selection:text-black">
       {/* Navigation Headers */}
-      <DesktopHeader onOpenBooking={() => openContact("booking")} />
-      <MobileHeader onOpenBooking={() => openContact("booking")} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* Main Content Sections */}
       <main>
         {/* 1. Hero Banner with Quick Stats & Booking Form */}
-        <HeroSection onOpenContact={(type) => openContact(type)} />
+        <HeroSection />
 
         {/* 2. Real Photos Grid & Featured Room Stage */}
-        <RealPhotosSection onSelectPhoto={(title) => openContact("zalo", `Ảnh concept: ${title}`)} />
+        <RealPhotosSection />
 
         {/* 3. Video Shorts & Channel Showcase */}
-        <VideoSection onOpenZalo={() => openContact("zalo", "Xem video phòng")} />
+        <VideoSection />
 
         {/* 4. Highlighted Concept Rooms with Detailed Features */}
-        <ConceptRoomsSection onAskRoom={(roomName) => openContact("phone", roomName)} />
+        <ConceptRoomsSection />
 
         {/* 5. 3 Hanoi Branches & Direct Location Contacts */}
-        <BranchesSection onSelectBranch={(branch) => openContact("phone", branch.name)} />
+        <BranchesSection />
 
         {/* 6. Why Choose Mix (Core Value Propositions) */}
         <WhyChooseUsSection />
 
         {/* 7. Transparent Pricing Matrix (Superior, Deluxe, VIP) */}
-        <PricingSection onAskTier={(tier) => openContact("zalo", tier)} />
+        <PricingSection />
 
         {/* 8. Romantic Event Setup & Decoration Packages */}
-        <EventsSection onOpenConsult={() => openContact("zalo", "Gói trang trí sự kiện")} />
+        <EventsSection />
 
         {/* 9. 3-Step Simple Booking Flow */}
         <BookingStepsSection />
@@ -73,23 +59,15 @@ export default function Home() {
         <FaqSection />
 
         {/* 11. Final Re-engagement Call-to-Action */}
-        <FinalCtaSection onOpenContact={(type) => openContact(type)} />
+        <FinalCtaSection />
 
         {/* 12. Full Agency-Standard Footer */}
         <FooterSection />
       </main>
 
       {/* Floating & Sticky Contact Controls */}
-      <DesktopContactBar onOpenContact={(type) => openContact(type)} />
-      <MobileActionBar onOpenContact={(type) => openContact(type)} />
-
-      {/* Interactive Branch Selection Modal */}
-      <ContactModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        contactType={contactType}
-        roomTitle={activeRoomTitle}
-      />
+      <DesktopContactBar />
+      <MobileActionBar />
     </div>
   );
 }

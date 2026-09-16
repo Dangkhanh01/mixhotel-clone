@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { useModal } from "@/context/ModalContext";
 
 interface RealPhotosSectionProps {
   onSelectPhoto?: (concept: string) => void;
@@ -37,30 +38,43 @@ const photoTiles = [
 ];
 
 export default function RealPhotosSection({ onSelectPhoto }: RealPhotosSectionProps) {
-  return (
-    <section id="real-photos" className="py-20 md:py-28 bg-[#121216] relative overflow-hidden">
-      {/* Subtle Auras */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#c5a880]/10 blur-[120px] pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-[#c92a2a]/10 blur-[120px] pointer-events-none" />
+  const { openBranchSelect } = useModal();
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+  const handleTileClick = (title: string) => {
+    if (onSelectPhoto) {
+      onSelectPhoto(title);
+    } else {
+      openBranchSelect("zalo");
+    }
+  };
+
+  return (
+    <section id="real-photos" className="mixLuxuryPhotos relative overflow-hidden py-20 bg-[#121216]">
+      {/* Decorative Auras */}
+      <div className="mixLuxuryPhotosAuraOne" />
+      <div className="mixLuxuryPhotosAuraTwo" />
+
+      <div className="container max-w-7xl mx-auto px-4 md:px-6 relative z-10">
         {/* Section Head */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <span className="text-xs font-mono uppercase tracking-widest text-[#c5a880] font-semibold">
-            Ảnh thật phòng thật
-          </span>
-          <h2 className="text-2xl md:text-4xl font-heading font-extrabold text-white tracking-tight">
+        <div className="mixLuxuryPhotosHead text-center max-w-3xl mx-auto mb-14 space-y-3">
+          <div className="mixLuxuryPhotosLabel text-xs uppercase tracking-widest text-[#c5a880] font-semibold">
+            ẢNH THẬT PHÒNG THẬT
+          </div>
+          <h2 className="mixLuxuryPhotosTitle text-2xl md:text-4xl font-bold text-white tracking-tight">
             Xem ảnh thật 100% từng phòng để dễ dàng chọn không gian trước khi đặt
           </h2>
-          <p className="text-sm md:text-base text-zinc-400">
+          <p className="mixLuxuryPhotosDesc text-sm md:text-base text-zinc-400">
             Mỗi hạng phòng đều có ảnh thực tế của bồn tắm, máy chiếu, ghế tình yêu, gương trần và các tiện nghi nổi bật.
           </p>
         </div>
 
         {/* Photo Stage Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="mixLuxuryPhotosStage grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Featured Room */}
-          <div className="lg:col-span-6 relative rounded-2xl overflow-hidden min-h-[380px] lg:min-h-[520px] group border border-zinc-800">
+          <div
+            className="mixLuxuryPhotoMain lg:col-span-6 relative rounded-2xl overflow-hidden min-h-[380px] lg:min-h-[520px] group border border-zinc-800 cursor-pointer"
+            onClick={() => handleTileClick("Featured room")}
+          >
             <Image
               src="/images/photo-stage-featured.webp"
               alt="Ảnh thật phòng VIP Mix Boutique Hotel"
@@ -80,22 +94,22 @@ export default function RealPhotosSection({ onSelectPhoto }: RealPhotosSectionPr
             {/* Caption */}
             <div className="absolute bottom-6 left-6 right-6 space-y-1">
               <span className="text-xs uppercase tracking-widest text-[#c5a880] font-semibold">
-                Ảnh nổi bật
+                ẢNH NỔI BẬT
               </span>
-              <h3 className="text-xl md:text-2xl font-heading font-bold text-white">
+              <h3 className="text-xl md:text-2xl font-bold text-white">
                 Không gian boutique riêng tư, ánh sáng rõ và có gu
               </h3>
             </div>
           </div>
 
           {/* 5-tile Subgrid */}
-          <div className="lg:col-span-6 grid grid-cols-2 gap-4">
+          <div className="mixLuxuryPhotoGrid lg:col-span-6 grid grid-cols-2 gap-4">
             {photoTiles.map((tile) => (
               <div
                 key={tile.title}
-                onClick={() => onSelectPhoto?.(tile.title)}
-                className={`relative rounded-xl overflow-hidden border border-zinc-800/80 group cursor-pointer ${
-                  tile.isLarge ? "col-span-2 h-44 md:h-52" : "h-40 md:h-48"
+                onClick={() => handleTileClick(tile.title)}
+                className={`mixLuxuryPhotoTile relative rounded-xl overflow-hidden border border-zinc-800/80 group cursor-pointer ${
+                  tile.isLarge ? "mixLuxuryPhotoTileLarge col-span-2 h-44 md:h-52" : "h-40 md:h-48"
                 }`}
               >
                 <Image
@@ -107,12 +121,14 @@ export default function RealPhotosSection({ onSelectPhoto }: RealPhotosSectionPr
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                 <div className="absolute bottom-3.5 left-4 right-4">
-                  <span className={`text-[11px] font-bold uppercase tracking-wider block ${
-                    tile.kicker.includes("HOT") ? "text-[#c92a2a]" : "text-[#c5a880]"
-                  }`}>
+                  <span
+                    className={`text-[11px] font-bold uppercase tracking-wider block ${
+                      tile.kicker.includes("HOT") ? "text-[#c92a2a]" : "text-[#c5a880]"
+                    }`}
+                  >
                     {tile.kicker}
                   </span>
-                  <strong className="text-sm md:text-base font-heading font-semibold text-white group-hover:text-[#c5a880] transition-colors">
+                  <strong className="text-sm md:text-base font-semibold text-white group-hover:text-[#c5a880] transition-colors">
                     {tile.title}
                   </strong>
                 </div>

@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Phone, Eye } from "lucide-react";
+import Link from "next/link";
+import { useModal } from "@/context/ModalContext";
 import type { RoomConcept } from "@/types/mixhotel";
 
 interface ConceptRoomsSectionProps {
-  onAskRoom: (roomTitle: string) => void;
+  onAskRoom?: (roomTitle: string) => void;
 }
 
 const conceptRooms: RoomConcept[] = [
@@ -65,6 +66,7 @@ const conceptRooms: RoomConcept[] = [
 ];
 
 export default function ConceptRoomsSection({ onAskRoom }: ConceptRoomsSectionProps) {
+  const { openBranchSelect } = useModal();
   const [selectedImage, setSelectedImage] = useState<{ [key: string]: string }>({
     karma: "/images/room-302-karma.jpg",
     katana: "/images/room-401-katana.jpg",
@@ -76,19 +78,27 @@ export default function ConceptRoomsSection({ onAskRoom }: ConceptRoomsSectionPr
     setSelectedImage((prev) => ({ ...prev, [roomId]: img }));
   };
 
+  const handleAsk = (roomName: string) => {
+    if (onAskRoom) {
+      onAskRoom(roomName);
+    } else {
+      openBranchSelect("phone");
+    }
+  };
+
   return (
-    <section id="concept" className="py-20 md:py-28 bg-[#121216] relative overflow-hidden">
+    <section id="concept" className="mixLuxuryConcept py-20 md:py-28 bg-[#121216] relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute top-1/4 right-0 w-[500px] h-[500px] rounded-full bg-[#c5a880]/10 blur-[150px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-0 w-[500px] h-[500px] rounded-full bg-[#c92a2a]/10 blur-[150px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+      <div className="container max-w-7xl mx-auto px-4 md:px-6 relative z-10">
         {/* Section Head */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <span className="text-xs font-mono uppercase tracking-widest text-[#c5a880] font-semibold">
-            Concept phòng nổi bật
-          </span>
-          <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-white tracking-tight">
+          <div className="text-xs uppercase tracking-widest text-[#c5a880] font-semibold">
+            CONCEPT PHÒNG NỔI BẬT
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
             Lãng mạn và huyền bí
           </h2>
           <p className="text-sm md:text-base text-zinc-400 leading-relaxed">
@@ -97,22 +107,22 @@ export default function ConceptRoomsSection({ onAskRoom }: ConceptRoomsSectionPr
         </div>
 
         {/* Room Articles Stack */}
-        <div className="space-y-14">
+        <div className="mixLuxuryRoomList space-y-14">
           {conceptRooms.map((room, idx) => (
             <article
               key={room.id}
-              className="rounded-2xl bg-[#17171c]/95 border border-[#2b2b36] overflow-hidden shadow-2xl p-6 md:p-8"
+              className="mixLuxuryRoom rounded-2xl bg-[#17171c]/95 border border-[#2b2b36] overflow-hidden shadow-2xl p-6 md:p-8"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 {/* Left Info Column */}
-                <div className={`lg:col-span-6 space-y-5 ${idx % 2 === 1 ? "lg:order-2" : "lg:order-1"}`}>
+                <div className={`mixLuxuryRoomInfo lg:col-span-6 space-y-5 ${idx % 2 === 1 ? "lg:order-2" : "lg:order-1"}`}>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 text-xs text-zinc-400">
                       <span>Concept riêng tư</span>
                       <span>•</span>
                       <strong className="text-[#c5a880] font-semibold">Mix Boutique Hotel</strong>
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-heading font-bold text-white tracking-tight">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
                       {room.name}
                     </h3>
                   </div>
@@ -137,25 +147,26 @@ export default function ConceptRoomsSection({ onAskRoom }: ConceptRoomsSectionPr
                   {/* Actions */}
                   <div className="flex flex-wrap gap-3 pt-2">
                     <button
-                      onClick={() => onAskRoom(room.name)}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#c5a880] to-[#dfc299] text-black font-semibold text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition-all cursor-pointer"
+                      type="button"
+                      onClick={() => handleAsk(room.name)}
+                      className="callContactLocate flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#c5a880] to-[#dfc299] text-black font-semibold text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition-all cursor-pointer border-none"
                     >
-                      <Phone className="w-3.5 h-3.5 fill-current" />
+                      <i className="fa fa-phone"></i>
                       <span>Hỏi phòng {room.name}</span>
                     </button>
 
-                    <button
-                      onClick={() => onAskRoom(room.name)}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-zinc-200 font-semibold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                    <Link
+                      href={`/khach-san-tinh-yeu/${room.id}`}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-zinc-200 font-semibold text-xs uppercase tracking-wider transition-all"
                     >
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Xem ảnh & Tư vấn</span>
-                    </button>
+                      <i className="fa fa-eye"></i>
+                      <span>Xem chi tiết phòng</span>
+                    </Link>
                   </div>
                 </div>
 
                 {/* Right Visual Column */}
-                <div className={`lg:col-span-6 space-y-4 ${idx % 2 === 1 ? "lg:order-1" : "lg:order-2"}`}>
+                <div className={`mixLuxuryRoomVisual lg:col-span-6 space-y-4 ${idx % 2 === 1 ? "lg:order-1" : "lg:order-2"}`}>
                   {/* Main Large Image */}
                   <div className="relative aspect-[16/10] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group">
                     <Image
@@ -180,8 +191,9 @@ export default function ConceptRoomsSection({ onAskRoom }: ConceptRoomsSectionPr
                   {/* Thumbnail Gallery */}
                   <div className="flex gap-3">
                     <button
+                      type="button"
                       onClick={() => handleThumbClick(room.id, room.mainImage)}
-                      className={`relative w-24 h-16 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                      className={`relative w-24 h-16 rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-transparent p-0 ${
                         selectedImage[room.id] === room.mainImage
                           ? "border-[#c5a880] scale-105"
                           : "border-zinc-800 opacity-70 hover:opacity-100"
@@ -193,8 +205,9 @@ export default function ConceptRoomsSection({ onAskRoom }: ConceptRoomsSectionPr
                     {room.thumbnails.map((thumb, tIdx) => (
                       <button
                         key={tIdx}
+                        type="button"
                         onClick={() => handleThumbClick(room.id, thumb)}
-                        className={`relative w-24 h-16 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                        className={`relative w-24 h-16 rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-transparent p-0 ${
                           selectedImage[room.id] === thumb
                             ? "border-[#c5a880] scale-105"
                             : "border-zinc-800 opacity-70 hover:opacity-100"

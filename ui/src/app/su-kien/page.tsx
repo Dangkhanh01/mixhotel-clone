@@ -7,12 +7,12 @@ import { Sparkles, Heart, CheckCircle2, Phone, Calendar, Wine, Gift } from "luci
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
+import { useModal } from "@/context/ModalContext";
 
 export default function SuKienPage() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const { openBranchSelect } = useModal();
 
   const packages = [
     {
@@ -80,8 +80,8 @@ export default function SuKienPage() {
 
   return (
     <div className="min-h-screen bg-[#070503] text-[#fff8ec] selection:bg-[#c88922] selection:text-black">
-      <DesktopHeader onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* Breadcrumbs */}
       <div className="pt-24 pb-4 border-b border-[#c88922]/15 bg-[#0f0b08]">
@@ -157,7 +157,8 @@ export default function SuKienPage() {
 
               <div className="p-6 md:p-8 pt-0">
                 <button
-                  onClick={() => setIsBookingOpen(true)}
+                  type="button"
+                  onClick={() => openBranchSelect("zalo")}
                   className="w-full py-3 rounded-full bg-gradient-to-r from-[#c88922] via-[#ffe2a0] to-[#d9a83a] text-[#1a0f05] font-philosopher font-bold text-sm tracking-wider uppercase shadow-lg hover:scale-102 transition-transform cursor-pointer"
                 >
                   Đặt Gói Trang Trí Này
@@ -187,9 +188,8 @@ export default function SuKienPage() {
       </main>
 
       <FooterSection />
-      <DesktopContactBar onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileBottomNav onOpenBooking={() => setIsBookingOpen(true)} />
-      <ContactModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <DesktopContactBar />
+      <MobileActionBar />
     </div>
   );
 }

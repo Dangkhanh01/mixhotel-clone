@@ -6,15 +6,13 @@ import Link from "next/link";
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
 import { GALLERY_ITEMS, GALLERY_BRANCH_TABS } from "@/data/galleryData";
 
 const ITEMS_PER_PAGE = 12;
 
 export default function GalleryPage() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [activeBranch, setActiveBranch] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -45,8 +43,8 @@ export default function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-[#0c080a] text-[#fff8ec]">
-      <DesktopHeader onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       <main className="mb-md-5 pb-md-5 galerryMix pt-24 md:pt-32">
         <article className="secMainContent">
@@ -189,8 +187,7 @@ export default function GalleryPage() {
 
       <FooterSection />
       <DesktopContactBar />
-      <MobileBottomNav onOpenBooking={() => setIsBookingOpen(true)} />
-      <ContactModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <MobileActionBar />
     </div>
   );
 }

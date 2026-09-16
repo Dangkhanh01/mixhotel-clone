@@ -1,22 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { CalendarClock, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
 
 export default function ChinhSachDatTraPhongPage() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-[#070503] text-[#fff8ec] selection:bg-[#c88922] selection:text-black">
-      <DesktopHeader onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* Breadcrumbs */}
       <div className="pt-24 pb-4 border-b border-[#c88922]/15 bg-[#0f0b08]">
@@ -48,7 +44,7 @@ export default function ChinhSachDatTraPhongPage() {
           {/* Section 1 */}
           <div>
             <h2 className="text-xl font-bold font-philosopher text-[#ffe2a0] mb-3 flex items-center gap-2">
-              <CalendarClock className="w-5 h-5 text-[#c88922]" />
+              <i className="fa fa-calendar-check-o text-[#c88922]" />
               <span>1. Quy định về đặt phòng & Giữ phòng</span>
             </h2>
             <ul className="space-y-2 text-sm pl-4 list-disc marker:text-[#c88922]">
@@ -67,7 +63,7 @@ export default function ChinhSachDatTraPhongPage() {
           {/* Section 2 */}
           <div>
             <h2 className="text-xl font-bold font-philosopher text-[#ffe2a0] mb-3 flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-[#c88922]" />
+              <i className="fa fa-clock-o text-[#c88922]" />
               <span>2. Thời gian Nhận phòng & Trả phòng</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-3 text-sm">
@@ -85,7 +81,7 @@ export default function ChinhSachDatTraPhongPage() {
           {/* Section 3 */}
           <div>
             <h2 className="text-xl font-bold font-philosopher text-[#ffe2a0] mb-3 flex items-center gap-2">
-              <RefreshCw className="w-5 h-5 text-[#c88922]" />
+              <i className="fa fa-refresh text-[#c88922]" />
               <span>3. Thay đổi lịch & Hủy đặt phòng</span>
             </h2>
             <p className="text-sm leading-relaxed">
@@ -95,7 +91,7 @@ export default function ChinhSachDatTraPhongPage() {
 
           {/* Section 4 */}
           <div className="p-5 rounded-2xl bg-[#c88922]/10 border border-[#c88922]/30 flex items-start gap-3 text-sm text-zinc-300">
-            <AlertCircle className="w-6 h-6 text-[#ffe2a0] shrink-0 mt-0.5" />
+            <i className="fa fa-exclamation-triangle text-[#ffe2a0] text-lg shrink-0 mt-0.5" />
             <div>
               <strong className="block text-[#ffe2a0] font-bold mb-1">Trường hợp bất khả kháng:</strong>
               Nếu phát sinh sự cố kỹ thuật về thiết bị (máy lạnh, bồn Jacuzzi) trong phòng, Mix Hotel sẽ lập tức nâng cấp miễn phí cho quý khách lên hạng phòng cao hơn hoặc hoàn trả 100% chi phí.
@@ -105,9 +101,8 @@ export default function ChinhSachDatTraPhongPage() {
       </main>
 
       <FooterSection />
-      <DesktopContactBar onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileBottomNav onOpenBooking={() => setIsBookingOpen(true)} />
-      <ContactModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <DesktopContactBar />
+      <MobileActionBar />
     </div>
   );
 }

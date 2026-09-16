@@ -6,9 +6,9 @@ import Link from "next/link";
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
+import { useModal } from "@/context/ModalContext";
 import { RoomDetail } from "@/data/roomsDetailData";
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function RoomDetailClient({ room }: Props) {
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const { openConnectConfirm } = useModal();
   const [activeImage, setActiveImage] = useState<string>(room.heroImage);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
@@ -43,8 +43,8 @@ export default function RoomDetailClient({ room }: Props) {
 
   return (
     <div className="min-h-screen bg-[#0c080a] text-[#fff8ec]">
-      <DesktopHeader onOpenBooking={() => setIsBookingModalOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingModalOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* 1. MIX DETAIL HERO */}
       <section className="mixDetailHero relative pt-24 md:pt-32 pb-16 px-4">
@@ -98,22 +98,22 @@ export default function RoomDetailClient({ room }: Props) {
                   <i className="fa fa-calendar-check-o" />
                   Giữ phòng nhanh
                 </button>
-                <a
-                  href={room.branchZalo}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-6 py-3 bg-blue-600/20 border border-blue-500/40 text-blue-200 font-semibold rounded-xl text-sm md:text-base hover:bg-blue-600/30 transition-all flex items-center gap-2"
+                <button
+                  type="button"
+                  onClick={() => openConnectConfirm("Chat Zalo", room.branchZalo)}
+                  className="callContactLocate px-6 py-3 bg-blue-600/20 border border-blue-500/40 text-blue-200 font-semibold rounded-xl text-sm md:text-base hover:bg-blue-600/30 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <i className="fa fa-comment" />
                   Nhắn Zalo tư vấn
-                </a>
-                <a
-                  href={`tel:${room.branchPhone.replace(/\s+/g, "")}`}
-                  className="px-5 py-3 bg-white/5 border border-white/15 text-white/90 font-medium rounded-xl text-sm md:text-base hover:bg-white/10 transition-all flex items-center gap-2"
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openConnectConfirm("Gọi điện", `tel:${room.branchPhone.replace(/\s+/g, "")}`)}
+                  className="contactCallPopUp px-5 py-3 bg-white/5 border border-white/15 text-white/90 font-medium rounded-xl text-sm md:text-base hover:bg-white/10 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <i className="fa fa-phone" />
-                  Hotline
-                </a>
+                  Hotline {room.branchPhone}
+                </button>
               </div>
 
               {/* Service Badges */}
@@ -545,22 +545,22 @@ export default function RoomDetailClient({ room }: Props) {
             Liên hệ ngay với Mix Boutique Hotel tại {room.branchName} để được hỗ trợ giữ phòng {room.name} nhanh chóng và bảo mật nhất.
           </p>
           <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href={room.branchZalo}
-              target="_blank"
-              rel="noreferrer"
-              className="px-6 py-3 bg-[#c88922] text-black font-bold rounded-xl text-sm md:text-base hover:brightness-110 transition-all flex items-center gap-2"
+            <button
+              type="button"
+              onClick={() => openConnectConfirm("Chat Zalo", room.branchZalo)}
+              className="callContactLocate px-6 py-3 bg-[#c88922] text-black font-bold rounded-xl text-sm md:text-base hover:brightness-110 transition-all flex items-center gap-2 cursor-pointer border-none"
             >
               <i className="fa fa-comment" />
               Chat Zalo Ngay
-            </a>
-            <a
-              href={`tel:${room.branchPhone.replace(/\s+/g, "")}`}
-              className="px-6 py-3 bg-white/10 border border-white/20 text-white font-semibold rounded-xl text-sm md:text-base hover:bg-white/15 transition-all flex items-center gap-2"
+            </button>
+            <button
+              type="button"
+              onClick={() => openConnectConfirm("Gọi điện", `tel:${room.branchPhone.replace(/\s+/g, "")}`)}
+              className="contactCallPopUp px-6 py-3 bg-white/10 border border-white/20 text-white font-semibold rounded-xl text-sm md:text-base hover:bg-white/15 transition-all flex items-center gap-2 cursor-pointer"
             >
               <i className="fa fa-phone" />
               Gọi Hotline {room.branchPhone}
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -583,8 +583,7 @@ export default function RoomDetailClient({ room }: Props) {
 
       <FooterSection />
       <DesktopContactBar />
-      <MobileBottomNav onOpenBooking={() => setIsBookingModalOpen(true)} />
-      <ContactModal isOpen={isBookingModalOpen} onClose={() => setIsBookingModalOpen(false)} />
+      <MobileActionBar />
     </div>
   );
 }

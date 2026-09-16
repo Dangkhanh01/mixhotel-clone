@@ -1,651 +1,1046 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
-import { RoomItem } from "@/data/branchesData";
-
-export interface BranchConfig {
-  slug: string;
-  name: string;
-  badge: string;
-  area: string;
-  address: string;
-  phone: string;
-  zalo: string;
-  heroImage: string;
-  heroDesc: string;
-  rooms: RoomItem[];
-  pricing: {
-    superior: { hourly: string; extraHour: string; overnight: string; fullDay: string };
-    deluxe: { hourly: string; extraHour: string; overnight: string; fullDay: string };
-    vip: { hourly: string; extraHour: string; overnight: string; fullDay: string };
-  };
-  introHtml: string;
-  faqs: { question: string; answer: string }[];
-}
+import { useModal } from "@/context/ModalContext";
+import { BranchFullConfig } from "@/data/branchFullData";
 
 interface Props {
-  branch: BranchConfig;
+  branch: BranchFullConfig;
 }
 
 export default function BranchDetailTemplate({ branch }: Props) {
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(branch.rooms[0]?.name || "");
+  const { openConnectConfirm } = useModal();
+  const [selectedRoomName, setSelectedRoomName] = useState(branch.rooms[0]?.title || "");
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    date: new Date().toISOString().split("T")[0],
-    time: "14:00",
-    demand: "Theo giờ (2 giờ đầu)",
-    note: "",
-  });
+  const [highlightBooking, setHighlightBooking] = useState(false);
 
-  const handleOpenRoomBooking = (roomName: string) => {
-    setSelectedRoom(roomName);
+  // Form states
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [time, setTime] = useState("14:00");
+  const [demand, setDemand] = useState("Theo giờ (2 giờ đầu)");
+  const [note, setNote] = useState("");
+
+  const handleBookingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormSubmitted(true);
+    setTimeout(() => setFormSubmitted(false), 5000);
+  };
+
+  const scrollToBooking = (roomName?: string) => {
+    if (roomName) setSelectedRoomName(roomName);
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", "#form-lien-he");
+    }
     const el = document.getElementById("form-lien-he");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
+      setHighlightBooking(true);
+      setTimeout(() => setHighlightBooking(false), 2500);
     }
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 6000);
-  };
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#form-lien-he") {
+      const el = document.getElementById("form-lien-he");
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+          setHighlightBooking(true);
+          setTimeout(() => setHighlightBooking(false), 2500);
+        }, 300);
+      }
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0c080a] text-[#fff8ec]">
-      <DesktopHeader onOpenBooking={() => setIsBookingModalOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingModalOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* 1. MIX BOUTIQUE HERO */}
-      <section className="mixBoutiqueHero relative pt-24 md:pt-32 pb-16 px-4">
-        <div className="absolute inset-0 z-0 overflow-hidden">
+      <section className="mixBoutiqueHero">
+        <div className="mixBoutiqueHeroBg">
           <Image
-            src={branch.heroImage}
+            src={branch.hero.bgImage || "/tassets/images/banner-home.jpg"}
             alt={branch.name}
             fill
             priority
-            className="object-cover opacity-30 filter blur-xs scale-105"
+            className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0c080a] via-[#0c080a]/80 to-[#0c080a]/40" />
         </div>
-
-        <div className="relative z-10 max-w-6xl mx-auto">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs md:text-sm text-[#c88922] mb-4">
-            <Link href="/" className="hover:underline">Trang chủ</Link>
-            <span>/</span>
-            <Link href="/khach-san-tinh-yeu" className="hover:underline">Khách sạn tình yêu</Link>
-            <span>/</span>
-            <span className="text-[#eee4d3]">{branch.name}</span>
-          </nav>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-4">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="px-3 py-1 bg-[#c88922]/20 border border-[#c88922]/50 text-[#ffe2a0] text-xs font-bold rounded-full uppercase tracking-wider">
-                  {branch.badge}
-                </span>
-                <span className="px-3 py-1 bg-white/10 text-white/90 text-xs font-medium rounded-full">
-                  <i className="fa fa-map-marker text-[#c88922] mr-1.5" />
-                  {branch.area}
-                </span>
+        <div className="mixBoutiqueHeroOverlay" />
+        <div className="mixBoutiqueHeroGlow" />
+        <div className="container">
+          <div className="mixBoutiqueHeroGrid">
+            <div className="mixBoutiqueHeroContent">
+              <div className="mixBoutiqueHeroKicker">
+                <span />
+                <div>{branch.hero.kicker}</div>
               </div>
 
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold font-philosopher text-[#ffe2a0] leading-tight">
-                {branch.name}
+              <h1 className="mixBoutiqueHeroTitle">
+                {branch.hero.titleParts.map((part, idx) => (
+                  <React.Fragment key={idx}>
+                    <span>{part}</span>
+                    {idx < branch.hero.titleParts.length - 1 && <br />}
+                  </React.Fragment>
+                ))}
               </h1>
 
-              <div className="flex items-center gap-2 text-sm text-[#eee4d3]">
-                <i className="fa fa-map-marker text-[#c88922]" />
-                <span>{branch.address}</span>
-              </div>
+              <div className="mixBoutiqueHeroDesc">{branch.hero.desc}</div>
 
-              <p className="text-sm md:text-base text-[#eee4d3] leading-relaxed max-w-xl">
-                {branch.heroDesc}
-              </p>
-
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <a
-                  href="#rooms"
-                  className="px-6 py-3 bg-gradient-to-r from-[#c88922] to-[#e5a73e] text-black font-bold rounded-xl text-sm md:text-base shadow-lg hover:brightness-110 transition-all cursor-pointer flex items-center gap-2"
+              <div className="mixBoutiqueHeroActions">
+                <button
+                  type="button"
+                  onClick={() => openConnectConfirm("Chat Zalo", branch.zalo)}
+                  className="mixBoutiqueHeroBtn mixBoutiqueHeroBtnPrimary cursor-pointer"
                 >
-                  <i className="fa fa-bed" />
-                  Khám phá {branch.rooms.length} phòng
-                </a>
-                <a
-                  href={branch.zalo}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-6 py-3 bg-blue-600/20 border border-blue-500/40 text-blue-200 font-semibold rounded-xl text-sm md:text-base hover:bg-blue-600/30 transition-all flex items-center gap-2"
+                  <span className="mixBoutiqueHeroBtnIcon">◌</span>
+                  <span>Nhắn Zalo tư vấn</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    openConnectConfirm("Gọi điện", `tel:${branch.phone.replace(/\s+/g, "")}`)
+                  }
+                  className="mixBoutiqueHeroBtn mixBoutiqueHeroBtnOutline cursor-pointer"
                 >
-                  <i className="fa fa-comment" />
-                  Nhắn Zalo tư vấn
-                </a>
-                <a
-                  href={`tel:${branch.phone.replace(/\s+/g, "")}`}
-                  className="px-5 py-3 bg-white/5 border border-white/15 text-white/90 font-medium rounded-xl text-sm md:text-base hover:bg-white/10 transition-all flex items-center gap-2"
-                >
-                  <i className="fa fa-phone" />
-                  Hotline
+                  <span className="mixBoutiqueHeroBtnIcon">☎</span>
+                  <span>Gọi điện</span>
+                </button>
+                <a href="#danh-sach-phong" className="mixBoutiqueHeroBtn mixBoutiqueHeroBtnOutline cursor-pointer">
+                  <span className="mixBoutiqueHeroBtnIcon">▤</span>
+                  <span>Xem phòng</span>
                 </a>
               </div>
 
-              {/* 3 Core Commitments */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-white/10">
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5">
-                  <strong className="block text-xs md:text-sm text-[#ffe2a0] mb-1">
-                    <i className="fa fa-shield text-[#c88922] mr-1.5" />
-                    Bảo Mật Tuyệt Đối
-                  </strong>
-                  <span className="text-[11px] text-[#c5b8a5]">Riêng tư, kín đáo, không lo lộ thông tin.</span>
-                </div>
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5">
-                  <strong className="block text-xs md:text-sm text-[#ffe2a0] mb-1">
-                    <i className="fa fa-bath text-[#c88922] mr-1.5" />
-                    Concept Đỉnh Cao
-                  </strong>
-                  <span className="text-[11px] text-[#c5b8a5]">Bồn tắm sục, máy chiếu, ghế Tantra, cosplay.</span>
-                </div>
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5">
-                  <strong className="block text-xs md:text-sm text-[#ffe2a0] mb-1">
-                    <i className="fa fa-credit-card text-[#c88922] mr-1.5" />
-                    Linh Hoạt Tiện Lợi
-                  </strong>
-                  <span className="text-[11px] text-[#c5b8a5]">Thanh toán tiền mặt hoặc chuyển khoản kín.</span>
-                </div>
+              <div className="mixBoutiqueHeroStats">
+                {branch.hero.stats.map((st, sIdx) => (
+                  <div key={sIdx} className="mixBoutiqueHeroStat">
+                    <strong>{st.value}</strong>
+                    <span>{st.label}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Branch Hero Visual Card */}
-            <div className="lg:col-span-5">
-              <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-2 border-[#c88922]/40 shadow-2xl">
-                <Image
-                  src={branch.heroImage}
-                  alt={branch.name}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6">
-                  <div>
-                    <span className="text-xs text-[#c88922] font-semibold uppercase tracking-wider block">
-                      Chi nhánh trung tâm
-                    </span>
-                    <strong className="text-lg text-[#ffe2a0] font-philosopher">
-                      {branch.name}
-                    </strong>
-                    <p className="text-xs text-white/80 mt-1">{branch.address}</p>
+            <div className="mixBoutiqueHeroCar">
+              <div className="mixBoutiqueHeroPrice">{branch.hero.cardPrice}</div>
+              <div className="mixBoutiqueHeroCardTitle">{branch.hero.cardTitle}</div>
+              <div className="mixBoutiqueHeroCardText">{branch.hero.cardAddress}</div>
+              <div className="mixBoutiqueHeroList">
+                {branch.hero.cardItems.map((item, iIdx) => (
+                  <div key={iIdx} className="mixBoutiqueHeroListItem">
+                    <span>✦</span>
+                    <p>{item}</p>
                   </div>
-                </div>
+                ))}
+              </div>
+              <div className="mixBoutiqueHeroCardLine" />
+              <div className="mixBoutiqueHeroMini">
+                <span>Tư vấn nhanh</span>
+                <strong>24/7</strong>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. ROOM SHOWCASE GRID */}
-      <section id="rooms" className="mixRoomShowcase py-16 px-4 bg-[#110d0a] border-y border-[#c88922]/20">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="text-xs uppercase tracking-widest text-[#c88922] font-semibold">
-              Danh Sách Phòng Concept
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-philosopher text-[#ffe2a0] mt-1">
-              Tất Cả {branch.rooms.length} Phòng Tại {branch.name}
-            </h2>
-            <p className="text-sm text-[#c5b8a5] mt-2">
-              Khám phá không gian độc bản, kiểm tra hình ảnh thực tế và đặt phòng trực tiếp.
-            </p>
+      {/* 2. MIX ROOM SHOWCASE */}
+      <section className="mixRoomShowcase" id="rooms">
+        <div className="mixRoomShowcaseAura" />
+        <div className="container">
+          <div className="mixRoomShowcaseHead">
+            <div className="mixRoomShowcaseKicker">
+              <span />
+              <div>{branch.showcase.kicker}</div>
+            </div>
+            <div className="mixRoomShowcaseTitle">
+              <div>{branch.showcase.title1}</div>
+              <br />
+              <span>{branch.showcase.title2}</span>
+            </div>
+            <div className="mixRoomShowcaseDesc">{branch.showcase.desc}</div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {branch.rooms.map((room, rIdx) => (
-              <div
-                key={rIdx}
-                className="rounded-2xl overflow-hidden bg-[#140e0a] border border-[#c88922]/25 hover:border-[#c88922]/60 transition-all flex flex-col justify-between group shadow-xl"
-              >
-                <div>
-                  <Link
-                    href={room.link}
-                    className="block relative w-full h-52 overflow-hidden"
-                    title={room.name}
-                  >
-                    <Image
-                      src={room.image}
-                      alt={room.name}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-sm border border-[#c88922]/40 text-[#ffe2a0] text-xs font-semibold px-2.5 py-1 rounded-full">
-                      {room.price}
-                    </div>
-                  </Link>
-
-                  <div className="p-5">
-                    <Link
-                      href={room.link}
-                      className="text-lg font-bold font-philosopher text-[#ffe2a0] hover:text-white transition-colors block mb-2"
-                      title={room.name}
-                    >
-                      {room.name}
-                    </Link>
-                    <p className="text-xs text-[#c5b8a5] line-clamp-3 leading-relaxed mb-4">
-                      {room.desc}
-                    </p>
+          {/* Featured Room Panel (if present) */}
+          {branch.showcase.featuredRoom && (
+            <div className="mixRoomShowcasePanel">
+              <div className="mixRoomShowcaseMedia">
+                <div className="mixRoomShowcaseFrame relative aspect-[16/10]">
+                  <Image
+                    src={branch.showcase.featuredRoom.mediaImage}
+                    alt={branch.showcase.featuredRoom.roomName}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="mixRoomShowcaseMediaShade" />
+                  <div className="mixRoomShowcaseMediaBadge">
+                    <span>{branch.showcase.featuredRoom.badgeTag}</span>
+                    <strong>{branch.showcase.featuredRoom.badgeName}</strong>
                   </div>
                 </div>
+              </div>
 
-                <div className="p-5 pt-0 flex items-center gap-2 border-t border-white/5">
-                  <Link
-                    href={room.link}
-                    className="flex-1 py-2.5 px-3 bg-[#c88922]/15 hover:bg-[#c88922]/30 border border-[#c88922]/40 text-[#ffe2a0] text-xs font-bold rounded-xl text-center transition-all flex items-center justify-center gap-1.5"
-                  >
-                    <i className="fa fa-eye" />
-                    Xem chi tiết
-                  </Link>
+              <div className="mixRoomShowcaseContent">
+                <div className="mixRoomShowcaseContentTop">
+                  <div className="mixRoomShowcaseTag">{branch.showcase.featuredRoom.tag}</div>
+                  <div className="mixRoomShowcasePrice">{branch.showcase.featuredRoom.price}</div>
+                </div>
+                <div className="mixRoomShowcaseRoomName">
+                  {branch.showcase.featuredRoom.roomName}
+                </div>
+                <div className="mixRoomShowcaseMeta">{branch.showcase.featuredRoom.meta}</div>
+                <div className="mixRoomShowcaseText">{branch.showcase.featuredRoom.text}</div>
+
+                <div className="mixRoomShowcaseBenefits">
+                  {branch.showcase.featuredRoom.benefits.map((bn, bIdx) => (
+                    <div key={bIdx} className="mixRoomShowcaseBenefit">
+                      <div className="mixRoomShowcaseBenefitIcon">
+                        <Image
+                          src={bn.icon}
+                          alt={bn.title}
+                          width={28}
+                          height={28}
+                          className="object-contain"
+                        />
+                      </div>
+                      <div className="mixRoomShowcaseBenefitInfo">
+                        <strong>{bn.title}</strong>
+                        <span>{bn.subtitle}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mixRoomShowcaseActions">
                   <button
                     type="button"
-                    onClick={() => handleOpenRoomBooking(room.name)}
-                    className="flex-1 py-2.5 px-3 bg-gradient-to-r from-[#c88922] to-[#e5a73e] text-black text-xs font-bold rounded-xl text-center hover:brightness-110 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                    onClick={() =>
+                      openConnectConfirm(
+                        `ĐẶT PHÒNG ${branch.showcase.featuredRoom?.roomName.toUpperCase()}`,
+                        branch.zalo
+                      )
+                    }
+                    className="mixRoomShowcaseBtn mixRoomShowcaseBtnMain cursor-pointer"
                   >
-                    <i className="fa fa-calendar-check-o" />
-                    Giữ phòng
+                    <span>◌</span>
+                    <em>Liên hệ</em>
                   </button>
+                  <Link
+                    href={branch.showcase.featuredRoom.detailLink}
+                    className="mixRoomShowcaseBtn mixRoomShowcaseBtnLine"
+                  >
+                    <span>▣</span>
+                    <em>Chi tiết</em>
+                  </Link>
+                  <a
+                    href="#form-lien-he"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToBooking(branch.showcase.featuredRoom?.roomName);
+                    }}
+                    className="mixRoomShowcaseBtn mixRoomShowcaseBtnGhost cursor-pointer"
+                  >
+                    <span>✧</span>
+                    <em>Giữ phòng</em>
+                  </a>
                 </div>
+              </div>
+            </div>
+          )}
+
+          <div className="mixRoomShowcaseMini">
+            {branch.showcase.miniItems.map((item, mIdx) => (
+              <div key={mIdx} className="mixRoomShowcaseMiniItem">
+                <span>{item.num}</span>
+                <p>{item.text}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 3. BRANCH PRICING TABLE */}
-      <section className="mixPricePremium py-16 px-4 bg-[#0c080a]">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="text-xs uppercase tracking-widest text-[#c88922] font-semibold">
-              Bảng Giá Cơ Sở
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-philosopher text-[#ffe2a0] mt-1">
-              Báo Giá Tại {branch.name}
+      {/* 3. VIDEO PREVIEW (if branch has video data) */}
+      {branch.video && (
+        <section className="mixVideoPremium" id="video-phong">
+          <div className="mixVideoPremiumDecor" />
+          <div className="container">
+            <div className="mixVideoPremiumBox">
+              <div className="mixVideoPremiumHead">
+                <div className="mixVideoPremiumHeadText">
+                  <div className="mixVideoPremiumKicker">
+                    <span />
+                    <em>{branch.video.kicker}</em>
+                  </div>
+                  <div className="mixVideoPremiumTitle">
+                    <span>{branch.video.titleLines[0]}</span>
+                    <br />
+                    <span>{branch.video.titleLines[1]}</span>
+                    <br />
+                    <span>{branch.video.titleLines[2]}</span>
+                  </div>
+                  <div className="mixVideoPremiumDesc">
+                    <span>{branch.video.desc}</span>
+                  </div>
+                </div>
+                <a
+                  className="mixVideoPremiumChannel"
+                  href={branch.video.channelUrl}
+                  rel="nofollow noopener"
+                  target="_blank"
+                >
+                  Xem kênh Mix
+                </a>
+              </div>
+
+              <div className="mixVideoPremiumGrid">
+                {branch.video.cards.map((card, cIdx) => (
+                  <div key={cIdx} className="mixVideoPremiumCard">
+                    <a
+                      href={`https://www.youtube.com/watch?v=${card.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mixVideoPremiumFrame js-mix-video-frame block relative aspect-video"
+                    >
+                      <Image
+                        src={card.thumb}
+                        alt={card.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="mixVideoPremiumShade" />
+                      <button aria-label="Phát video" className="mixVideoPremiumPlay" type="button">
+                        <i className="fa fa-play" />
+                      </button>
+                      <div className="mixVideoPremiumTag">{card.tag}</div>
+                    </a>
+                    <div className="mixVideoPremiumInfo">
+                      <div className="mixVideoPremiumInfoText">
+                        <div className="mixVideoPremiumName">{card.title}</div>
+                        <div className="mixVideoPremiumNote">{card.note}</div>
+                      </div>
+                      <a
+                        className="mixVideoPremiumYoutube"
+                        href={`https://www.youtube.com/watch?v=${card.id}`}
+                        rel="nofollow noopener"
+                        target="_blank"
+                      >
+                        YouTube
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mixVideoPremiumBottom">
+                <div className="mixVideoPremiumItem">
+                  <span>01</span>
+                  <p>Xem ánh sáng thật của từng phòng</p>
+                </div>
+                <div className="mixVideoPremiumItem">
+                  <span>02</span>
+                  <p>Cảm nhận layout, bồn tắm, máy chiếu rõ hơn ảnh</p>
+                </div>
+                <div className="mixVideoPremiumItem">
+                  <span>03</span>
+                  <p>Nhắn Zalo để kiểm tra phòng đang trống</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 4. THE HUGE ROOM SHOWCASE CARDS (ALTERNATING FULL-WIDTH SHOWCASE BLOCKS) */}
+      <div id="danh-sach-phong">
+        {branch.rooms.map((room, rIdx) => {
+          const isSecond = rIdx % 2 !== 0;
+          return (
+            <section
+              key={rIdx}
+              className={`mixRoomPremium ${isSecond ? "mixRoomPremiumSecond" : ""}`}
+            >
+              <div className="mixRoomPremiumDecor" />
+              <div className="container">
+                <div className={`mixRoomPremiumBlock ${isSecond ? "mixRoomPremiumBlockReverse" : ""}`}>
+                  {/* Content (Text + Amenities + Prices + Buttons) */}
+                  <div className="mixRoomPremiumContent">
+                    <div className="mixRoomPremiumKicker">
+                      <span />
+                      {room.kicker}
+                    </div>
+
+                    <h2 className="mixRoomPremiumTitle">{room.title}</h2>
+
+                    <div className="mixRoomPremiumDesc">{room.desc}</div>
+
+                    <div className="mixRoomPremiumLine" />
+
+                    {/* Amenities with icons */}
+                    <div className="mixRoomPremiumAmenities">
+                      {room.amenities.map((am, aIdx) => (
+                        <div key={aIdx} className="mixRoomPremiumAmenity">
+                          <div className="mixRoomPremiumAmenityIcon">{am.icon}</div>
+                          <span>{am.name}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* 3 Pricing Columns */}
+                    <div className="mixRoomPremiumPrices">
+                      {room.prices.map((pr, pIdx) => (
+                        <div key={pIdx} className="mixRoomPremiumPrice">
+                          <span>{pr.label}</span>
+                          <strong>{pr.value}</strong>
+                          <em>{pr.sub}</em>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* 3 Action Buttons */}
+                    <div className="mixRoomPremiumActions">
+                      <a
+                        href="#form-lien-he"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          scrollToBooking(room.title);
+                        }}
+                        className="mixRoomPremiumBtn mixRoomPremiumBtnMain cursor-pointer"
+                      >
+                        <span>◌</span>
+                        Đặt phòng {room.title}
+                      </a>
+                      <Link href={room.link} className="mixRoomPremiumBtn mixRoomPremiumBtnDetail">
+                        <span>▣</span>
+                        Xem chi tiết phòng
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openConnectConfirm(
+                            "Gọi điện",
+                            `tel:${branch.phone.replace(/\s+/g, "")}`
+                          )
+                        }
+                        className="mixRoomPremiumBtn mixRoomPremiumBtnLine cursor-pointer"
+                      >
+                        <span>☎</span>
+                        Gọi tư vấn
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Visual with Floating Glass Badge */}
+                  <div className="mixRoomPremiumVisual">
+                    <Link className="mixRoomPremiumPhoto relative block aspect-[16/11]" href={room.link}>
+                      <Image
+                        src={room.photo}
+                        alt={room.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="mixRoomPremiumPhotoShade" />
+                      <div className="mixRoomPremiumBadge">
+                        <span>{room.badge.span}</span>
+                        <strong>{room.badge.strong}</strong>
+                      </div>
+                    </Link>
+
+                    <div className="mixRoomPremiumFloat">
+                      <div className="mixRoomPremiumFloatName">{room.float.name}</div>
+                      <div className="mixRoomPremiumFloatMeta">{room.float.meta}</div>
+                      <div className="mixRoomPremiumFloatMini">
+                        {room.float.tags.map((tg, tIdx) => (
+                          <span key={tIdx}>{tg}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          );
+        })}
+      </div>
+
+      {/* 5. PRICING SECTION */}
+      <section className="mixPricePremium" id="bang-gia">
+        <div className="mixPricePremiumDecor" />
+        <div className="container">
+          <div className="mixPricePremiumHead">
+            <div className="mixPricePremiumKicker">
+              <span />
+              {branch.priceSec.kicker}
+            </div>
+            <h2 className="mixPricePremiumTitle">
+              {branch.priceSec.title}
+              <span>tại {branch.name}</span>
             </h2>
-            <p className="text-sm text-[#c5b8a5] mt-2">
-              Bảng giá áp dụng chuẩn cho các hạng phòng Superior, Deluxe và VIP.
-            </p>
+            <p className="mixPricePremiumDesc">{branch.priceSec.desc}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Superior */}
-            <div className="p-6 rounded-2xl bg-[#140e0a] border border-white/10 hover:border-[#c88922]/40 transition-all">
-              <span className="text-xs uppercase font-bold text-[#c88922] tracking-wider block mb-1">
-                Hạng Phòng
-              </span>
-              <h3 className="text-xl font-bold text-[#ffe2a0] font-philosopher mb-4">Superior Room</h3>
-              <div className="space-y-3 text-sm text-[#eee4d3] border-t border-white/10 pt-4">
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">2 giờ đầu:</span>
-                  <strong className="text-[#ffe2a0]">{branch.pricing.superior.hourly}</strong>
+          <div className="mixPricePremiumGrid">
+            {branch.priceSec.columns.map((col, cIdx) => (
+              <div
+                key={cIdx}
+                className={`mixPricePremiumCard ${col.isPopular ? "mixPricePremiumCardVip" : ""}`}
+              >
+                {col.isPopular && <div className="mixPricePremiumRibbon">{col.badge}</div>}
+                <div className="mixPricePremiumCardTop">
+                  <div className="mixPricePremiumName">{col.name}</div>
+                  {!col.isPopular && <div className="mixPricePremiumTag">{col.badge}</div>}
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">Thêm mỗi giờ:</span>
-                  <span>{branch.pricing.superior.extraHour}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">Nghỉ qua đêm:</span>
-                  <strong className="text-[#ffe2a0]">{branch.pricing.superior.overnight}</strong>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">Cả ngày đêm:</span>
-                  <span>{branch.pricing.superior.fullDay}</span>
-                </div>
-              </div>
-            </div>
 
-            {/* Deluxe */}
-            <div className="p-6 rounded-2xl bg-[#140e0a] border border-[#c88922]/50 hover:border-[#c88922] transition-all relative overflow-hidden shadow-xl">
-              <div className="absolute top-0 right-0 bg-[#c88922] text-black text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
-                Yêu thích nhất
-              </div>
-              <span className="text-xs uppercase font-bold text-[#c88922] tracking-wider block mb-1">
-                Hạng Phòng
-              </span>
-              <h3 className="text-xl font-bold text-[#ffe2a0] font-philosopher mb-4">Deluxe Room</h3>
-              <div className="space-y-3 text-sm text-[#eee4d3] border-t border-white/10 pt-4">
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">2 giờ đầu:</span>
-                  <strong className="text-[#ffe2a0]">{branch.pricing.deluxe.hourly}</strong>
+                <div className="mixPricePremiumHour mb-4">
+                  <div className="text-2xl md:text-3xl font-bold font-philosopher text-[#f1d828]">
+                    {col.price2h}
+                  </div>
+                  <div className="text-xs text-zinc-400 mt-1">{col.extra}</div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">Thêm mỗi giờ:</span>
-                  <span>{branch.pricing.deluxe.extraHour}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">Nghỉ qua đêm:</span>
-                  <strong className="text-[#ffe2a0]">{branch.pricing.deluxe.overnight}</strong>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">Cả ngày đêm:</span>
-                  <span>{branch.pricing.deluxe.fullDay}</span>
-                </div>
-              </div>
-            </div>
 
-            {/* VIP */}
-            <div className="p-6 rounded-2xl bg-[#140e0a] border border-white/10 hover:border-[#c88922]/40 transition-all">
-              <span className="text-xs uppercase font-bold text-[#c88922] tracking-wider block mb-1">
-                Hạng Phòng
-              </span>
-              <h3 className="text-xl font-bold text-[#ffe2a0] font-philosopher mb-4">VIP Suite Room</h3>
-              <div className="space-y-3 text-sm text-[#eee4d3] border-t border-white/10 pt-4">
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">2 giờ đầu:</span>
-                  <strong className="text-[#ffe2a0]">{branch.pricing.vip.hourly}</strong>
+                <div className="space-y-1.5 py-3 border-y border-white/10 text-xs text-zinc-300 mb-4">
+                  <div>
+                    <strong className="text-white">Qua đêm:</strong> {col.overnight}
+                  </div>
+                  <div>
+                    <strong className="text-white">Cả ngày:</strong> {col.fullday}
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">Thêm mỗi giờ:</span>
-                  <span>{branch.pricing.vip.extraHour}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">Nghỉ qua đêm:</span>
-                  <strong className="text-[#ffe2a0]">{branch.pricing.vip.overnight}</strong>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#c5b8a5]">Cả ngày đêm:</span>
-                  <span>{branch.pricing.vip.fullDay}</span>
-                </div>
+
+                <ul className="space-y-2 text-xs text-zinc-300 mb-6">
+                  {col.features.map((feat, fIdx) => (
+                    <li key={fIdx} className="flex items-center gap-2">
+                      <span className="text-[#f1d828]">✓</span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  type="button"
+                  onClick={() => openConnectConfirm(`TƯ VẤN ${col.name.toUpperCase()}`, branch.zalo)}
+                  className="w-full py-3 rounded-xl bg-[#f1d828] text-black font-bold uppercase text-xs tracking-wider hover:brightness-110 transition-all cursor-pointer"
+                >
+                  Chọn Hạng Phòng Này
+                </button>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 4. FORM BOOKING */}
-      <section id="form-lien-he" className="mixCateBooking py-16 px-4 bg-[#140e0a] border-y border-[#c88922]/20">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-8">
-            <span className="text-xs uppercase tracking-widest text-[#c88922] font-semibold">
-              Tư Vấn & Giữ Phòng
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-philosopher text-[#ffe2a0] mt-1">
-              Đặt Phòng Tại {branch.name}
-            </h2>
-            <p className="text-sm text-[#eee4d3] mt-2">
-              Lễ tân sẽ liên hệ trong 5-10 phút để xác nhận phòng trống và hỗ trợ bạn nhận phòng nhanh nhất.
-            </p>
-          </div>
-
-          <div className="p-6 md:p-8 rounded-2xl bg-[#0c080a] border border-[#c88922]/30 shadow-2xl">
-            {formSubmitted ? (
-              <div className="p-8 text-center bg-[#c88922]/15 border border-[#c88922] rounded-xl space-y-3">
-                <i className="fa fa-check-circle text-4xl text-[#ffe2a0]" />
-                <h3 className="text-xl font-bold text-[#ffe2a0]">Đã Gửi Yêu Cầu Giữ Phòng!</h3>
-                <p className="text-sm text-[#eee4d3]">
-                  Cảm ơn bạn! Lễ tân tại cơ sở <strong>{branch.name}</strong> sẽ liên hệ ngay qua số điện thoại/Zalo để giữ phòng <strong>{selectedRoom}</strong> cho bạn.
-                </p>
+      {/* 6. BOOKING FORM & STEPS (mixCateBooking) */}
+      <section className="mixCateBooking" id="form-lien-he" style={{ scrollMarginTop: "90px" }}>
+        <div className="container">
+          <div className="mixCateBookingWrap">
+            <div className="mixCateBookingVisual">
+              <div className="mixCateBookingBadge">
+                <span />
+                <em>Gửi yêu cầu giữ phòng</em>
               </div>
-            ) : (
-              <form onSubmit={handleFormSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#ffe2a0] mb-1.5 uppercase">
-                      Họ tên / Biệt danh
-                    </label>
+              <h2 className="mixCateBookingTitle">
+                <span>Đặt phòng nhanh.</span>
+                <strong>Mix kiểm tra lịch và giữ phòng ngay</strong>
+              </h2>
+              <div className="mixCateBookingDesc">
+                Chỉ mất 1 phút để gửi yêu cầu. Tư vấn viên sẽ liên hệ ngay qua điện thoại hoặc Zalo để
+                xác nhận tình trạng phòng trống và hỗ trợ bạn chu đáo.
+              </div>
+
+              <div className="mixCateBookingTrust">
+                <div className="mixCateBookingTrustItem">
+                  <div className="mixCateBookingTrustIcon">⏱</div>
+                  <div className="mixCateBookingTrustText">
+                    <strong>15-20p</strong>
+                    <span>Giữ phòng chưa cọc</span>
+                  </div>
+                </div>
+                <div className="mixCateBookingTrustItem">
+                  <div className="mixCateBookingTrustIcon">🔒</div>
+                  <div className="mixCateBookingTrustText">
+                    <strong>100%</strong>
+                    <span>Bảo mật danh tính</span>
+                  </div>
+                </div>
+                <div className="mixCateBookingTrustItem">
+                  <div className="mixCateBookingTrustIcon">◌</div>
+                  <div className="mixCateBookingTrustText">
+                    <strong>24/7</strong>
+                    <span>Phục vụ linh hoạt</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mixCateBookingMini">
+                <div className="mixCateBookingMiniItem">
+                  <span>01</span>
+                  <p>Điền thông tin và chọn phòng mong muốn</p>
+                </div>
+                <div className="mixCateBookingMiniLine" />
+                <div className="mixCateBookingMiniItem">
+                  <span>02</span>
+                  <p>Lễ tân kiểm tra tình trạng phòng trống</p>
+                </div>
+                <div className="mixCateBookingMiniLine" />
+                <div className="mixCateBookingMiniItem">
+                  <span>03</span>
+                  <p>Nhận xác nhận giữ phòng qua Zalo/Điện thoại</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Booking Card */}
+            <div
+              className={`mixCateBookingCard transition-all duration-700 ${
+                highlightBooking
+                  ? "ring-2 ring-[#f1d828] shadow-[0_0_50px_rgba(241,216,40,0.45)] scale-[1.01]"
+                  : ""
+              }`}
+            >
+              <div className="mixCateBookingCardGlow" />
+              <div className="mixCateBookingCardHead">
+                <div className="mixCateBookingCardKicker">Ưu đãi hôm nay</div>
+                <h3>Thông Tin Giữ Phòng</h3>
+              </div>
+
+              {formSubmitted && (
+                <div className="p-4 mx-4 mb-4 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-300 text-sm">
+                  ✓ Yêu cầu giữ phòng đã được gửi! Lễ tân {branch.name} sẽ liên hệ trong 5 phút.
+                </div>
+              )}
+
+              <form className="mixCateBookingForm" onSubmit={handleBookingSubmit}>
+                <div className="mixCateBookingGrid">
+                  <div className="mixCateBookingField">
+                    <label>Họ tên của bạn</label>
                     <input
                       type="text"
                       required
-                      placeholder="Ví dụ: Anh Nam"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#140e0a] border border-white/15 text-white focus:border-[#c88922] focus:outline-none text-sm"
+                      placeholder="Ví dụ: Anh Nam / Chị Linh"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#ffe2a0] mb-1.5 uppercase">
-                      Số điện thoại / Zalo
-                    </label>
+
+                  <div className="mixCateBookingField">
+                    <label>Số điện thoại / Zalo</label>
                     <input
                       type="tel"
                       required
                       placeholder="09xx xxx xxx"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#140e0a] border border-white/15 text-white focus:border-[#c88922] focus:outline-none text-sm"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
                     />
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#ffe2a0] mb-1.5 uppercase">
-                      Cơ sở
-                    </label>
-                    <input
-                      type="text"
-                      disabled
-                      value={branch.name}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 text-sm cursor-not-allowed"
-                    />
+                  <div className="mixCateBookingField">
+                    <label>Cơ sở</label>
+                    <input type="text" disabled value={branch.name} />
                   </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#ffe2a0] mb-1.5 uppercase">
-                      Phòng muốn đặt
-                    </label>
-                    <select
-                      value={selectedRoom}
-                      onChange={(e) => setSelectedRoom(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#140e0a] border border-white/15 text-white focus:border-[#c88922] focus:outline-none text-sm"
-                    >
-                      {branch.rooms.map((r, idx) => (
-                        <option key={idx} value={r.name}>
-                          {r.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#ffe2a0] mb-1.5 uppercase">
-                      Nhu cầu lưu trú
-                    </label>
-                    <select
-                      value={formData.demand}
-                      onChange={(e) => setFormData({ ...formData, demand: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#140e0a] border border-white/15 text-white focus:border-[#c88922] focus:outline-none text-sm"
-                    >
-                      <option value="Theo giờ (2 giờ đầu)">Theo giờ (2 giờ đầu)</option>
-                      <option value="Qua đêm">Nghỉ qua đêm</option>
-                      <option value="Cả ngày đêm">Cả ngày đêm</option>
-                      <option value="Trang trí sự kiện kỷ niệm">Setup sự kiện kỷ niệm</option>
-                    </select>
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#ffe2a0] mb-1.5 uppercase">
-                      Ngày nhận phòng
-                    </label>
+                  <div className="mixCateBookingField">
+                    <label>Phòng muốn đặt</label>
+                    <div className="mixCateBookingSelectWrap">
+                      <select
+                        value={selectedRoomName}
+                        onChange={(e) => setSelectedRoomName(e.target.value)}
+                      >
+                        {branch.rooms.some((r) => r.title === selectedRoomName) ? null : selectedRoomName ? (
+                          <option value={selectedRoomName}>{selectedRoomName}</option>
+                        ) : null}
+                        {branch.rooms.map((r, rIdx) => (
+                          <option key={rIdx} value={r.title}>
+                            {r.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="mixCateBookingField">
+                    <label>Nhu cầu lưu trú</label>
+                    <div className="mixCateBookingSelectWrap">
+                      <select value={demand} onChange={(e) => setDemand(e.target.value)}>
+                        <option value="Theo giờ (2 giờ đầu)">Theo giờ (2 giờ đầu)</option>
+                        <option value="Qua đêm (22h - 12h)">Qua đêm (22h - 12h)</option>
+                        <option value="Cả ngày (14h - 12h)">Cả ngày (14h - 12h)</option>
+                        <option value="Setup sự kiện kỷ niệm">Setup sự kiện kỷ niệm</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="mixCateBookingField">
+                    <label>Ngày nhận phòng</label>
                     <input
                       type="date"
-                      value={formData.date}
-                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#140e0a] border border-white/15 text-white focus:border-[#c88922] focus:outline-none text-sm"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#ffe2a0] mb-1.5 uppercase">
-                      Giờ dự kiến đến
-                    </label>
+
+                  <div className="mixCateBookingField">
+                    <label>Giờ dự kiến đến</label>
                     <input
                       type="time"
-                      value={formData.time}
-                      onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#140e0a] border border-white/15 text-white focus:border-[#c88922] focus:outline-none text-sm"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="mixCateBookingFieldFullGrid mixCateBookingField">
+                    <label>Ghi chú yêu cầu (nếu có)</label>
+                    <textarea
+                      rows={2}
+                      placeholder="Ví dụ: Giữ phòng 15 phút, mượn đồ cosplay, chuẩn bị rượu vang..."
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-[#ffe2a0] mb-1.5 uppercase">
-                    Ghi chú yêu cầu
-                  </label>
-                  <textarea
-                    rows={2}
-                    placeholder="Ví dụ: Giữ phòng 15 phút, mượn đồ cosplay, chuẩn bị rượu vang..."
-                    value={formData.note}
-                    onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#140e0a] border border-white/15 text-white focus:border-[#c88922] focus:outline-none text-sm"
-                  />
+                <div className="mixCateBookingActions">
+                  <button type="submit" className="mixCateBookingBtn mixCateBookingBtnPrimary cursor-pointer">
+                    <span>Gửi Yêu Cầu Giữ Phòng</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => openConnectConfirm("Chat Zalo", branch.zalo)}
+                    className="mixCateBookingBtn mixCateBookingBtnZalo cursor-pointer"
+                  >
+                    <span>Nhắn Zalo Trực Tiếp</span>
+                  </button>
                 </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3.5 bg-gradient-to-r from-[#c88922] via-[#e5a73e] to-[#c88922] text-black font-bold rounded-xl text-base shadow-lg hover:brightness-110 transition-all cursor-pointer uppercase tracking-wider"
-                >
-                  Xác Nhận Giữ Phòng Tức Thì
-                </button>
               </form>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. FREE PERKS & DECOR */}
-      <section className="mixCatePremium py-16 px-4 bg-[#0c080a]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="text-xs uppercase tracking-widest text-[#c88922] font-semibold">
-              Đặc Quyền Khách Hàng
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-philosopher text-[#ffe2a0] mt-1">
-              Dịch Vụ & Tiện Ích Miễn Phí
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl bg-[#140e0a] border border-[#c88922]/20 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-[#c88922]/20 border border-[#c88922]/40 mx-auto flex items-center justify-center text-2xl text-[#ffe2a0] mb-4">
-                <i className="fa fa-female" />
-              </div>
-              <h3 className="text-lg font-bold text-[#ffe2a0] font-philosopher mb-2">Miễn Phí Cosplay</h3>
-              <p className="text-xs text-[#c5b8a5] leading-relaxed">
-                Hơn 20+ bộ trang phục cosplay quyến rũ được giặt là sạch sẽ, thơm tho, sẵn sàng phục vụ các cặp đôi đổi gió.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-[#140e0a] border border-[#c88922]/20 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-[#c88922]/20 border border-[#c88922]/40 mx-auto flex items-center justify-center text-2xl text-[#ffe2a0] mb-4">
-                <i className="fa fa-lock" />
-              </div>
-              <h3 className="text-lg font-bold text-[#ffe2a0] font-philosopher mb-2">Đạo Cụ BDSM Tinh Tế</h3>
-              <p className="text-xs text-[#c5b8a5] leading-relaxed">
-                Các phụ kiện cảm xúc an toàn, tinh tế giúp tình yêu thăng hoa và khám phá những chân trời cảm xúc mới lạ.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-[#140e0a] border border-[#c88922]/20 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-[#c88922]/20 border border-[#c88922]/40 mx-auto flex items-center justify-center text-2xl text-[#ffe2a0] mb-4">
-                <i className="fa fa-gamepad" />
-              </div>
-              <h3 className="text-lg font-bold text-[#ffe2a0] font-philosopher mb-2">Board Game Tình Yêu</h3>
-              <p className="text-xs text-[#c5b8a5] leading-relaxed">
-                Bộ bài thử thách sự thấu hiểu và gắn kết lãng mạn, mang đến những tiếng cười và khoảnh khắc khó quên.
-              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. FAQ ACCORDION */}
-      <section className="mixCateFaq py-16 px-4 bg-[#140e0a]">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="text-xs uppercase tracking-widest text-[#c88922] font-semibold">
-              Hỏi Đáp Cơ Sở
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-philosopher text-[#ffe2a0] mt-1">
-              Câu Hỏi Thường Gặp Tại {branch.name}
-            </h2>
-          </div>
+      {/* 7. GALLERY PHOTOS (mixCateGallery) */}
+      <section className="mixCateGallery">
+        <div className="container">
+          <div className="mixCateGalleryHead">
+            <div className="mixCateGalleryText">
+              <div className="mixCateGalleryLabel">
+                <span />
+                <em>Ảnh thật tại chi nhánh</em>
+              </div>
+              <div className="mixCateGalleryTitle">
+                <span>Xem nhanh không gian</span>
+                <strong>trước khi giữ phòng</strong>
+              </div>
+              <div className="mixCateGalleryDesc">
+                Ảnh được chọn để khách nhìn rõ các điểm đáng tiền: bồn tắm, máy chiếu, giường tròn, trần gương, ánh sáng và mức độ riêng tư của từng concept.
+              </div>
+            </div>
 
-          <div className="space-y-3">
-            {branch.faqs.map((faq, fIdx) => (
-              <details
-                key={fIdx}
-                className="group p-4 rounded-xl bg-[#0c080a] border border-[#c88922]/25 [&_summary::-webkit-details-marker]:hidden"
+            <div className="mixCateGalleryAction">
+              <button
+                type="button"
+                onClick={() => openConnectConfirm("Hỏi phòng trống", branch.zalo)}
+                className="mixCateGalleryBtn cursor-pointer"
               >
-                <summary className="flex items-center justify-between cursor-pointer font-bold text-sm md:text-base text-[#ffe2a0]">
-                  <span>{faq.question}</span>
-                  <i className="fa fa-chevron-down text-xs text-[#c88922] transition-transform duration-300 group-open:rotate-180" />
-                </summary>
-                <p className="mt-3 text-sm text-[#eee4d3] leading-relaxed pt-3 border-t border-white/10">
-                  {faq.answer}
-                </p>
-              </details>
+                <span>✦</span>
+                <em>Hỏi phòng trống</em>
+              </button>
+            </div>
+          </div>
+
+          <div className="mixCateGalleryBody">
+            <div className="mixCateGalleryMain">
+              <div className="mixCateGalleryItem mixCateGalleryItemLarge relative aspect-[16/10] overflow-hidden rounded-2xl block">
+                <Image
+                  src={branch.galleryPhotos[0]?.src || "/tassets/images/thu-vien-1.webp"}
+                  alt={branch.galleryPhotos[0]?.name || branch.name}
+                  fill
+                  className="object-cover"
+                />
+                <div className="mixCateGalleryOverlay">
+                  <div className="mixCateGalleryTag">{branch.galleryPhotos[0]?.tag || "Concept nổi bật"}</div>
+                  <div className="mixCateGalleryName">{branch.galleryPhotos[0]?.name || "Không gian riêng tư"}</div>
+                  <div className="mixCateGalleryMore">Xem chi tiết</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mixCateGalleryList">
+              {branch.galleryPhotos.slice(1, 4).map((item, gIdx) => (
+                <div
+                  key={gIdx}
+                  className="mixCateGalleryItem relative aspect-[16/10] overflow-hidden rounded-xl block"
+                >
+                  <Image
+                    src={item.src}
+                    alt={item.name}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="mixCateGalleryOverlay">
+                    <div className="mixCateGalleryTag">{item.tag}</div>
+                    <div className="mixCateGalleryName">{item.name}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. SPECIAL FEATURES (mixCatePremium) */}
+      <section className="mixCatePremium">
+        <div className="container">
+          <div className="mixCatePremiumWrap">
+            <div className="mixCatePremiumMedia">
+              <div className="mixCatePremiumPhoto relative aspect-[4/3] rounded-2xl overflow-hidden block">
+                <Image
+                  src={branch.galleryPhotos[0]?.src || "/tassets/images/thu-vien-1.webp"}
+                  alt="Không gian phòng Premium"
+                  fill
+                  className="object-cover"
+                />
+                <div className="mixCatePremiumPhotoShade" />
+                <div className="mixCatePremiumTag">
+                  <span>{branch.badge}</span>
+                  <strong>{branch.name}</strong>
+                </div>
+              </div>
+              <div className="mixCatePremiumFloat">
+                <div className="mixCatePremiumFloatIcon">✦</div>
+                <div className="mixCatePremiumFloatText">
+                  <strong>Ảnh thật tại chi nhánh</strong>
+                  <span>Không gian được chọn lọc theo từng concept</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mixCatePremiumContent">
+              <div className="mixCatePremiumLabel">
+                <span />
+                <em>Vì sao chọn {branch.name}</em>
+              </div>
+              <div className="mixCatePremiumTitle">
+                <span>Một chi nhánh cho</span>
+                <strong>những buổi hẹn có gu và kín đáo</strong>
+              </div>
+              <div className="mixCatePremiumDesc">
+                {branch.name} phù hợp với cặp đôi muốn đổi gió ở khu trung tâm: dễ di chuyển, nhiều phòng concept từ lãng mạn nhẹ nhàng đến ấn tượng, có ảnh thật để xem trước và có thể đặt thêm trang trí nếu muốn tạo bất ngờ.
+              </div>
+
+              <div className="mixCatePremiumFeatures">
+                {branch.features.map((feat, fIdx) => (
+                  <div key={fIdx} className="mixCatePremiumFeature">
+                    <div className="mixCatePremiumIcon">{feat.icon}</div>
+                    <div className="mixCatePremiumFeatureName">{feat.name}</div>
+                    <div className="mixCatePremiumFeatureText">{feat.desc}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. DECOR PACKAGES (mixCateDecor) */}
+      <section className="mixCateDecor">
+        <div className="container">
+          <div className="mixCateDecorWrap">
+            <div className="mixCateDecorMedia">
+              <div className="mixCateDecorPhoto relative aspect-[4/3] rounded-2xl overflow-hidden block">
+                <Image
+                  src={branch.galleryPhotos[2]?.src || "/tassets/images/thu-vien-4.webp"}
+                  alt="Trang trí sự kiện lãng mạn"
+                  fill
+                  className="object-cover"
+                />
+                <div className="mixCateDecorPhotoOverlay" />
+                <div className="mixCateDecorPhotoTag">
+                  <span>Add-on Premium</span>
+                  <strong>Trang trí riêng theo dịp</strong>
+                </div>
+              </div>
+              <div className="mixCateDecorMini">
+                <div className="mixCateDecorMiniIcon">✦</div>
+                <div className="mixCateDecorMiniText">
+                  <strong>Set up trước giờ nhận phòng</strong>
+                  <span>Mix chuẩn bị theo nhu cầu sau khi xác nhận lịch.</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mixCateDecorContent">
+              <div className="mixCateDecorLabel">
+                <span />
+                <em>Thêm bất ngờ cho người thương</em>
+              </div>
+              <div className="mixCateDecorTitle">
+                <span>Trang trí sinh nhật,</span>
+                <strong>kỷ niệm, cầu hôn ngay trong phòng</strong>
+              </div>
+              <div className="mixCateDecorDesc">
+                Khi đã chọn được phòng phù hợp, bạn có thể nâng trải nghiệm bằng gói nến, hoa, bóng, bánh kem hoặc rượu vang. Phù hợp cho những dịp cần một khoảnh khắc riêng tư nhưng vẫn chỉn chu.
+              </div>
+
+              <div className="mixCateDecorPackages">
+                {branch.decorPackages.map((dp, dIdx) => (
+                  <div key={dIdx} className="mixCateDecorPackage">
+                    <div className="mixCateDecorPackageTop">
+                      <div className="mixCateDecorPackageName">{dp.name}</div>
+                      <div className="mixCateDecorPackageType">{dp.type}</div>
+                    </div>
+                    <div className="mixCateDecorPrice">{dp.price}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 10. POLICIES (mixCatePolicy) */}
+      <section className="mixCatePolicy">
+        <div className="container">
+          <div className="mixCatePolicyHead">
+            <div className="mixCatePolicyLabel">
+              <span />
+              <em>Chính sách rõ ràng</em>
+            </div>
+            <div className="mixCatePolicyTitle">
+              <span>Giữ phòng dễ,</span>
+              <strong>cọc rõ, không phát sinh mơ hồ</strong>
+            </div>
+            <div className="mixCatePolicyDesc">
+              Những thông tin quan trọng được nói trước để khách yên tâm khi liên hệ: giữ phòng bao lâu, khi nào cần cọc, thanh toán thế nào và có thể đổi lịch ra sao.
+            </div>
+          </div>
+
+          <div className="mixCatePolicyBody">
+            {branch.policies.map((pol, pIdx) => (
+              <div key={pIdx} className="mixCatePolicyCard">
+                <div className="mixCatePolicyCardTop">
+                  <div className="mixCatePolicyCardIcon">{pol.icon}</div>
+                  <div className="mixCatePolicyCardName">{pol.title}</div>
+                </div>
+                <div className="mixCatePolicyList">
+                  {pol.items.map((it, itIdx) => (
+                    <div key={itIdx} className="mixCatePolicyItem">
+                      <div className="mixCatePolicyItemIcon">⏱</div>
+                      <div className="mixCatePolicyItemText">{it}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 7. BOTTOM CTA */}
-      <section className="catePremiumCta py-14 px-4 bg-[#0c080a] border-t border-[#c88922]/20">
-        <div className="max-w-4xl mx-auto text-center space-y-4">
-          <h2 className="text-2xl md:text-3xl font-bold font-philosopher text-[#ffe2a0]">
-            Đặt Phòng Riêng Tư Tại {branch.name}
-          </h2>
-          <p className="text-sm md:text-base text-[#eee4d3] max-w-xl mx-auto">
-            Địa chỉ: {branch.address}. Liên hệ lễ tân để được đón tiếp chu đáo nhất!
-          </p>
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href={branch.zalo}
-              target="_blank"
-              rel="noreferrer"
-              className="px-6 py-3 bg-[#c88922] text-black font-bold rounded-xl text-sm md:text-base hover:brightness-110 transition-all flex items-center gap-2"
-            >
-              <i className="fa fa-comment" />
-              Chat Zalo Lễ Tân
-            </a>
-            <a
-              href={`tel:${branch.phone.replace(/\s+/g, "")}`}
-              className="px-6 py-3 bg-white/10 border border-white/20 text-white font-semibold rounded-xl text-sm md:text-base hover:bg-white/15 transition-all flex items-center gap-2"
-            >
-              <i className="fa fa-phone" />
-              Gọi Hotline {branch.phone}
-            </a>
+      {/* 11. FAQS ACCORDION (mixCateFaq) */}
+      <section className="mixCateFaq">
+        <div className="container">
+          <div className="mixCateFaqHead">
+            <div className="mixCateFaqLabel">
+              <span />
+              <em>Câu hỏi thường gặp</em>
+            </div>
+            <div className="mixCateFaqTitle">
+              <span>Giải tỏa lo lắng</span>
+              <strong>trước khi đặt phòng</strong>
+            </div>
+            <div className="mixCateFaqDesc">
+              Một vài thông tin khách thường hỏi trước khi giữ phòng: độ kín đáo, cọc giữ lịch, phát sinh chi phí, tiện ích phòng và các gói trang trí đi kèm.
+            </div>
+          </div>
+
+          <div className="mixCateFaqList">
+            {branch.faqs.map((faq, fIdx) => (
+              <div key={fIdx} className="mixCateFaqItem">
+                <details open={fIdx === 0}>
+                  <summary>
+                    <div className="mixCateFaqQuestion">{faq.q}</div>
+                    <div className="mixCateFaqMark">+</div>
+                  </summary>
+                  <div className="mixCateFaqAnswer">{faq.a}</div>
+                </details>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 8. SEO ARTICLE */}
-      <article className="py-12 px-4 bg-[#140e0a]">
-        <section className="max-w-4xl mx-auto p-6 md:p-8 rounded-2xl border border-[#c88922]/20 bg-[#0c080a] text-[#eee4d3] leading-relaxed text-sm md:text-base">
-          <header className="mb-4">
-            <h2 className="text-xl md:text-2xl font-bold text-[#ffe2a0] font-philosopher">
-              Giới Thiệu Cơ Sở {branch.name}
-            </h2>
-            <div className="w-16 h-0.5 bg-[#c88922] mt-2" />
-          </header>
+      {/* 12. BOTTOM CTA (catePremiumCta) */}
+      <section className="catePremiumCta" id="booking">
+        <div className="catePremiumCtaWrap">
           <div
-            className="data_contents space-y-4 text-justify"
-            dangerouslySetInnerHTML={{ __html: branch.introHtml }}
+            className="catePremiumCtaBg"
+            style={{
+              backgroundImage: `url(${branch.hero.bgImage || "/tassets/images/banner-home.jpg"})`,
+            }}
           />
+          <div className="catePremiumCtaShade" />
+          <div className="catePremiumCtaContent">
+            <div className="catePremiumCtaKicker">
+              <span />
+              <em>Đặt phòng hôm nay</em>
+            </div>
+            <div className="catePremiumCtaTitle">
+              <span>Chọn {branch.name},</span>
+              <br />
+              <span>Mix tư vấn phòng phù hợp</span>
+              <br />
+              <span>trong vài phút</span>
+            </div>
+            <div className="catePremiumCtaText">
+              Nhận ảnh thật, giá rõ ràng, tư vấn kín đáo và giữ phòng nhanh qua Zalo hoặc hotline.
+            </div>
+            <div className="catePremiumCtaActions">
+              <button
+                type="button"
+                onClick={() => openConnectConfirm("Chat Zalo", branch.zalo)}
+                className="catePremiumCtaBtn catePremiumCtaBtnMain cursor-pointer"
+              >
+                <span>◌</span>
+                <span>Nhắn Zalo giữ phòng</span>
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  openConnectConfirm("Gọi điện", `tel:${branch.phone.replace(/\s+/g, "")}`)
+                }
+                className="catePremiumCtaBtn catePremiumCtaBtnLine cursor-pointer"
+              >
+                <span>☎</span>
+                <span>Gọi hotline {branch.phone}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 13. SEO ARTICLE (content-frame-section) */}
+      {branch.articleHtml && (
+        <section className="content-frame-section">
+          <div className="container">
+            <div
+              className="content-frame"
+              dangerouslySetInnerHTML={{ __html: branch.articleHtml }}
+            />
+          </div>
         </section>
-      </article>
+      )}
 
       <FooterSection />
       <DesktopContactBar />
-      <MobileBottomNav onOpenBooking={() => setIsBookingModalOpen(true)} />
-      <ContactModal isOpen={isBookingModalOpen} onClose={() => setIsBookingModalOpen(false)} />
+      <MobileActionBar />
     </div>
   );
 }

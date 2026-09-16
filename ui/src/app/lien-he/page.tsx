@@ -6,12 +6,10 @@ import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from "lucide-react";
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
 
 export default function LienHePage() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -27,8 +25,8 @@ export default function LienHePage() {
 
   return (
     <div className="min-h-screen bg-[#070503] text-[#fff8ec] selection:bg-[#c88922] selection:text-black">
-      <DesktopHeader onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* Breadcrumbs */}
       <div className="pt-24 pb-4 border-b border-[#c88922]/15 bg-[#0f0b08]">
@@ -212,9 +210,8 @@ export default function LienHePage() {
       </main>
 
       <FooterSection />
-      <DesktopContactBar onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileBottomNav onOpenBooking={() => setIsBookingOpen(true)} />
-      <ContactModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <DesktopContactBar />
+      <MobileActionBar />
     </div>
   );
 }

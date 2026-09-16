@@ -2,23 +2,49 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { MessageSquare, Phone, Calendar, User, ChevronDown } from "lucide-react";
+import { useModal } from "@/context/ModalContext";
 
 interface HeroSectionProps {
-  onOpenContact: (type: "phone" | "zalo" | "booking") => void;
+  onOpenContact?: (type: "phone" | "zalo" | "booking") => void;
 }
 
 export default function HeroSection({ onOpenContact }: HeroSectionProps) {
+  const { openBranchSelect, openConnectConfirm } = useModal();
   const [bookingData, setBookingData] = useState({
     name: "",
     phone: "",
-    branch: "cs1",
-    roomType: "standard",
+    branch: "Mix Boutique Premium (Huỳnh Thúc Kháng)",
+    roomType: "Nghỉ giờ (từ 2h)",
   });
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onOpenContact("booking");
+    if (onOpenContact) {
+      onOpenContact("booking");
+    } else {
+      openConnectConfirm(
+        "Chat Zalo Giữ Phòng",
+        `https://zalo.me/0383104010?text=${encodeURIComponent(
+          `Chào Mix, tôi là ${bookingData.name} (${bookingData.phone}), muốn đặt phòng tại ${bookingData.branch}, gói: ${bookingData.roomType}`
+        )}`
+      );
+    }
+  };
+
+  const handleZalo = () => {
+    if (onOpenContact) {
+      onOpenContact("zalo");
+    } else {
+      openBranchSelect("zalo");
+    }
+  };
+
+  const handlePhone = () => {
+    if (onOpenContact) {
+      onOpenContact("phone");
+    } else {
+      openBranchSelect("phone");
+    }
   };
 
   return (
@@ -43,91 +69,91 @@ export default function HeroSection({ onOpenContact }: HeroSectionProps) {
         <div className="mixLuxuryHeroGrid">
           {/* Left Column: Hero Content */}
           <div className="mixLuxuryHeroContent">
-            <div className="mixLuxuryKicker font-philosopher">
+            <div className="mixLuxuryKicker">
               KHÁCH SẠN TÌNH YÊU TẠI HÀ NỘI
             </div>
 
-            <h1 className="mixLuxuryDisplay font-philosopher">
+            <h1 className="mixLuxuryDisplay">
               Mix Boutique Hotel phòng concept{" "}
               <span className="mixLuxuryGold">riêng tư</span> cho hai người
             </h1>
 
-            <p className="mixLuxuryLead font-philosopher">
+            <p className="mixLuxuryLead">
               Xem ảnh thật, video phòng thật, chọn concept hợp gu và nhắn Zalo để giữ phòng nhanh tại 3 chi nhánh Hà Nội.
             </p>
 
             {/* Actions */}
             <div className="mixLuxuryActions">
-              <a
-                href="https://zalo.me/0383104010"
-                target="_blank"
-                rel="noreferrer"
-                className="mixLuxuryBtn mixLuxuryBtnPrimary font-philosopher uppercase"
+              <button
+                type="button"
+                onClick={handleZalo}
+                className="mixLuxuryBtn mixLuxuryBtnPrimary callContactLocate cursor-pointer border-none"
               >
-                <MessageSquare className="w-4 h-4 fill-current" />
+                <i className="fa fa-commenting text-lg"></i>
                 <span>Nhắn Zalo Tư Vấn</span>
-              </a>
+              </button>
 
-              <a
-                href="tel:0383104010"
-                className="mixLuxuryBtn mixLuxuryBtnOutline font-philosopher uppercase"
+              <button
+                type="button"
+                onClick={handlePhone}
+                className="mixLuxuryBtn mixLuxuryBtnOutline callContactLocate cursor-pointer border-none"
               >
-                <Phone className="w-4 h-4 text-[#ffe2a0]" />
+                <i className="fa fa-phone text-lg"></i>
                 <span>Gọi Ngay</span>
-              </a>
+              </button>
             </div>
 
             {/* 4 Stats Cards */}
             <div className="mixLuxuryStats">
               <div className="mixLuxuryStat">
-                <span className="mixLuxuryStatNumber font-philosopher">3</span>
-                <span className="mixLuxuryStatText font-philosopher">
+                <span className="mixLuxuryStatNumber">3</span>
+                <span className="mixLuxuryStatText">
                   chi nhánh Hà Nội dễ di chuyển
                 </span>
               </div>
 
               <div className="mixLuxuryStat">
-                <span className="mixLuxuryStatNumber font-philosopher">32+</span>
-                <span className="mixLuxuryStatText font-philosopher">
+                <span className="mixLuxuryStatNumber">32+</span>
+                <span className="mixLuxuryStatText">
                   phòng concept đổi gió cho cặp đôi
                 </span>
               </div>
 
               <div className="mixLuxuryStat">
-                <span className="mixLuxuryStatNumber font-philosopher">199k</span>
-                <span className="mixLuxuryStatText font-philosopher">
+                <span className="mixLuxuryStatNumber">199k</span>
+                <span className="mixLuxuryStatText">
                   giá từ 199k / 2h đầu
                 </span>
               </div>
 
               <div className="mixLuxuryStat">
-                <span className="mixLuxuryStatNumber font-philosopher">Kín đáo</span>
-                <span className="mixLuxuryStatText font-philosopher">
+                <span className="mixLuxuryStatNumber">Kín đáo</span>
+                <span className="mixLuxuryStatText">
                   riêng tư, an tâm, không lo thông tin
                 </span>
               </div>
             </div>
 
             {/* Mini preview shots */}
-            <div className="grid grid-cols-3 gap-3 mt-6 max-w-md">
+            <div className="mixLuxuryMobileShots grid grid-cols-3 gap-3 mt-6 max-w-md">
               <div className="relative h-20 rounded-xl overflow-hidden border border-[#c88922]/30 shadow-md">
-                <Image src="/images/469-moonlit-love.jpg" alt="Room 469" fill className="object-cover" />
+                <Image src="/images/thu-vien-1.webp" alt="Phòng Mix 1" fill className="object-cover" />
               </div>
               <div className="relative h-20 rounded-xl overflow-hidden border border-[#c88922]/30 shadow-md">
-                <Image src="/images/302-karma.jpg" alt="Room 302" fill className="object-cover" />
+                <Image src="/images/thu-vien-2.webp" alt="Phòng Mix 2" fill className="object-cover" />
               </div>
               <div className="relative h-20 rounded-xl overflow-hidden border border-[#c88922]/30 shadow-md">
-                <Image src="/images/202-galaxy.jpg" alt="Room 202" fill className="object-cover" />
+                <Image src="/images/thu-vien-3.webp" alt="Phòng Mix 3" fill className="object-cover" />
               </div>
             </div>
           </div>
 
           {/* Right Column: Reservation Form Card */}
           <div className="mixLuxuryReserve">
-            <h2 className="mixLuxuryReserveTitle font-philosopher">
+            <h2 className="mixLuxuryReserveTitle">
               TƯ VẤN TỨC THÌ
             </h2>
-            <p className="mixLuxuryReserveText font-philosopher">
+            <p className="mixLuxuryReserveText">
               Giữ Phòng Nhanh Nhất &bull; Gửi nhu cầu, Mix sẽ liên hệ xác nhận tình trạng phòng trống ngay.
             </p>
 
@@ -138,7 +164,7 @@ export default function HeroSection({ onOpenContact }: HeroSectionProps) {
                 required
                 value={bookingData.name}
                 onChange={(e) => setBookingData({ ...bookingData, name: e.target.value })}
-                className="mixLuxuryInput font-philosopher"
+                className="mixLuxuryInput"
               />
 
               <input
@@ -147,38 +173,39 @@ export default function HeroSection({ onOpenContact }: HeroSectionProps) {
                 required
                 value={bookingData.phone}
                 onChange={(e) => setBookingData({ ...bookingData, phone: e.target.value })}
-                className="mixLuxuryInput font-philosopher"
+                className="mixLuxuryInput"
               />
 
               <select
                 value={bookingData.branch}
                 onChange={(e) => setBookingData({ ...bookingData, branch: e.target.value })}
-                className="mixLuxuryInput font-philosopher"
+                className="mixLuxuryInput"
               >
-                <option value="cs1">CS1: Huỳnh Thúc Kháng (Mix Premium)</option>
-                <option value="cs2">CS2: 256B Đặng Tiến Đông, Đống Đa</option>
-                <option value="cs3">CS3: 20 Phúc La, Hà Đông</option>
+                <option value="CS1: Huỳnh Thúc Kháng (Mix Premium)">CS1: Huỳnh Thúc Kháng (Mix Premium)</option>
+                <option value="CS2: 256B Đặng Tiến Đông, Đống Đa">CS2: 256B Đặng Tiến Đông, Đống Đa</option>
+                <option value="CS3: 20 Phúc La, Hà Đông">CS3: 20 Phúc La, Hà Đông</option>
               </select>
 
               <select
                 value={bookingData.roomType}
                 onChange={(e) => setBookingData({ ...bookingData, roomType: e.target.value })}
-                className="mixLuxuryInput font-philosopher"
+                className="mixLuxuryInput"
               >
-                <option value="standard">Phòng Tiêu Chuẩn (từ 199k)</option>
-                <option value="boutique">Phòng Boutique Concept (từ 300k)</option>
-                <option value="vip">Phòng VIP Suite Bồn Sục (từ 400k)</option>
+                <option value="Nghỉ giờ (từ 2h)">Nghỉ giờ (từ 2h)</option>
+                <option value="Nghỉ qua đêm">Nghỉ qua đêm</option>
+                <option value="Trang trí sinh nhật / kỷ niệm">Trang trí sinh nhật / kỷ niệm</option>
+                <option value="Tư vấn concept phù hợp">Tư vấn concept phù hợp</option>
               </select>
 
               <button
                 type="submit"
-                className="mixLuxuryBtn mixLuxuryBtnPrimary font-philosopher uppercase mt-2 w-full justify-center tracking-wider"
+                className="mixLuxuryBtn mixLuxuryBtnPrimary uppercase mt-2 w-full justify-center tracking-wider cursor-pointer border-none"
               >
                 GỬI YÊU CẦU GIỮ PHÒNG
               </button>
             </form>
 
-            <p className="mixLuxuryNote font-philosopher text-center">
+            <p className="mixLuxuryNote text-center">
               Chưa đặt cọc: Mix hỗ trợ giữ phòng 15 - 20 phút tùy tình trạng phòng.
             </p>
           </div>

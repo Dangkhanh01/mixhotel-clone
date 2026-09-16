@@ -6,14 +6,14 @@ import Link from "next/link";
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
+import { useModal } from "@/context/ModalContext";
 import { BRANCHES_DATA, FORM_ROOMS_BY_BRANCH } from "@/data/branchesData";
 import { KHACH_SAN_TINH_YEU_TOC, KHACH_SAN_TINH_YEU_CONTENT_HTML } from "@/data/khachSanTinhYeuArticle";
 
 export default function KhachSanTinhYeuPage() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const { openConnectConfirm, openBranchSelect } = useModal();
   const [activeTab, setActiveTab] = useState<string>("branch-mix-boutique-premium-hotel");
   
   // Consultation Form state
@@ -64,13 +64,21 @@ export default function KhachSanTinhYeuPage() {
   const handleOpenRoomBooking = (roomName: string, branchName: string) => {
     setSelectedBranch(branchName);
     setSelectedRoom(roomName);
-    setIsBookingOpen(true);
+    const branchZaloMap: Record<string, string> = {
+      "Huỳnh Thúc Kháng": "https://zalo.me/0383104010",
+      "Đặng Tiến Đông": "https://zalo.me/+84393307030",
+      "Phúc La": "https://zalo.me/+84353660966",
+      "Hoàng Ngân": "https://zalo.me/0383104010",
+    };
+    const matched = Object.entries(branchZaloMap).find(([k]) => branchName.includes(k));
+    const zaloLink = matched ? matched[1] : "https://zalo.me/0383104010";
+    openConnectConfirm(`ĐẶT PHÒNG ${roomName.toUpperCase()}`, zaloLink);
   };
 
   return (
     <div className="min-h-screen bg-[#0c080a] text-[#fff8ec]">
-      <DesktopHeader onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* 1. CATE MIX HERO */}
       <div className="cateMixHero">
@@ -98,19 +106,22 @@ export default function KhachSanTinhYeuPage() {
               3 địa chỉ khác nhau, nhóm phòng khác nhau. Bạn hãy chọn chi nhánh trước để Mix Hotel tư vấn đúng phòng trống.
             </div>
             <div className="cateMixHeroActions">
-              <a
-                href="https://zalo.me/0383104010"
-                target="_blank"
-                rel="noreferrer"
-                className="cateMixHeroBtn cateMixHeroBtnPrimary cursor-pointer"
+              <button
+                type="button"
+                onClick={() => openConnectConfirm("Chat Zalo", "https://zalo.me/0383104010")}
+                className="cateMixHeroBtn cateMixHeroBtnPrimary cursor-pointer border-none"
               >
                 <i className="fa fa-comment-o" />
                 <span>Nhắn Zalo tư vấn</span>
-              </a>
-              <a href="tel:0383104010" className="cateMixHeroBtn cursor-pointer">
+              </button>
+              <button
+                type="button"
+                onClick={() => openConnectConfirm("Gọi điện", "tel:0383104010")}
+                className="cateMixHeroBtn cursor-pointer border-none"
+              >
                 <i className="fa fa-phone" />
                 <span>Gọi điện</span>
-              </a>
+              </button>
               <a href="#chon-chi-nhanh" className="cateMixHeroBtn cursor-pointer">
                 <i className="fa fa-map-marker" />
                 <span>Chọn chi nhánh</span>
@@ -752,7 +763,7 @@ export default function KhachSanTinhYeuPage() {
                 </a>
                 <button
                   type="button"
-                  onClick={() => setIsBookingOpen(true)}
+                  onClick={() => openBranchSelect("zalo")}
                   className="cateEventDecorBtn cateEventDecorBtnLine cursor-pointer"
                 >
                   <i className="fa fa-calendar-check-o" />
@@ -1193,9 +1204,8 @@ export default function KhachSanTinhYeuPage() {
       </section>
 
       <FooterSection />
-      <DesktopContactBar onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileBottomNav onOpenBooking={() => setIsBookingOpen(true)} />
-      <ContactModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <DesktopContactBar />
+      <MobileActionBar />
     </div>
   );
 }

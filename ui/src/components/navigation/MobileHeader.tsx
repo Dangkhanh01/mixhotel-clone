@@ -3,13 +3,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X, ChevronRight, ChevronDown, Phone } from "lucide-react";
 
 interface MobileHeaderProps {
   onOpenBooking?: () => void;
 }
 
-export default function MobileHeader({ onOpenBooking }: MobileHeaderProps) {
+export default function MobileHeader({}: MobileHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
@@ -22,302 +21,214 @@ export default function MobileHeader({ onOpenBooking }: MobileHeaderProps) {
   };
 
   return (
-    <>
-      {/* Fixed Mobile Top Bar */}
-      <header className="lg:hidden fixed top-0 left-0 w-full h-16 z-[90] bg-[#110d0a]/95 backdrop-blur-md border-b border-[#c88922]/20 px-4 flex items-center justify-between shadow-lg">
-        <Link href="/" className="relative block w-32 h-10">
-          <Image
-            src="/images/mix-boutique-logo.png"
-            alt="Mix Boutique Hotel"
-            fill
-            className="object-contain object-left"
-            priority
-          />
-        </Link>
+    <div id="menuNKTA_MOBILE" className="lg:hidden">
+      {/* Top Page Header (Logo + Hamburger Bars only - NO ĐẶT PHÒNG button) */}
+      <div className="menuTopPage flex items-center justify-between px-4 fixed top-0 left-0 w-full z-[90] bg-[#ffffff] shadow-[0_3px_10px_0px_rgba(0,0,0,0.2)] min-h-[60px]">
+        <div className="logoPart w-[100px]">
+          <Link href="/">
+            <Image
+              src="/images/mix-boutique-logo.png"
+              alt="Mix Boutique Hotel"
+              width={100}
+              height={40}
+              className="object-contain"
+              priority
+            />
+          </Link>
+        </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onOpenBooking}
-            className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#c88922] to-[#ffe2a0] text-[#1a0f05] font-bold text-xs uppercase font-philosopher shadow-md tracking-wider"
-          >
-            ĐẶT PHÒNG
-          </button>
+        <div className="barsPart">
           <button
             onClick={() => setIsOpen(true)}
             aria-label="Mở menu"
-            className="p-2 rounded-lg text-[#ffe2a0] hover:text-white hover:bg-zinc-800 transition-colors"
+            className="aTag aTagBars flex flex-col items-center justify-center p-1 cursor-pointer bg-transparent border-none text-[#333333]"
           >
-            <Menu className="w-6 h-6" />
+            <i className="fa fa-bars text-2xl text-[#333333]"></i>
+            <div className="textUnderItem text-[11px] text-[#888888] mt-0.5">Menu</div>
           </button>
         </div>
-      </header>
+      </div>
 
-      {/* Slide-in Mobile Drawer */}
+      {/* Drawer Menu trượt toàn màn hình */}
       {isOpen && (
-        <div className="lg:hidden fixed inset-0 z-[150] flex">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
-            onClick={closeDrawer}
-          />
+        <div
+          className="blockCateMobile fixed inset-0 z-[999999] bg-[#ffffff] text-[#333333] overflow-y-auto pt-10 pb-20 px-4"
+          style={{ display: "block" }}
+        >
+          {/* Nút đóng màu đỏ góc trên phải */}
+          <div className="hideBlock fixed top-0 right-0 z-20">
+            <button
+              onClick={closeDrawer}
+              aria-label="Đóng menu"
+              className="xItem bg-[#e52325] text-[#ffffff] px-3 py-2 rounded-l font-bold text-xl cursor-pointer border-none shadow-md"
+            >
+              x
+            </button>
+          </div>
 
-          {/* Drawer Content */}
-          <div className="relative w-4/5 max-w-sm h-full bg-[#140e0a] border-r border-[#c88922]/30 shadow-2xl flex flex-col z-10 overflow-y-auto animate-in slide-in-from-left duration-300">
-            {/* Drawer Header */}
-            <div className="flex items-center justify-between p-4 border-b border-[#c88922]/20 bg-[#0d0907]">
-              <div className="relative w-28 h-8">
-                <Image
-                  src="/images/mix-boutique-logo.png"
-                  alt="Mix Boutique Hotel"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <button
-                onClick={closeDrawer}
-                aria-label="Đóng menu"
-                className="w-8 h-8 rounded-full bg-[#c88922]/20 text-[#ffe2a0] flex items-center justify-center hover:bg-[#c88922]/40 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Drawer Links */}
-            <nav className="p-4 space-y-1 divide-y divide-[#c88922]/10 flex-1 font-philosopher">
-              <Link
-                href="/"
-                onClick={closeDrawer}
-                style={{ color: '#fff8ec' }}
-                className="block py-3 text-sm font-bold hover:text-[#ffe2a0] transition-colors uppercase tracking-wider"
-              >
+          <div className="wrapCateParts divide-y divide-dashed divide-[#cdcdcd] mt-4">
+            {/* TRANG CHỦ */}
+            <div className="catePart py-2">
+              <Link href="/" onClick={closeDrawer} className="link1 block text-[15px] font-bold text-[#333333]">
                 TRANG CHỦ
               </Link>
+            </div>
 
-              <Link
-                href="/gioi-thieu"
-                onClick={closeDrawer}
-                style={{ color: '#fff8ec' }}
-                className="block py-3 text-sm font-bold hover:text-[#ffe2a0] transition-colors uppercase tracking-wider"
-              >
+            {/* GIỚI THIỆU */}
+            <div className="catePart py-2">
+              <Link href="/gioi-thieu" onClick={closeDrawer} className="link1 block text-[15px] font-bold text-[#333333]">
                 GIỚI THIỆU
               </Link>
+            </div>
 
-              {/* Submenu: Khách sạn tình yêu */}
-              <div className="pt-2">
+            {/* KHÁCH SẠN TÌNH YÊU */}
+            <div className={`catePart py-2 relative ${openSubmenu === "rooms" ? "active" : ""}`}>
+              <div className="flex items-center justify-between">
+                <Link href="/khach-san-tinh-yeu" onClick={closeDrawer} className="link1 block text-[15px] font-bold text-[#333333]">
+                  KHÁCH SẠN TÌNH YÊU
+                </Link>
                 <button
+                  type="button"
                   onClick={() => toggleSubmenu("rooms")}
-                  style={{ color: '#fff8ec' }}
-                  className="w-full flex items-center justify-between py-2 text-sm font-bold hover:text-[#ffe2a0] transition-colors uppercase tracking-wider"
+                  className="p-2 cursor-pointer bg-transparent border-none text-[#555555]"
                 >
-                  <span>KHÁCH SẠN TÌNH YÊU</span>
-                  {openSubmenu === "rooms" ? (
-                    <ChevronDown className="w-4 h-4 text-[#ffe2a0]" />
-                  ) : (
-                    <ChevronRight className="w-4 h-4 text-[#ffe2a0]/60" />
-                  )}
+                  <i className={`fa ${openSubmenu === "rooms" ? "fa-angle-down" : "fa-angle-right"} text-lg`}></i>
                 </button>
-                {openSubmenu === "rooms" && (
-                  <div className="pl-4 py-2 space-y-2 border-l-2 border-[#c88922]/40 ml-1">
-                    <Link
-                      href="/khach-san-tinh-yeu"
-                      onClick={closeDrawer}
-                      style={{ color: '#ffe2a0' }}
-                      className="block text-xs font-bold hover:underline uppercase"
-                    >
-                      TẤT CẢ CHI NHÁNH & PHÒNG
-                    </Link>
-                    <Link
-                      href="/mix-boutique-premium-hotel"
-                      onClick={closeDrawer}
-                      style={{ color: '#d4d4d8' }}
-                      className="block text-xs font-medium hover:text-[#ffe2a0] uppercase"
-                    >
+              </div>
+              {openSubmenu === "rooms" && (
+                <ul className="blockLevel2 pl-4 py-2 space-y-2 bg-[#f9f9f9] rounded my-2 list-none border-l-2 border-[#f3bf01]">
+                  <li>
+                    <Link href="/mix-boutique-premium-hotel" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       MIX BOUTIQUE PREMIUM
                     </Link>
-                    <Link
-                      href="/mix-boutique-hotel-256b-dang-tien-dong"
-                      onClick={closeDrawer}
-                      style={{ color: '#d4d4d8' }}
-                      className="block text-xs font-medium hover:text-[#ffe2a0] uppercase"
-                    >
-                      MIX 256B ĐẶNG TIẾN ĐÔNG
+                  </li>
+                  <li>
+                    <Link href="/mix-boutique-hotel-256b-dang-tien-dong" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
+                      MIX BOUTIQUE HOTEL 256B ĐẶNG TIẾN ĐÔNG
                     </Link>
-                    <Link
-                      href="/mix-boutique-hotel-20-phuc-la-ha-dong"
-                      onClick={closeDrawer}
-                      style={{ color: '#d4d4d8' }}
-                      className="block text-xs font-medium hover:text-[#ffe2a0] uppercase"
-                    >
-                      MIX 20 PHÚC LA HÀ ĐÔNG
+                  </li>
+                  <li>
+                    <Link href="/mix-boutique-hotel-20-phuc-la-ha-dong" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
+                      MIX BOUTIQUE HOTEL 20 PHÚC LA HÀ ĐÔNG
                     </Link>
-                  </div>
-                )}
-              </div>
+                  </li>
+                </ul>
+              )}
+            </div>
 
-              <Link
-                href="/gallery"
-                onClick={closeDrawer}
-                style={{ color: '#fff8ec' }}
-                className="block py-3 text-sm font-bold hover:text-[#ffe2a0] transition-colors uppercase tracking-wider"
-              >
+            {/* GALLERY */}
+            <div className="catePart py-2">
+              <Link href="/gallery" onClick={closeDrawer} className="link1 block text-[15px] font-bold text-[#333333]">
                 GALLERY
               </Link>
+            </div>
 
-              {/* Submenu: Tin tức */}
-              <div className="pt-2">
+            {/* TIN TỨC */}
+            <div className={`catePart py-2 relative ${openSubmenu === "news" ? "active" : ""}`}>
+              <div className="flex items-center justify-between">
+                <Link href="/tin-tuc" onClick={closeDrawer} className="link1 block text-[15px] font-bold text-[#333333]">
+                  TIN TỨC
+                </Link>
                 <button
+                  type="button"
                   onClick={() => toggleSubmenu("news")}
-                  style={{ color: '#fff8ec' }}
-                  className="w-full flex items-center justify-between py-2 text-sm font-bold hover:text-[#ffe2a0] transition-colors uppercase tracking-wider"
+                  className="p-2 cursor-pointer bg-transparent border-none text-[#555555]"
                 >
-                  <span>TIN TỨC</span>
-                  {openSubmenu === "news" ? (
-                    <ChevronDown className="w-4 h-4 text-[#ffe2a0]" />
-                  ) : (
-                    <ChevronRight className="w-4 h-4 text-[#ffe2a0]/60" />
-                  )}
+                  <i className={`fa ${openSubmenu === "news" ? "fa-angle-down" : "fa-angle-right"} text-lg`}></i>
                 </button>
-                {openSubmenu === "news" && (
-                  <div className="pl-4 py-2 space-y-2 border-l-2 border-[#c88922]/40 ml-1">
-                    <Link
-                      href="/tin-tuc"
-                      onClick={closeDrawer}
-                      className="block text-xs font-bold text-[#ffe2a0] hover:underline uppercase"
-                    >
-                      TẤT CẢ BÀI VIẾT
-                    </Link>
-                    <Link
-                      href="/tin-tuc?cat=review"
-                      onClick={closeDrawer}
-                      className="block text-xs font-medium text-zinc-300 hover:text-[#ffe2a0] uppercase"
-                    >
+              </div>
+              {openSubmenu === "news" && (
+                <ul className="blockLevel2 pl-4 py-2 space-y-2 bg-[#f9f9f9] rounded my-2 list-none border-l-2 border-[#f3bf01]">
+                  <li>
+                    <Link href="/review-khach-san-tinh-yeu" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       REVIEW KHÁCH SẠN TÌNH YÊU
                     </Link>
-                    <Link
-                      href="/tin-tuc?cat=hen-ho"
-                      onClick={closeDrawer}
-                      className="block text-xs font-medium text-zinc-300 hover:text-[#ffe2a0] uppercase"
-                    >
+                  </li>
+                  <li>
+                    <Link href="/dia-diem-hen-ho-danh-cho-cap-doi" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       ĐỊA ĐIỂM HẸN HÒ DÀNH CHO CẶP ĐÔI
                     </Link>
-                    <Link
-                      href="/tin-tuc?cat=di-choi"
-                      onClick={closeDrawer}
-                      className="block text-xs font-medium text-zinc-300 hover:text-[#ffe2a0] uppercase"
-                    >
+                  </li>
+                  <li>
+                    <Link href="/dia-diem-di-choi-cho-cap-doi" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       ĐỊA ĐIỂM ĐI CHƠI CHO CẶP ĐÔI
                     </Link>
-                    <Link
-                      href="/tin-tuc?cat=qua-tang"
-                      onClick={closeDrawer}
-                      className="block text-xs font-medium text-zinc-300 hover:text-[#ffe2a0] uppercase"
-                    >
+                  </li>
+                  <li>
+                    <Link href="/goi-y-qua-tang-cac-diep-le" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       GỢI Ý QUÀ TẶNG CÁC DỊP LỄ
                     </Link>
-                    <Link
-                      href="/tin-tuc?cat=kien-thuc"
-                      onClick={closeDrawer}
-                      className="block text-xs font-medium text-zinc-300 hover:text-[#ffe2a0] uppercase"
-                    >
+                  </li>
+                  <li>
+                    <Link href="/kien-thuc-ve-khach-san" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       KIẾN THỨC VỀ KHÁCH SẠN
                     </Link>
-                    <Link
-                      href="/tin-tuc?cat=cam-nang"
-                      onClick={closeDrawer}
-                      className="block text-xs font-medium text-zinc-300 hover:text-[#ffe2a0] uppercase"
-                    >
+                  </li>
+                  <li>
+                    <Link href="/cam-nang-tinh-yeu" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       CẨM NANG TÌNH YÊU
                     </Link>
-                    <Link
-                      href="/tin-tuc?cat=dia-chi"
-                      onClick={closeDrawer}
-                      className="block text-xs font-medium text-zinc-300 hover:text-[#ffe2a0] uppercase"
-                    >
+                  </li>
+                  <li>
+                    <Link href="/cac-dia-chi-khach-san-tinh-yeu" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       CÁC ĐỊA CHỈ KHÁCH SẠN TÌNH YÊU
                     </Link>
-                  </div>
-                )}
-              </div>
+                  </li>
+                </ul>
+              )}
+            </div>
 
-              <Link
-                href="/su-kien"
-                onClick={closeDrawer}
-                style={{ color: '#fff8ec' }}
-                className="block py-3 text-sm font-bold hover:text-[#ffe2a0] transition-colors uppercase tracking-wider"
-              >
+            {/* SỰ KIỆN */}
+            <div className="catePart py-2">
+              <Link href="/su-kien" onClick={closeDrawer} className="link1 block text-[15px] font-bold text-[#333333]">
                 SỰ KIỆN
               </Link>
+            </div>
 
-              {/* Submenu: Chính sách */}
-              <div className="pt-2">
+            {/* CHÍNH SÁCH */}
+            <div className={`catePart py-2 relative ${openSubmenu === "policy" ? "active" : ""}`}>
+              <div className="flex items-center justify-between">
+                <Link href="/chinh-sach-thanh-toan" onClick={closeDrawer} className="link1 block text-[15px] font-bold text-[#333333]">
+                  CHÍNH SÁCH
+                </Link>
                 <button
-                  onClick={() => toggleSubmenu("policies")}
-                  style={{ color: '#fff8ec' }}
-                  className="w-full flex items-center justify-between py-2 text-sm font-bold hover:text-[#ffe2a0] transition-colors uppercase tracking-wider"
+                  type="button"
+                  onClick={() => toggleSubmenu("policy")}
+                  className="p-2 cursor-pointer bg-transparent border-none text-[#555555]"
                 >
-                  <span>CHÍNH SÁCH</span>
-                  {openSubmenu === "policies" ? (
-                    <ChevronDown className="w-4 h-4 text-[#ffe2a0]" />
-                  ) : (
-                    <ChevronRight className="w-4 h-4 text-[#ffe2a0]/60" />
-                  )}
+                  <i className={`fa ${openSubmenu === "policy" ? "fa-angle-down" : "fa-angle-right"} text-lg`}></i>
                 </button>
-                {openSubmenu === "policies" && (
-                  <div className="pl-4 py-2 space-y-2 border-l-2 border-[#c88922]/40 ml-1">
-                    <Link
-                      href="/chinh-sach-thanh-toan"
-                      onClick={closeDrawer}
-                      style={{ color: '#d4d4d8' }}
-                      className="block text-xs font-medium hover:text-[#ffe2a0] uppercase"
-                    >
+              </div>
+              {openSubmenu === "policy" && (
+                <ul className="blockLevel2 pl-4 py-2 space-y-2 bg-[#f9f9f9] rounded my-2 list-none border-l-2 border-[#f3bf01]">
+                  <li>
+                    <Link href="/chinh-sach-thanh-toan" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       CHÍNH SÁCH THANH TOÁN
                     </Link>
-                    <Link
-                      href="/chinh-sach-bao-mat-thong-tin"
-                      onClick={closeDrawer}
-                      style={{ color: '#d4d4d8' }}
-                      className="block text-xs font-medium hover:text-[#ffe2a0] uppercase"
-                    >
+                  </li>
+                  <li>
+                    <Link href="/chinh-sach-bao-mat-thong-tin" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       CHÍNH SÁCH BẢO MẬT THÔNG TIN
                     </Link>
-                    <Link
-                      href="/chinh-sach-dat-tra-phong"
-                      onClick={closeDrawer}
-                      style={{ color: '#d4d4d8' }}
-                      className="block text-xs font-medium hover:text-[#ffe2a0] uppercase"
-                    >
+                  </li>
+                  <li>
+                    <Link href="/chinh-sach-dat-tra-phong" onClick={closeDrawer} className="link2 block py-1.5 text-sm text-[#444444] font-medium">
                       CHÍNH SÁCH ĐẶT TRẢ PHÒNG
                     </Link>
-                  </div>
-                )}
-              </div>
+                  </li>
+                </ul>
+              )}
+            </div>
 
-              <Link
-                href="/lien-he"
-                onClick={closeDrawer}
-                style={{ color: '#fff8ec' }}
-                className="block py-3 text-sm font-bold hover:text-[#ffe2a0] transition-colors uppercase tracking-wider"
-              >
+            {/* LIÊN HỆ */}
+            <div className="catePart py-2">
+              <Link href="/lien-he" onClick={closeDrawer} className="link1 block text-[15px] font-bold text-[#333333]">
                 LIÊN HỆ
               </Link>
-            </nav>
-
-            {/* Quick Hotline Footer in Drawer */}
-            <div className="p-4 border-t border-[#c88922]/20 bg-[#0d0907]">
-              <button
-                onClick={() => {
-                  closeDrawer();
-                  if (onOpenBooking) onOpenBooking();
-                }}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-gradient-to-r from-[#c88922] to-[#ffe2a0] text-[#1a0f05] font-bold text-sm shadow-lg font-philosopher tracking-wider uppercase"
-              >
-                <Phone className="w-4 h-4 fill-current" />
-                <span>LIÊN HỆ ĐẶT PHÒNG</span>
-              </button>
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

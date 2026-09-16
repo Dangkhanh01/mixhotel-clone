@@ -1,22 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { ShieldCheck, Lock, EyeOff, UserCheck } from "lucide-react";
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
 
 export default function ChinhSachBaoMatPage() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-[#070503] text-[#fff8ec] selection:bg-[#c88922] selection:text-black">
-      <DesktopHeader onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* Breadcrumbs */}
       <div className="pt-24 pb-4 border-b border-[#c88922]/15 bg-[#0f0b08]">
@@ -47,7 +43,7 @@ export default function ChinhSachBaoMatPage() {
         <div className="rounded-3xl p-8 md:p-12 bg-[#140e0a] border border-[#c88922]/25 shadow-2xl space-y-8 text-zinc-300 leading-relaxed font-light">
           <div>
             <h2 className="text-xl font-bold font-philosopher text-[#ffe2a0] mb-3 flex items-center gap-2">
-              <UserCheck className="w-5 h-5 text-[#c88922]" />
+              <i className="fa fa-user-circle text-[#c88922]" />
               <span>1. Mục đích và phạm vi thu thập thông tin</span>
             </h2>
             <p className="text-sm leading-relaxed">
@@ -57,7 +53,7 @@ export default function ChinhSachBaoMatPage() {
 
           <div>
             <h2 className="text-xl font-bold font-philosopher text-[#ffe2a0] mb-3 flex items-center gap-2">
-              <EyeOff className="w-5 h-5 text-[#c88922]" />
+              <i className="fa fa-eye-slash text-[#c88922]" />
               <span>2. Phạm vi sử dụng thông tin</span>
             </h2>
             <p className="text-sm leading-relaxed">
@@ -72,7 +68,7 @@ export default function ChinhSachBaoMatPage() {
 
           <div>
             <h2 className="text-xl font-bold font-philosopher text-[#ffe2a0] mb-3 flex items-center gap-2">
-              <Lock className="w-5 h-5 text-[#c88922]" />
+              <i className="fa fa-lock text-[#c88922]" />
               <span>3. Thời gian lưu trữ & Bảo mật tuyệt đối</span>
             </h2>
             <p className="text-sm leading-relaxed">
@@ -82,7 +78,7 @@ export default function ChinhSachBaoMatPage() {
 
           <div>
             <h2 className="text-xl font-bold font-philosopher text-[#ffe2a0] mb-3 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-[#c88922]" />
+              <i className="fa fa-shield text-[#c88922]" />
               <span>4. Đơn vị thu thập và quản lý thông tin</span>
             </h2>
             <div className="p-4 rounded-xl bg-[#1c140e] border border-[#c88922]/20 text-sm space-y-1">
@@ -96,9 +92,8 @@ export default function ChinhSachBaoMatPage() {
       </main>
 
       <FooterSection />
-      <DesktopContactBar onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileBottomNav onOpenBooking={() => setIsBookingOpen(true)} />
-      <ContactModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <DesktopContactBar />
+      <MobileActionBar />
     </div>
   );
 }

@@ -7,12 +7,12 @@ import { Star, Wifi, Bath, Tv, Sparkles, Wine, ShieldCheck } from "lucide-react"
 import DesktopHeader from "@/components/navigation/DesktopHeader";
 import MobileHeader from "@/components/navigation/MobileHeader";
 import DesktopContactBar from "@/components/floating/DesktopContactBar";
-import MobileBottomNav from "@/components/floating/MobileBottomNav";
-import ContactModal from "@/components/ui/ContactModal";
+import MobileActionBar from "@/components/floating/MobileActionBar";
 import FooterSection from "@/components/sections/FooterSection";
+import { useModal } from "@/context/ModalContext";
 
 export default function GioiThieuPage() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const { openBranchSelect } = useModal();
 
   const amenities = [
     { name: "WIFI NHANH", desc: "Tốc độ cao 100Mbps riêng từng phòng", icon: Wifi },
@@ -52,8 +52,8 @@ export default function GioiThieuPage() {
 
   return (
     <div className="min-h-screen bg-[#070503] text-[#fff8ec] selection:bg-[#c88922] selection:text-black">
-      <DesktopHeader onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileHeader onOpenBooking={() => setIsBookingOpen(true)} />
+      <DesktopHeader />
+      <MobileHeader />
 
       {/* Breadcrumbs */}
       <div className="pt-24 pb-4 border-b border-[#c88922]/15 bg-[#0f0b08]">
@@ -198,8 +198,9 @@ export default function GioiThieuPage() {
             Đặt phòng trước 15-30 phút để nhận trọn gói ưu đãi giảm 10% và chuẩn bị phòng ốc chỉn chu nhất.
           </p>
           <button
-            onClick={() => setIsBookingOpen(true)}
-            className="px-8 py-3.5 rounded-full bg-gradient-to-r from-[#c88922] via-[#ffe2a0] to-[#d9a83a] text-[#1a0f05] font-philosopher font-bold text-base shadow-xl hover:scale-105 transition-transform cursor-pointer tracking-wider uppercase"
+            type="button"
+            onClick={() => openBranchSelect("zalo")}
+            className="callContactLocate px-8 py-3.5 rounded-full bg-gradient-to-r from-[#c88922] via-[#ffe2a0] to-[#d9a83a] text-[#1a0f05] font-philosopher font-bold text-base shadow-xl hover:scale-105 transition-transform cursor-pointer tracking-wider uppercase border-none"
           >
             ĐẶT PHÒNG NGAY
           </button>
@@ -207,9 +208,8 @@ export default function GioiThieuPage() {
       </main>
 
       <FooterSection />
-      <DesktopContactBar onOpenBooking={() => setIsBookingOpen(true)} />
-      <MobileBottomNav onOpenBooking={() => setIsBookingOpen(true)} />
-      <ContactModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <DesktopContactBar />
+      <MobileActionBar />
     </div>
   );
 }

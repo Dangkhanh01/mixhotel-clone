@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import React from "react";
 import type { FaqItem } from "@/types/mixhotel";
 
 const faqs: FaqItem[] = [
@@ -24,63 +23,39 @@ const faqs: FaqItem[] = [
 ];
 
 export default function FaqSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  const toggleIndex = (idx: number) => {
-    setOpenIndex(openIndex === idx ? null : idx);
-  };
-
   return (
-    <section id="faq" className="py-20 md:py-28 bg-[#141419] relative overflow-hidden">
-      <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-10">
+    <section id="faq" className="mixFaq py-20 md:py-28 bg-[#141419] relative overflow-hidden">
+      <div className="container max-w-4xl mx-auto px-4 md:px-6 relative z-10">
         {/* Head */}
-        <div className="text-center mb-14 space-y-3">
-          <span className="text-xs font-mono uppercase tracking-widest text-[#c5a880] font-semibold">
+        <div className="mixFaqHead text-center mb-14 space-y-3">
+          <div className="mixFaqLabel text-xs uppercase tracking-widest text-[#c5a880] font-semibold">
             FAQ
-          </span>
-          <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-white tracking-tight">
+          </div>
+          <h2 className="mixFaqTitle text-3xl md:text-5xl font-bold text-white tracking-tight">
             Những câu hỏi khách thường hỏi trước khi đặt
           </h2>
-          <p className="text-sm md:text-base text-zinc-400">
+          <p className="mixFaqDesc text-sm md:text-base text-zinc-400">
             Giải đáp nhanh chóng, minh bạch mọi băn khoăn để bạn hoàn toàn an tâm trải nghiệm.
           </p>
         </div>
 
-        {/* Accordion Stack */}
-        <div className="space-y-4">
-          {faqs.map((faq, idx) => {
-            const isOpen = openIndex === idx;
-            return (
-              <div
-                key={idx}
-                className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-                  isOpen
-                    ? "bg-[#1c1c24] border-[#c5a880]/60 shadow-xl"
-                    : "bg-[#17171c] border-[#272733] hover:border-zinc-700"
-                }`}
-              >
-                <button
-                  onClick={() => toggleIndex(idx)}
-                  className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
-                >
-                  <span className="font-heading font-semibold text-base md:text-lg text-white">
-                    {faq.question}
-                  </span>
-                  <ChevronDown
-                    className={`w-5 h-5 text-[#c5a880] shrink-0 transition-transform duration-300 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                {isOpen && (
-                  <div className="px-6 pb-6 pt-1 text-xs md:text-sm text-zinc-300 leading-relaxed border-t border-zinc-800/80">
-                    <p>{faq.answer}</p>
-                  </div>
-                )}
+        {/* Accordion Stack using native details & summary with BEM classes */}
+        <div className="mixFaqList space-y-4">
+          {faqs.map((faq, idx) => (
+            <details
+              key={idx}
+              open={idx === 0}
+              className="mixFaqItem rounded-2xl border border-[#272733] bg-[#17171c] transition-all duration-300 overflow-hidden group"
+            >
+              <summary className="mixFaqQuestion list-none cursor-pointer p-6 flex items-center justify-between gap-4 font-semibold text-base md:text-lg text-white group-open:text-[#c5a880] transition-colors">
+                <span>{faq.question}</span>
+                <i className="fa fa-angle-down text-[#c5a880] text-lg transition-transform duration-300 group-open:rotate-180"></i>
+              </summary>
+              <div className="mixFaqAnswer px-6 pb-6 pt-1 text-xs md:text-sm text-zinc-300 leading-relaxed border-t border-zinc-800/80">
+                <p>{faq.answer}</p>
               </div>
-            );
-          })}
+            </details>
+          ))}
         </div>
       </div>
     </section>
