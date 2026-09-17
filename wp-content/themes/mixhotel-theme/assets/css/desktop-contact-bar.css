@@ -1,0 +1,107 @@
+/* ==========================================================================
+   Desktop Floating Contact Bar Module
+   Mix Boutique Hotel Theme
+   ========================================================================== */
+
+#contactBtnBlock {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  #contactBtnBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 60%;
+    transform: translateY(-50%);
+    right: 14px;
+    z-index: var(--z-desktop-bar, 50);
+    background: rgba(22, 16, 11, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(197, 168, 128, 0.35);
+    border-radius: 16px;
+    padding: 10px 8px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    user-select: none;
+    min-width: 66px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  #contactBtnBlock .smallBlock {
+    text-align: center;
+    cursor: pointer;
+    padding: 6px 4px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    width: 100%;
+    transition: background-color 0.2s ease;
+  }
+
+  #contactBtnBlock .smallBlock:hover {
+    background-color: rgba(197, 168, 128, 0.15);
+  }
+
+  #contactBtnBlock .smallBlock:last-child {
+    margin-bottom: 0;
+  }
+
+  #contactBtnBlock .imgPart {
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 4px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.25s ease;
+  }
+
+  #contactBtnBlock .smallBlock:hover .imgPart {
+    transform: scale(1.12);
+  }
+
+  #contactBtnBlock .imgPart img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  #contactBtnBlock .phoneBlock .imgPart {
+    background-color: #043d6d;
+    padding: 6px;
+  }
+
+  #contactBtnBlock .textPart {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--wp--preset--color--gold-bright, #ffe2a0);
+    margin: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  /* Page Up (Scroll To Top) */
+  #contactBtnBlock .pageUp {
+    border-top: 1px solid rgba(197, 168, 128, 0.2);
+    padding-top: 8px;
+    margin-top: 4px;
+    display: none;
+  }
+
+  #contactBtnBlock .pageUp.is-visible {
+    display: block;
+  }
+
+  #contactBtnBlock .pageUpImg {
+    color: var(--wp--preset--color--gold-bright, #ffe2a0);
+    font-size: 20px;
+    line-height: 1;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  #contactBtnBlock .pageUp:hover .pageUpImg {
+    color: #ffffff;
+    animation: pageUpAni 1s infinite;
+  }
+}

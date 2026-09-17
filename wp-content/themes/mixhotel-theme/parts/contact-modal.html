@@ -1,0 +1,91 @@
+<!-- wp:html -->
+<div id="popupContact_1" class="mix-contact-modal" role="dialog" aria-modal="true" aria-labelledby="mix-modal-title" aria-describedby="mix-modal-desc">
+  <!-- Overlay Backdrop -->
+  <div class="mix-contact-modal__overlay" tabindex="-1"></div>
+
+  <!-- Dialog Box -->
+  <div class="mix-contact-modal__content">
+    <!-- Close Button -->
+    <button type="button" class="mix-contact-modal__close" aria-label="Đóng cửa sổ">&times;</button>
+
+    <!-- Header -->
+    <div class="mix-contact-modal__header">
+      <span class="mix-contact-modal__kicker">KẾT NỐI NGAY</span>
+      <h3 id="mix-modal-title" class="mix-contact-modal__title">Chọn Chi Nhánh Gần Bạn</h3>
+      <p id="mix-modal-desc" class="mix-contact-modal__desc">Mix sẵn sàng tư vấn phòng còn trống và gửi ảnh thực tế tức thì.</p>
+    </div>
+
+    <!-- Branches List -->
+    <div class="mix-contact-modal__branches">
+      <!-- Branch 1 -->
+      <a href="https://zalo.me/+84383104010" target="_blank" rel="noopener noreferrer" class="mix-contact-modal__branch-item" data-branch-id="branch-premium">
+        <div class="mix-contact-modal__branch-info">
+          <div class="mix-contact-modal__branch-top">
+            <span class="mix-contact-modal__branch-idx">01</span>
+            <h4 class="mix-contact-modal__branch-name">Mix Boutique Premium</h4>
+          </div>
+          <p class="mix-contact-modal__branch-address">Ngách 29 Ngõ 49 Huỳnh Thúc Kháng, Đống Đa, Hà Nội</p>
+        </div>
+        <span class="mix-contact-modal__branch-action">
+          <span class="mix-action-label">Nhắn Zalo Tư Vấn</span>
+        </span>
+      </a>
+
+      <!-- Branch 2 -->
+      <a href="https://zalo.me/+84393307030" target="_blank" rel="noopener noreferrer" class="mix-contact-modal__branch-item" data-branch-id="branch-dangtiendong">
+        <div class="mix-contact-modal__branch-info">
+          <div class="mix-contact-modal__branch-top">
+            <span class="mix-contact-modal__branch-idx">02</span>
+            <h4 class="mix-contact-modal__branch-name">Mix Boutique Hotel 256B Đặng Tiến Đông</h4>
+          </div>
+          <p class="mix-contact-modal__branch-address">256B Đặng Tiến Đông, Chợ Dừa, Đống Đa, Hà Nội</p>
+        </div>
+        <span class="mix-contact-modal__branch-action">
+          <span class="mix-action-label">Nhắn Zalo Tư Vấn</span>
+        </span>
+      </a>
+
+      <!-- Branch 3 -->
+      <a href="https://zalo.me/+84353660966" target="_blank" rel="noopener noreferrer" class="mix-contact-modal__branch-item" data-branch-id="branch-phucla">
+        <div class="mix-contact-modal__branch-info">
+          <div class="mix-contact-modal__branch-top">
+            <span class="mix-contact-modal__branch-idx">03</span>
+            <h4 class="mix-contact-modal__branch-name">Mix Boutique Hotel 20 Phúc La Hà Đông</h4>
+          </div>
+          <p class="mix-contact-modal__branch-address">20 Phúc La, KĐT Xa La, Hà Đông, Hà Nội</p>
+        </div>
+        <span class="mix-contact-modal__branch-action">
+          <span class="mix-action-label">Nhắn Zalo Tư Vấn</span>
+        </span>
+      </a>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="mix-contact-modal__footer">
+      <p class="mix-contact-modal__note">Hỗ trợ giữ phòng 15 - 20 phút không cần cọc tùy tình trạng phòng.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification when booking submitted -->
+<div id="mixBookingToast" class="mix-booking-toast" role="status" aria-live="polite">
+  <div class="mix-booking-toast__header">
+    <h4 class="mix-booking-toast__title">
+      <span>&#10004;</span> Đã sao chép nội dung giữ phòng!
+    </h4>
+    <button type="button" class="mix-booking-toast__close" id="btnCloseBookingToast" aria-label="Đóng">&times;</button>
+  </div>
+  <p class="mix-booking-toast__body">
+    Do Zalo không cho phép liên kết ngoài tự động chèn tin nhắn riêng, Mix đã <strong>tự động sao chép</strong> nội dung yêu cầu của bạn. Bạn chỉ cần <strong>Dán (Ctrl+V / Paste)</strong> vào khung chat Zalo!
+  </p>
+  <div class="mix-booking-toast__msg-preview" id="mixBookingToastMsg"></div>
+  <div class="mix-booking-toast__actions">
+    <button type="button" class="mix-booking-toast__btn mix-booking-toast__btn--copy" id="btnCopyBookingToast">
+      <span>&#128203;</span> Sao chép lại
+    </button>
+    <a href="#" target="_blank" rel="noopener noreferrer" class="mix-booking-toast__btn mix-booking-toast__btn--zalo" id="btnOpenZaloToast">
+      <span>&#9993;</span> Mở lại Zalo
+    </a>
+  </div>
+</div>
+<!-- /wp:html -->

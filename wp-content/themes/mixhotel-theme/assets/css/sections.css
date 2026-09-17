@@ -1,0 +1,1261 @@
+/* ==========================================================================
+   Homepage Sections Module
+   Mix Boutique Hotel Theme
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Common Section Styles & Utilities
+   -------------------------------------------------------------------------- */
+.mix-section {
+  position: relative;
+  overflow: hidden;
+  padding: 80px 0;
+}
+
+.mix-section--dark-1 {
+  background-color: var(--wp--preset--color--dark-primary, #0f0f12);
+}
+
+.mix-section--dark-2 {
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+}
+
+.mix-section--dark-3 {
+  background-color: #121216;
+}
+
+.mix-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.mix-section-head {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 50px;
+}
+
+.mix-section-kicker {
+  display: inline-block;
+  font-family: var(--wp--preset--font-family--roboto, sans-serif);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  margin-bottom: 10px;
+}
+
+.mix-section-title {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  font-weight: 700;
+  color: var(--wp--preset--color--text-bright, #ffffff);
+  line-height: 1.25;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.mix-section-desc {
+  font-size: 15px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 680px;
+}
+
+/* --------------------------------------------------------------------------
+   Section 1: Real Photos Grid (#real-photos)
+   -------------------------------------------------------------------------- */
+.mixLuxuryPhotosStage {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+}
+
+.mixLuxuryPhotoMain {
+  grid-column: span 6;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 520px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+.mixLuxuryPhotoMain img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.mixLuxuryPhotoMain:hover img {
+  transform: scale(1.04);
+}
+
+.mixLuxuryPhotoMainOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+.mixLuxuryPhotoBadge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mixLuxuryPhotoBadgeNumber {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+}
+
+.mixLuxuryPhotoBadgeLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #dddddd;
+  letter-spacing: 0.5px;
+}
+
+.mixLuxuryPhotoMainCaption {
+  position: absolute;
+  bottom: 22px;
+  left: 22px;
+  right: 22px;
+}
+
+.mixLuxuryPhotoGrid {
+  grid-column: span 6;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.mixLuxuryPhotoTile {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 190px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+.mixLuxuryPhotoTileLarge {
+  grid-column: span 2;
+  height: 200px;
+}
+
+.mixLuxuryPhotoTile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.mixLuxuryPhotoTile:hover img {
+  transform: scale(1.08);
+}
+
+.mixLuxuryPhotoTileCaption {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  right: 14px;
+  z-index: 2;
+}
+
+.mixLuxuryPhotoTileKicker {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  margin-bottom: 2px;
+}
+
+.mixLuxuryPhotoTileKicker.hot {
+  color: var(--wp--preset--color--sensual-crimson, #c92a2a);
+}
+
+.mixLuxuryPhotoTileTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--wp--preset--color--text-bright, #ffffff);
+  transition: color 0.2s ease;
+}
+
+.mixLuxuryPhotoTile:hover .mixLuxuryPhotoTileTitle {
+  color: var(--wp--preset--color--gold-bright, #dfc299);
+}
+
+/* --------------------------------------------------------------------------
+   Section 2: Video Showcase (#videos)
+   -------------------------------------------------------------------------- */
+.mixLuxuryVideosGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.mixLuxuryShortsCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.mixLuxuryShortItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mixLuxuryShortItemHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mixLuxuryShortIndex {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+}
+
+.mixLuxuryShortTitle {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mixLuxuryShortThumb {
+  position: relative;
+  aspect-ratio: 9/16;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.mixLuxuryShortThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.mixLuxuryShortThumb:hover img {
+  transform: scale(1.05);
+}
+
+.mixLuxuryPlayBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: rgba(197, 168, 128, 0.9);
+  color: var(--wp--preset--color--dark-primary, #0f0f12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 25px rgba(197, 168, 128, 0.5);
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.mixLuxuryShortThumb:hover .mixLuxuryPlayBtn,
+.mixLuxuryChannelThumb:hover .mixLuxuryPlayBtn {
+  transform: translate(-50%, -50%) scale(1.12);
+  background-color: var(--wp--preset--color--gold-bright, #dfc299);
+}
+
+.mixLuxuryPlayBtn i {
+  margin-left: 2px;
+  font-size: 18px;
+}
+
+.mixLuxuryShortBadge {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.mixLuxuryVideoPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mixLuxuryVideoBullets {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mixLuxuryVideoBulletItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+}
+
+.mixLuxuryVideoBulletItem i {
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  margin-top: 3px;
+}
+
+.mixLuxuryChannelThumb {
+  position: relative;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.mixLuxuryChannelThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.mixLuxuryChannelThumb:hover img {
+  transform: scale(1.04);
+}
+
+/* Video Modal Lite */
+.mix-video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal-overlay, 1000);
+  background-color: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.mix-video-modal.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mix-video-modal__container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16/9;
+  background-color: #000000;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+}
+
+.mix-video-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.mix-video-modal__close:hover {
+  background-color: var(--wp--preset--color--sensual-crimson, #c92a2a);
+}
+
+.mix-video-modal__container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* --------------------------------------------------------------------------
+   Section 3: Concept Rooms (#concept-rooms)
+   -------------------------------------------------------------------------- */
+.mixLuxuryRoomsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.mixLuxuryRoomCard {
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.mixLuxuryRoomCard:hover {
+  border-color: rgba(197, 168, 128, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.mixLuxuryRoomThumb {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+}
+
+.mixLuxuryRoomThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.mixLuxuryRoomCard:hover .mixLuxuryRoomThumb img {
+  transform: scale(1.06);
+}
+
+.mixLuxuryRoomTag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: rgba(15, 15, 18, 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(197, 168, 128, 0.3);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+}
+
+.mixLuxuryRoomBody {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mixLuxuryRoomTitle {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--wp--preset--color--text-bright, #ffffff);
+  margin: 0 0 8px;
+}
+
+.mixLuxuryRoomDesc {
+  font-size: 13.5px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  line-height: 1.55;
+  margin: 0 0 18px;
+}
+
+.mixLuxuryRoomFeatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.mixLuxuryRoomFeatureBadge {
+  font-size: 11.5px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background-color: var(--wp--preset--color--dark-tertiary, #22222a);
+  color: #cccccc;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mixLuxuryRoomFeatureBadge i {
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  font-size: 10px;
+}
+
+.mixLuxuryRoomFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mixLuxuryRoomPrice {
+  display: flex;
+  flex-direction: column;
+}
+
+.mixLuxuryRoomPriceLabel {
+  font-size: 11px;
+  color: var(--wp--preset--color--text-subtle, #707078);
+}
+
+.mixLuxuryRoomPriceValue {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+}
+
+/* --------------------------------------------------------------------------
+   Section 4: Branches System (#branches)
+   -------------------------------------------------------------------------- */
+.mixLuxuryBranchesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.mixLuxuryBranchCard {
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.mixLuxuryBranchCard:hover {
+  border-color: rgba(197, 168, 128, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+}
+
+.mixLuxuryBranchThumb {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+}
+
+.mixLuxuryBranchThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.mixLuxuryBranchCard:hover .mixLuxuryBranchThumb img {
+  transform: scale(1.05);
+}
+
+.mixLuxuryBranchBody {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mixLuxuryBranchName {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wp--preset--color--text-bright, #ffffff);
+  margin: 0 0 10px;
+  line-height: 1.3;
+}
+
+.mixLuxuryBranchInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+}
+
+.mixLuxuryBranchInfoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
+}
+
+.mixLuxuryBranchInfoItem i {
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  margin-top: 3px;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.mixLuxuryBranchActions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.mixLuxuryBranchBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.mixLuxuryBranchBtnZalo {
+  background: linear-gradient(135deg, var(--wp--preset--color--luxury-gold, #c5a880), var(--wp--preset--color--gold-bright, #dfc299));
+  color: var(--wp--preset--color--dark-primary, #0f0f12);
+}
+
+.mixLuxuryBranchBtnPhone {
+  background-color: var(--wp--preset--color--dark-tertiary, #22222a);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mixLuxuryBranchBtnPhone:hover {
+  background-color: rgba(197, 168, 128, 0.2);
+  border-color: var(--wp--preset--color--luxury-gold, #c5a880);
+  color: var(--wp--preset--color--gold-bright, #dfc299);
+}
+
+/* --------------------------------------------------------------------------
+   Section 5: Why Choose Mix (#why-choose-us)
+   -------------------------------------------------------------------------- */
+.mixLuxuryWhyGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.mixLuxuryWhyCard {
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.25s ease;
+}
+
+.mixLuxuryWhyCard:hover {
+  border-color: rgba(197, 168, 128, 0.35);
+  transform: translateY(-3px);
+  background-color: rgba(23, 23, 28, 0.95);
+}
+
+.mixLuxuryWhyIconBox {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(197, 168, 128, 0.12);
+  border: 1px solid rgba(197, 168, 128, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  font-size: 20px;
+}
+
+.mixLuxuryWhyTitle {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--wp--preset--color--text-bright, #ffffff);
+  margin: 0;
+}
+
+.mixLuxuryWhyDesc {
+  font-size: 13.5px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Section 6: Pricing Table (#pricing)
+   -------------------------------------------------------------------------- */
+.mixLuxuryPricingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.mixLuxuryPricingCard {
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.mixLuxuryPricingCard--featured {
+  border-color: var(--wp--preset--color--luxury-gold, #c5a880);
+  background: linear-gradient(180deg, rgba(34, 34, 42, 0.9) 0%, rgba(23, 23, 28, 0.95) 100%);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(197, 168, 128, 0.12);
+  transform: scale(1.03);
+}
+
+.mixLuxuryPricingBadge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 14px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--wp--preset--color--luxury-gold, #c5a880), var(--wp--preset--color--gold-bright, #dfc299));
+  color: var(--wp--preset--color--dark-primary, #0f0f12);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mixLuxuryPricingHeader {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mixLuxuryPricingClass {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.mixLuxuryPricingRate {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+}
+
+.mixLuxuryPricingSub {
+  font-size: 12px;
+  color: var(--wp--preset--color--text-subtle, #707078);
+  margin-top: 4px;
+}
+
+.mixLuxuryPricingList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex: 1;
+}
+
+.mixLuxuryPricingItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+}
+
+.mixLuxuryPricingItem i {
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  font-size: 13px;
+}
+
+/* --------------------------------------------------------------------------
+   Section 7: Events & Decoration (#events)
+   -------------------------------------------------------------------------- */
+.mixLuxuryEventsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.mixLuxuryEventCard {
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.mixLuxuryEventCard:hover {
+  border-color: rgba(197, 168, 128, 0.4);
+  transform: translateY(-4px);
+}
+
+.mixLuxuryEventThumb {
+  aspect-ratio: 4/3;
+  position: relative;
+  overflow: hidden;
+}
+
+.mixLuxuryEventThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.mixLuxuryEventCard:hover .mixLuxuryEventThumb img {
+  transform: scale(1.08);
+}
+
+.mixLuxuryEventBody {
+  padding: 16px;
+}
+
+.mixLuxuryEventTitle {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px;
+}
+
+.mixLuxuryEventDesc {
+  font-size: 12.5px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Section 8: Booking Steps (#booking-steps)
+   -------------------------------------------------------------------------- */
+.mixLuxuryStepsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  position: relative;
+}
+
+.mixLuxuryStepCard {
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+}
+
+.mixLuxuryStepNumber {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--wp--preset--color--luxury-gold, #c5a880), var(--wp--preset--color--gold-bright, #dfc299));
+  color: var(--wp--preset--color--dark-primary, #0f0f12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 22px;
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(197, 168, 128, 0.35);
+}
+
+.mixLuxuryStepTitle {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.mixLuxuryStepDesc {
+  font-size: 13.5px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Section 9: FAQ Accordion (#faq)
+   -------------------------------------------------------------------------- */
+.mixLuxuryFaqList {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mixLuxuryFaqItem {
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.mixLuxuryFaqItem[open],
+.mixLuxuryFaqItem.is-open {
+  border-color: rgba(197, 168, 128, 0.4);
+}
+
+.mixLuxuryFaqQuestion {
+  width: 100%;
+  padding: 18px 22px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  text-align: left;
+  color: #ffffff;
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  list-style: none;
+  user-select: none;
+  transition: color 0.25s ease;
+}
+
+/* Remove default browser disclosure triangles across WebKit/Firefox */
+.mixLuxuryFaqQuestion::-webkit-details-marker,
+.mixLuxuryFaqQuestion::marker {
+  display: none;
+}
+
+/* Ensure clicks on inner text or icon always cleanly activate summary */
+.mixLuxuryFaqQuestion > * {
+  pointer-events: none;
+}
+
+.mixLuxuryFaqItem[open] .mixLuxuryFaqQuestion,
+.mixLuxuryFaqItem.is-open .mixLuxuryFaqQuestion {
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+}
+
+.mixLuxuryFaqQuestion i {
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  font-size: 14px;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.mixLuxuryFaqItem[open] .mixLuxuryFaqQuestion i,
+.mixLuxuryFaqItem.is-open .mixLuxuryFaqQuestion i {
+  transform: rotate(180deg);
+}
+
+.mixLuxuryFaqAnswer {
+  display: none;
+  padding: 0 22px 20px;
+  font-size: 14px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  line-height: 1.65;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 4px;
+  padding-top: 14px;
+}
+
+.mixLuxuryFaqItem[open] .mixLuxuryFaqAnswer,
+.mixLuxuryFaqItem.is-open .mixLuxuryFaqAnswer {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Section 10: Final CTA (#final-cta)
+   -------------------------------------------------------------------------- */
+.mixLuxuryFinalCta {
+  position: relative;
+  padding: 100px 0;
+  text-align: center;
+  background-color: var(--wp--preset--color--dark-primary, #0f0f12);
+  overflow: hidden;
+}
+
+.mixLuxuryFinalCtaBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.mixLuxuryFinalCtaBg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.35);
+}
+
+.mixLuxuryFinalCtaVeil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(15, 15, 18, 0.5) 0%, rgba(15, 15, 18, 0.95) 100%);
+  z-index: 1;
+}
+
+.mixLuxuryFinalCtaContent {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.mixLuxuryFinalCtaTitle {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.mixLuxuryFinalCtaDesc {
+  font-size: 16px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+.mixLuxuryFinalCtaActions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+   Section 11: Footer (#footerNKTA)
+   -------------------------------------------------------------------------- */
+#footerNKTA {
+  position: relative;
+  background-color: var(--wp--preset--color--dark-primary, #0f0f12);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footerBlock_1 {
+  position: relative;
+  padding: 60px 0 40px;
+  background-image: url('../images/bgFooter.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.footerBlock_1 .bgCoverOver {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(15, 15, 18, 0.94);
+  z-index: 1;
+}
+
+.footerContainer {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.4fr 1.1fr 1fr 0.9fr;
+  gap: 32px;
+}
+
+.footerCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.footerColLogo {
+  width: 130px;
+  margin-bottom: 16px;
+}
+
+.footerColTitle {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  margin: 0 0 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.footerColText {
+  font-size: 13.5px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  line-height: 1.6;
+  margin: 0 0 14px;
+}
+
+.footerColList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footerColList li {
+  font-size: 13px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+}
+
+.footerColList a {
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  transition: color 0.2s ease, padding-left 0.2s ease;
+  display: inline-block;
+}
+
+.footerColList a:hover {
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  padding-left: 4px;
+}
+
+.footerBadges {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: center;
+}
+
+.footerBadges img {
+  height: 38px;
+  width: auto;
+}
+
+.footerLineEnd {
+  position: relative;
+  z-index: 2;
+  background-color: #08080a;
+  padding: 18px 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footerLineEnd .pTagEnd {
+  font-size: 12.5px;
+  color: var(--wp--preset--color--text-subtle, #707078);
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Adaptations for Sections
+   -------------------------------------------------------------------------- */
+@media (max-width: 1199px) {
+  .footerContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .mixLuxuryPhotoMain {
+    grid-column: span 12;
+    min-height: 360px;
+  }
+
+  .mixLuxuryPhotoGrid {
+    grid-column: span 12;
+  }
+
+  .mixLuxuryVideosGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mixLuxuryRoomsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mixLuxuryBranchesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mixLuxuryWhyGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mixLuxuryPricingGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mixLuxuryPricingCard--featured {
+    transform: none;
+  }
+
+  .mixLuxuryEventsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mixLuxuryStepsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 575px) {
+  .mix-section {
+    padding: 60px 0;
+  }
+
+  .mixLuxuryWhyGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mixLuxuryEventsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .footerContainer {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}

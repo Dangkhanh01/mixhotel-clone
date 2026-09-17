@@ -147,3 +147,29 @@ function mixhotel_handle_booking() {
     * Modal Overlay / Backdrop: `z-index: 1000`
     * Modal Dialog Content: `z-index: 1050`
     * Toast Notifications: `z-index: 2000`
+
+---
+
+## 4. PHÂN HỆ: ACCORDION, HTML5 DETAILS & INTERACTION
+
+### BUG-06: Ẩn/Hiện nội dung trong thẻ HTML5 `<details>` & Accordion CSS
+* **Triệu chứng:** Khi click vào câu hỏi trong FAQ hoặc Accordion, câu trả lời không mở ra, hoặc mở ra nhưng nội dung bên trong vẫn bị ẩn (`display: none`).
+* **Root cause:** 
+  1. Ghi đè CSS `display: none` vô điều kiện lên class của phần thân câu trả lời (`.mixLuxuryFaqAnswer { display: none; }`), trong khi HTML5 `<details>` mặc định tự động ẩn/hiện con thông qua thuộc tính `[open]`.
+  2. Dùng `display: flex` trực tiếp trên `<summary>` trong WebKit/Chromium gây lỗi click event vào các thẻ con (`<span>`, `<i>`) không kích hoạt toggle native nếu thiếu `pointer-events: none;` trên children.
+  3. Thiếu cơ chế đồng bộ class `.is-open` khi người dùng toggle thẻ `<details>`.
+* **Quy tắc phòng ngừa:**
+  * Luôn hỗ trợ cả selector `[open]` và `.is-open` trong CSS:
+    ```css
+    .mixLuxuryFaqItem[open] .mixLuxuryFaqAnswer,
+    .mixLuxuryFaqItem.is-open .mixLuxuryFaqAnswer {
+      display: block;
+    }
+    ```
+  * Trên `<summary>` khi dùng flex layout, luôn đặt `pointer-events: none;` cho các thẻ con bên trong để click event luôn nhận diện đúng `<summary>`:
+    ```css
+    .mixLuxuryFaqQuestion > * {
+      pointer-events: none;
+    }
+    ```
+  * Trong JavaScript điều khiển Accordion, sử dụng `e.preventDefault()` để kiểm soát trạng thái `open` và class `is-open` một cách tất định (deterministic), đồng thời đóng các item khác để đảm bảo single-open UX mượt mà.

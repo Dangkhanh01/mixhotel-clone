@@ -211,5 +211,32 @@
         }
       }
     }
-  }
+  },
+  "templateParts": [
+    {
+      "name": "header",
+      "title": "Header",
+      "area": "header"
+    },
+    {
+      "name": "footer",
+      "title": "Footer",
+      "area": "footer"
+    },
+    {
+      "name": "mobile-action-bar",
+      "title": "Mobile Action Bar",
+      "area": "uncategorized"
+    },
+    {
+      "name": "desktop-contact-bar",
+      "title": "Desktop Contact Bar",
+      "area": "uncategorized"
+    },
+    {
+      "name": "contact-modal",
+      "title": "Contact Modal",
+      "area": "uncategorized"
+    }
+  ]
 }

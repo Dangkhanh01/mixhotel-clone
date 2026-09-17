@@ -1,0 +1,358 @@
+/* ==========================================================================
+   Contact Modal Module (#popupContact_1)
+   Mix Boutique Hotel Theme
+   ========================================================================== */
+
+body.modal-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+/* Modal Wrapper */
+.mix-contact-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal-overlay, 1000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+}
+
+.mix-contact-modal.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Modal Backdrop Overlay */
+.mix-contact-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: var(--z-modal-overlay, 1000);
+}
+
+/* Modal Dialog Box */
+.mix-contact-modal__content {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  border: 1px solid rgba(197, 168, 128, 0.25);
+  border-radius: 18px;
+  padding: 28px 24px 20px;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.75), 0 0 30px rgba(197, 168, 128, 0.08);
+  z-index: var(--z-modal-content, 1050);
+  transform: scale(0.92) translateY(12px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+}
+
+.mix-contact-modal.is-active .mix-contact-modal__content {
+  transform: scale(1) translateY(0);
+}
+
+/* Close Button */
+.mix-contact-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.mix-contact-modal__close:hover {
+  background-color: var(--wp--preset--color--sensual-crimson, #c92a2a);
+  border-color: var(--wp--preset--color--sensual-crimson, #c92a2a);
+  color: #ffffff;
+}
+
+/* Modal Header */
+.mix-contact-modal__header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.mix-contact-modal__kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  margin-bottom: 4px;
+}
+
+.mix-contact-modal__title {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--wp--preset--color--text-bright, #ffffff);
+  margin: 0 0 6px;
+}
+
+.mix-contact-modal__desc {
+  font-size: 13px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.mix-contact-modal__room-tag {
+  color: var(--wp--preset--color--gold-bright, #dfc299);
+  font-weight: 600;
+}
+
+/* Branch List */
+.mix-contact-modal__branches {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mix-contact-modal__branch-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background-color: rgba(34, 34, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  gap: 12px;
+}
+
+.mix-contact-modal__branch-item:hover {
+  background-color: rgba(34, 34, 42, 0.95);
+  border-color: var(--wp--preset--color--luxury-gold, #c5a880);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.mix-contact-modal__branch-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mix-contact-modal__branch-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.mix-contact-modal__branch-idx {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: rgba(197, 168, 128, 0.15);
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+}
+
+.mix-contact-modal__branch-name {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--wp--preset--color--text-bright, #ffffff);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+.mix-contact-modal__branch-item:hover .mix-contact-modal__branch-name {
+  color: var(--wp--preset--color--gold-bright, #dfc299);
+}
+
+.mix-contact-modal__branch-address {
+  font-size: 11.5px;
+  color: var(--wp--preset--color--text-subtle, #707078);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+/* Branch Action Badge */
+.mix-contact-modal__branch-action {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--wp--preset--color--luxury-gold, #c5a880), var(--wp--preset--color--gold-bright, #dfc299));
+  color: var(--wp--preset--color--dark-primary, #0f0f12);
+  box-shadow: 0 3px 10px rgba(197, 168, 128, 0.3);
+  transition: all 0.2s ease;
+}
+
+.mix-contact-modal__branch-item:hover .mix-contact-modal__branch-action {
+  filter: brightness(1.08);
+  transform: scale(1.02);
+}
+
+/* Modal Footer */
+.mix-contact-modal__footer {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.mix-contact-modal__note {
+  font-size: 11.5px;
+  color: var(--wp--preset--color--text-subtle, #707078);
+  margin: 0;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Booking Toast Notification
+   ========================================================================== */
+.mix-booking-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  max-width: 440px;
+  width: calc(100% - 48px);
+  background: rgba(23, 23, 28, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--wp--preset--color--luxury-gold, #c5a880);
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(197, 168, 128, 0.25);
+  z-index: var(--z-toast, 2000);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transform: translateY(120px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mix-booking-toast.is-show {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.mix-booking-toast__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mix-booking-toast__title {
+  font-family: var(--wp--preset--font-family--questrial, sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--wp--preset--color--gold-bright, #dfc299);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mix-booking-toast__close {
+  background: none;
+  border: none;
+  color: #888888;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.mix-booking-toast__close:hover {
+  color: #ffffff;
+}
+
+.mix-booking-toast__body {
+  font-size: 13px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.mix-booking-toast__msg-preview {
+  background: rgba(34, 34, 42, 0.85);
+  border: 1px dashed rgba(197, 168, 128, 0.4);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #ffffff;
+  font-style: italic;
+  word-break: break-word;
+}
+
+.mix-booking-toast__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.mix-booking-toast__btn {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.mix-booking-toast__btn--copy {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.mix-booking-toast__btn--copy:hover {
+  background: rgba(197, 168, 128, 0.2);
+  border-color: var(--wp--preset--color--luxury-gold, #c5a880);
+}
+
+.mix-booking-toast__btn--zalo {
+  background: linear-gradient(135deg, var(--wp--preset--color--luxury-gold, #c5a880), var(--wp--preset--color--gold-bright, #dfc299));
+  color: var(--wp--preset--color--dark-primary, #0f0f12);
+}
+
+.mix-booking-toast__btn--zalo:hover {
+  filter: brightness(1.08);
+}
+

@@ -1,0 +1,107 @@
+/* ==========================================================================
+   Sticky Mobile Action Bar Module
+   Mix Boutique Hotel Theme
+   ========================================================================== */
+
+.menuEndPage {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .menuEndPage {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: var(--z-mobile-bar, 500);
+    background-color: #f2f2f2;
+    padding-top: 8px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid #e2e2e2;
+    box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .menuEndPage .smallPart {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+
+  .menuEndPage .smallPart .aTag {
+    display: block;
+    width: 26px;
+    height: 26px;
+    margin: 0 auto 3px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .menuEndPage .smallPart .aTag img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+
+  .menuEndPage .smallPart .textUnderItem {
+    font-size: 10px;
+    color: #777777;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  /* Center Raised Phone Button */
+  .menuEndPage .centerPart {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .menuEndPage .centerPart .phoneBtnWrapper {
+    position: relative;
+    top: -20px;
+    margin-bottom: -20px;
+  }
+
+  .menuEndPage .centerPart .phoneBtn {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background-color: var(--wp--preset--color--luxury-gold, #f3bf01);
+    border: 3px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(243, 191, 1, 0.55);
+    transition: transform 0.2s ease;
+  }
+
+  .menuEndPage .centerPart .phoneBtn:hover {
+    transform: scale(1.05);
+  }
+
+  .menuEndPage .centerPart .phoneIconInner {
+    width: 26px;
+    height: 26px;
+    animation: latdat_2 0.8s ease-in-out infinite;
+  }
+
+  .menuEndPage .centerPart .phoneIconInner img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  .menuEndPage .centerPart .textUnderItem {
+    margin-top: 4px;
+  }
+}
