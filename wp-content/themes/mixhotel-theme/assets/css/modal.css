@@ -356,3 +356,271 @@ body.modal-open {
   filter: brightness(1.08);
 }
 
+/* ==========================================================================
+   Booking Confirmation Modal (#mixhotel-booking-modal)
+   ========================================================================== */
+
+.mix-booking-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal-overlay, 1000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+}
+
+.mix-booking-modal.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mix-booking-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: var(--z-modal-overlay, 1000);
+}
+
+.mix-booking-modal__content {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  border: 1px solid rgba(197, 168, 128, 0.3);
+  border-radius: 18px;
+  padding: 32px 24px 24px;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.8), 0 0 30px rgba(197, 168, 128, 0.1);
+  z-index: var(--z-modal-content, 1050);
+  transform: scale(0.92) translateY(12px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  text-align: center;
+}
+
+.mix-booking-modal.is-active .mix-booking-modal__content {
+  transform: scale(1) translateY(0);
+}
+
+.mix-booking-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.mix-booking-modal__close:hover {
+  background-color: rgba(197, 168, 128, 0.2);
+  color: #ffffff;
+  border-color: var(--wp--preset--color--luxury-gold, #c5a880);
+}
+
+.mix-booking-modal__icon {
+  margin: 0 auto 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(197, 168, 128, 0.12);
+  border: 1px solid rgba(197, 168, 128, 0.35);
+}
+
+.mix-booking-modal__kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  margin-bottom: 6px;
+}
+
+.mix-booking-modal__title {
+  font-family: var(--wp--preset--font-family--heading, 'Questrial', sans-serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.mix-booking-modal__desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  margin: 0 0 20px;
+}
+
+.mix-booking-modal__card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.mix-booking-modal__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 13px;
+}
+
+.mix-booking-modal__row:last-child {
+  border-bottom: none;
+}
+
+.mix-booking-modal__label {
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+}
+
+.mix-booking-modal__code {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  background: rgba(197, 168, 128, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(197, 168, 128, 0.25);
+}
+
+.mix-booking-modal__val {
+  color: #ffffff;
+  font-weight: 600;
+  text-align: right;
+  max-width: 240px;
+}
+
+.mix-booking-modal__timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #48bb78;
+  font-weight: 600;
+}
+
+.mix-timer-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #48bb78;
+  animation: pulseAura 1.5s infinite;
+}
+
+.mix-booking-modal__sandbox {
+  background: rgba(197, 168, 128, 0.07);
+  border: 1px dashed rgba(197, 168, 128, 0.4);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.mix-sandbox-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  background: #c5a880;
+  color: #0f0f12;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.mix-sandbox-text {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #d1d5db;
+  margin: 0;
+}
+
+.mix-booking-modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mix-modal-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mix-modal-dismiss-btn {
+  background: transparent;
+  border: none;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+  font-size: 13px;
+  padding: 8px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  margin-top: 4px;
+}
+
+.mix-modal-dismiss-btn:hover {
+  color: #ffffff;
+}
+
+/* Spinner and Form Error Alerts */
+.mix-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: mixSpin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+@keyframes mixSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mix-form-error-alert {
+  background: rgba(201, 42, 42, 0.15);
+  border: 1px solid rgba(201, 42, 42, 0.4);
+  color: #ff8787;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+

@@ -237,6 +237,11 @@
       "name": "contact-modal",
       "title": "Contact Modal",
       "area": "uncategorized"
+    },
+    {
+      "name": "booking-modal",
+      "title": "Booking Modal",
+      "area": "uncategorized"
     }
   ]
 }

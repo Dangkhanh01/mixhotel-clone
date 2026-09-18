@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BookingLeadContract",
+  "description": "Schema hợp đồng dữ liệu cho CPT booking_lead trong WordPress",
+  "type": "object",
+  "required": [
+    "post_title",
+    "post_type",
+    "post_status",
+    "meta_input"
+  ],
+  "properties": {
+    "post_title": {
+      "type": "string",
+      "pattern": "^#LEAD-\\d{8}-\\d{3,}$",
+      "description": "Mã đơn dạng #LEAD-YYYYMMDD-001"
+    },
+    "post_type": {
+      "type": "string",
+      "enum": ["booking_lead"]
+    },
+    "post_status": {
+      "type": "string",
+      "enum": ["publish", "pending"]
+    },
+    "meta_input": {
+      "type": "object",
+      "required": [
+        "_mixhotel_lead_customer_name",
+        "_mixhotel_lead_customer_phone",
+        "_mixhotel_lead_branch_id",
+        "_mixhotel_lead_demand",
+        "_mixhotel_lead_status"
+      ],
+      "properties": {
+        "_mixhotel_lead_customer_name": { "type": "string", "maxLength": 100 },
+        "_mixhotel_lead_customer_phone": { "type": "string", "pattern": "^0[3|5|7|8|9][0-9]{8}$" },
+        "_mixhotel_lead_branch_id": { "type": ["string", "integer"] },
+        "_mixhotel_lead_branch_name": { "type": "string" },
+        "_mixhotel_lead_room_id": { "type": "integer" },
+        "_mixhotel_lead_room_name": { "type": "string" },
+        "_mixhotel_lead_demand": { "type": "string" },
+        "_mixhotel_lead_booking_date": { "type": "string" },
+        "_mixhotel_lead_booking_time": { "type": "string" },
+        "_mixhotel_lead_note": { "type": "string" },
+        "_mixhotel_lead_status": {
+          "type": "string",
+          "enum": ["pending", "contacted", "confirmed", "cancelled"]
+        },
+        "_mixhotel_lead_ip": { "type": "string" },
+        "_mixhotel_lead_is_demo": { "type": "integer", "enum": [0, 1] }
+      }
+    }
+  }
+}

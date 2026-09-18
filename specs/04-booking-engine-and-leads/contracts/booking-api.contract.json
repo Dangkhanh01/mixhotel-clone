@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BookingAPIContract",
+  "description": "AJAX API Contract for POST admin-ajax.php?action=mixhotel_submit_booking",
+  "type": "object",
+  "properties": {
+    "request": {
+      "type": "object",
+      "required": ["action", "customer_name", "customer_phone"],
+      "properties": {
+        "action": { "type": "string", "const": "mixhotel_submit_booking" },
+        "mixhotel_booking_nonce": { "type": "string" },
+        "mixhotel_booking_security": { "type": "string" },
+        "customer_name": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "customer_phone": { "type": "string", "pattern": "^(0[3|5|7|8|9])+([0-9]{8})$" },
+        "branch_id": { "type": ["string", "integer"] },
+        "booking_demand": { "type": "string" },
+        "room_id": { "type": "integer" },
+        "room_name": { "type": "string" },
+        "booking_date": { "type": "string" },
+        "booking_time": { "type": "string" },
+        "booking_note": { "type": "string" },
+        "mixhotel_hp_email": { "type": "string", "description": "Honeypot field, must be empty" },
+        "website_url": { "type": "string", "description": "Honeypot field, must be empty" }
+      }
+    },
+    "response_success": {
+      "type": "object",
+      "required": ["success", "data"],
+      "properties": {
+        "success": { "type": "boolean", "const": true },
+        "data": {
+          "type": "object",
+          "required": ["lead_id", "lead_code", "message"],
+          "properties": {
+            "lead_id": { "type": "integer" },
+            "lead_code": { "type": "string" },
+            "message": { "type": "string" },
+            "is_demo": { "type": "boolean" },
+            "branch_name": { "type": "string" },
+            "branch_hotline": { "type": "string" },
+            "branch_zalo": { "type": "string" },
+            "hold_minutes": { "type": "integer", "default": 15 }
+          }
+        }
+      }
+    },
+    "response_error": {
+      "type": "object",
+      "required": ["success", "data"],
+      "properties": {
+        "success": { "type": "boolean", "const": false },
+        "data": {
+          "type": "object",
+          "required": ["message"],
+          "properties": {
+            "message": { "type": "string" },
+            "code": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

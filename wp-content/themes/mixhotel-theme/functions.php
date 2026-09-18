@@ -136,11 +136,57 @@ function mixhotel_enqueue_assets() {
         array('in_footer' => true, 'strategy' => 'defer')
     );
 
+    wp_enqueue_script(
+        'mixhotel-booking-engine',
+        $theme_uri . '/assets/js/booking-engine.js',
+        array(),
+        $theme_version,
+        array('in_footer' => true, 'strategy' => 'defer')
+    );
+
     // Localize data for scripts
-    wp_localize_script('mixhotel-contact-modal', 'MixHotelData', array(
-        'themeUri'  => $theme_uri,
-        'ajaxUrl'   => admin_url('admin-ajax.php'),
-        'nonce'     => wp_create_nonce('mixhotel_booking_nonce')
-    ));
+    $is_demo = get_option('mixhotel_demo_sandbox_mode', '1') === '1';
+    $localize_data = array(
+        'themeUri' => $theme_uri,
+        'ajaxUrl'  => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('mixhotel_booking_nonce'),
+        'isDemo'   => $is_demo,
+    );
+
+    wp_localize_script('mixhotel-contact-modal', 'MixHotelData', $localize_data);
+    wp_localize_script('mixhotel-booking-engine', 'MixHotelData', $localize_data);
+
+    // 4. Conditional CSS/JS for Room Pages (T006, T011, T012)
+    if ( is_singular('hotel_room') ) {
+        wp_enqueue_style(
+            'mixhotel-room-detail',
+            $theme_uri . '/assets/css/room-detail.css',
+            array('mixhotel-style'),
+            $theme_version
+        );
+        wp_enqueue_script(
+            'mixhotel-room-gallery',
+            $theme_uri . '/assets/js/room-gallery.js',
+            array(),
+            $theme_version,
+            array('in_footer' => true, 'strategy' => 'defer')
+        );
+    }
+
+    if ( is_post_type_archive('hotel_room') ) {
+        wp_enqueue_style(
+            'mixhotel-room-archive',
+            $theme_uri . '/assets/css/room-archive.css',
+            array('mixhotel-style'),
+            $theme_version
+        );
+        wp_enqueue_script(
+            'mixhotel-room-filter',
+            $theme_uri . '/assets/js/room-filter.js',
+            array(),
+            $theme_version,
+            array('in_footer' => true, 'strategy' => 'defer')
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'mixhotel_enqueue_assets');

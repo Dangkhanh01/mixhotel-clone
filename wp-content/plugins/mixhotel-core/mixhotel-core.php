@@ -25,6 +25,11 @@ define('MIXHOTEL_CORE_URL', plugin_dir_url(__FILE__));
 // Load các module thành phần
 require_once MIXHOTEL_CORE_DIR . 'includes/class-taxonomies.php';
 require_once MIXHOTEL_CORE_DIR . 'includes/class-cpt-room.php';
+require_once MIXHOTEL_CORE_DIR . 'includes/class-meta-boxes.php';
+require_once MIXHOTEL_CORE_DIR . 'includes/class-helpers.php';
+require_once MIXHOTEL_CORE_DIR . 'includes/class-booking-handler.php';
+require_once MIXHOTEL_CORE_DIR . 'includes/class-settings.php';
+require_once MIXHOTEL_CORE_DIR . 'includes/class-admin-leads.php';
 
 /**
  * Khởi tạo plugin
@@ -32,6 +37,10 @@ require_once MIXHOTEL_CORE_DIR . 'includes/class-cpt-room.php';
 function mixhotel_core_init() {
     MixHotel_Taxonomies::init();
     MixHotel_CPT::init();
+    MixHotel_Meta_Boxes::init();
+    MixHotel_Booking_Handler::init();
+    MixHotel_Settings::init();
+    MixHotel_Admin_Leads::init();
 }
 add_action('plugins_loaded', 'mixhotel_core_init');
 

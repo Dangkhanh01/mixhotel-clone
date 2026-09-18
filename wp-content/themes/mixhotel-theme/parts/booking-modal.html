@@ -1,0 +1,72 @@
+<!-- wp:html -->
+<div id="mixhotel-booking-modal" class="mix-booking-modal" role="dialog" aria-modal="true" aria-labelledby="mix-booking-modal-title" aria-describedby="mix-booking-modal-desc" aria-hidden="true">
+  <!-- Overlay Backdrop -->
+  <div class="mix-booking-modal__overlay" data-booking-modal-close tabindex="-1"></div>
+
+  <!-- Dialog Box -->
+  <div class="mix-booking-modal__content">
+    <!-- Close Button -->
+    <button type="button" class="mix-booking-modal__close" data-booking-modal-close aria-label="Đóng cửa sổ">&times;</button>
+
+    <!-- Success Header -->
+    <div class="mix-booking-modal__header">
+      <div class="mix-booking-modal__icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c5a880" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      <span class="mix-booking-modal__kicker">ĐÃ TIẾP NHẬN YÊU CẦU</span>
+      <h3 id="mix-booking-modal-title" class="mix-booking-modal__title">Giữ Phòng Thành Công!</h3>
+      <p id="mix-booking-modal-desc" class="mix-booking-modal__desc">
+        Hệ thống đã ghi nhận thông tin đặt phòng. Mix sẽ liên hệ xác nhận tình trạng phòng trống trong vòng 15 phút.
+      </p>
+    </div>
+
+    <!-- Lead Info Card -->
+    <div class="mix-booking-modal__card">
+      <div class="mix-booking-modal__row">
+        <span class="mix-booking-modal__label">Mã giữ phòng:</span>
+        <span class="mix-booking-modal__code" data-booking-code>#LEAD-ĐANG-TẢI</span>
+      </div>
+
+      <div class="mix-booking-modal__row">
+        <span class="mix-booking-modal__label">Chi nhánh tiếp nhận:</span>
+        <strong class="mix-booking-modal__val" data-booking-branch>Mix Boutique Hotel</strong>
+      </div>
+
+      <div class="mix-booking-modal__row">
+        <span class="mix-booking-modal__label">Thời gian giữ phòng:</span>
+        <span class="mix-booking-modal__timer">
+          <span class="mix-timer-dot"></span> 15 - 20 phút
+        </span>
+      </div>
+    </div>
+
+    <!-- Sandbox Disclaimer Banner -->
+    <div class="mix-booking-modal__sandbox" data-booking-sandbox-notice style="display:none;">
+      <div class="mix-sandbox-tag">
+        <span class="mix-sandbox-badge">DEMO SANDBOX</span>
+      </div>
+      <p class="mix-sandbox-text">
+        Đây là dự án <strong>Technical Clone</strong>. Đơn đặt phòng này đã được lưu thật vào CSDL WordPress và tạo thông báo mô phỏng an toàn đến quản trị viên.
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mix-booking-modal__actions">
+      <a href="https://zalo.me/+84383104010" target="_blank" rel="noopener noreferrer" class="mixLuxuryBtn mixLuxuryBtnPrimary mix-modal-btn" data-booking-zalo-btn>
+        <span>Xác Nhận Ngay Qua Zalo</span>
+      </a>
+
+      <a href="tel:0383104010" class="mixLuxuryBtn mixLuxuryBtnOutline mix-modal-btn" data-booking-call-btn>
+        <span>Gọi Hotline (<span data-booking-hotline>038 310 4010</span>)</span>
+      </a>
+
+      <button type="button" class="mix-modal-dismiss-btn" data-booking-modal-close>
+        Đóng cửa sổ
+      </button>
+    </div>
+  </div>
+</div>
+<!-- /wp:html -->
