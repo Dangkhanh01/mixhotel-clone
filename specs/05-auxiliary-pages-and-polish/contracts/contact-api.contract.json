@@ -1,0 +1,103 @@
+{
+  "contract": "contact-api",
+  "version": "1.0.0",
+  "description": "API Contract cho AJAX Contact Form Handler trong mixhotel-core plugin",
+  "endpoint": {
+    "url": "/wp-admin/admin-ajax.php",
+    "method": "POST",
+    "content_type": "application/x-www-form-urlencoded"
+  },
+  "request": {
+    "action": "mixhotel_submit_contact",
+    "fields": {
+      "_mixhotel_contact_nonce": {
+        "type": "string",
+        "required": true,
+        "description": "WordPress Nonce token cho action 'mixhotel_contact_nonce'"
+      },
+      "contact_name": {
+        "type": "string",
+        "required": true,
+        "validation": "sanitize_text_field, min 2 chars",
+        "description": "Họ tên người liên hệ"
+      },
+      "contact_phone": {
+        "type": "string",
+        "required": true,
+        "validation": "regex /^0[35789][0-9]{8}$/ — SĐT Việt Nam 10 số",
+        "description": "Số điện thoại liên hệ"
+      },
+      "contact_email": {
+        "type": "string",
+        "required": true,
+        "validation": "is_email() + sanitize_email()",
+        "description": "Địa chỉ email"
+      },
+      "contact_message": {
+        "type": "string",
+        "required": false,
+        "validation": "sanitize_textarea_field, max 1000 chars",
+        "description": "Nội dung tin nhắn"
+      },
+      "mixhotel_hp_email": {
+        "type": "string",
+        "required": false,
+        "description": "Honeypot field #1 — phải rỗng, nếu có giá trị → bot"
+      },
+      "website_url": {
+        "type": "string",
+        "required": false,
+        "description": "Honeypot field #2 — phải rỗng, nếu có giá trị → bot"
+      }
+    }
+  },
+  "response_success": {
+    "success": true,
+    "data": {
+      "message": "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất.",
+      "is_demo": true
+    }
+  },
+  "response_error_examples": [
+    {
+      "success": false,
+      "data": {
+        "message": "Vui lòng điền đầy đủ thông tin bắt buộc."
+      }
+    },
+    {
+      "success": false,
+      "data": {
+        "message": "Số điện thoại không hợp lệ. Vui lòng nhập 10 chữ số bắt đầu bằng 03, 05, 07, 08 hoặc 09."
+      }
+    },
+    {
+      "success": false,
+      "data": {
+        "message": "Địa chỉ email không hợp lệ."
+      }
+    },
+    {
+      "success": false,
+      "data": {
+        "message": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau 10 phút."
+      }
+    },
+    {
+      "success": false,
+      "data": {
+        "message": "Xác thực bảo mật thất bại. Vui lòng tải lại trang."
+      }
+    }
+  ],
+  "security": {
+    "nonce_action": "mixhotel_contact_nonce",
+    "nonce_field": "_mixhotel_contact_nonce",
+    "honeypot_fields": ["mixhotel_hp_email", "website_url"],
+    "rate_limit": {
+      "max_requests": 3,
+      "window_minutes": 10,
+      "storage": "WordPress Transients keyed by client IP"
+    }
+  }
+}
