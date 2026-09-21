@@ -7,11 +7,23 @@
 # ==============================================================================
 # Thư mục uploads (ảnh, tài liệu media dung lượng lớn)
 wp-content/uploads/
+wp-content/uploads-webpc/
 wp-content/blogs.dir/
 wp-content/upgrade/
 wp-content/cache/
 wp-content/backup-db/
 wp-content/backups/
+wp-content/updraft/
+wp-content/.htaccess
+
+# Dependencies bên thứ 3 (Chỉ track code do đội dev tự viết - REAL_WORLD_AGENCY_WORKFLOW.md 13.1)
+wp-content/plugins/*
+!wp-content/plugins/mixhotel-core/
+!wp-content/plugins/mixhotel-core/**
+!wp-content/plugins/akismet/
+!wp-content/plugins/akismet/**
+!wp-content/plugins/hello.php
+!wp-content/plugins/index.php
 
 # Logs & Debugging (Tuân thủ AGENTS.md & bảo mật)
 wp-content/debug.log

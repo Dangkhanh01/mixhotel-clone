@@ -65,6 +65,12 @@ graph TD
 3. **Thư mục Tải lên (`wp-content/uploads/`):**
    * Chứa hình ảnh phòng, banner, logo. Thư mục này nằm ngoài Git tracking để tránh làm phình repo code.
 
+4. **Danh Sách Plugin Bên Thứ Ba Được Phê Duyệt (Approved 3rd-party Plugins):**
+   * **Spectra (`ultimate-addons-for-gutenberg`):** Cung cấp thư viện Block nâng cao (Container, Grid, Tabs) phục vụ trải nghiệm biên tập No-code khi quản trị viên tạo trang mới trong Block Editor. Các trang cốt lõi (Trang chủ, Chi tiết phòng, Danh mục phòng) duy trì vận hành trên FSE Native Block Patterns để tối ưu Core Web Vitals và đạt tốc độ tải cao nhất.
+   * **Rank Math SEO (`seo-by-rank-math`):** Quản lý thẻ meta OpenGraph, chấm điểm bài viết chuẩn SEO, tự động tạo XML Sitemap và sinh cấu trúc Schema `LodgingBusiness` cho khách sạn.
+   * **Converter for Media (`webp-converter-for-media`):** Tự động chuyển đổi toàn bộ ảnh tải lên thư viện Media sang định dạng WebP/AVIF siêu nhẹ.
+   * **UpdraftPlus (`updraftplus`):** Công cụ sao lưu tự động (Backup & Restore) CSDL và mã nguồn định kỳ lên Google Drive trước khi bàn giao.
+
 ---
 
 ## 3. CƠ CHẾ BOOKING LEAD ENGINE

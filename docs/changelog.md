@@ -6,6 +6,11 @@ Tất cả các thay đổi kiến trúc, tính năng và sửa lỗi của dự
 
 ## [Unreleased]
 
+### Added - 2026-09-21
+- **Kiến trúc & Quản lý Phụ thuộc (Approved 3rd-party Plugins & Git Hardening):**
+  - `docs/system-architecture.md`: Bổ sung danh sách 4 plugin bên thứ 3 được phê duyệt theo chuẩn SOP Agency (Spectra, Rank Math SEO, Converter for Media, UpdraftPlus).
+  - `.gitignore`: Đồng bộ quy tắc loại trừ dependencies bên thứ 3, thư mục sao lưu UpdraftPlus (`wp-content/updraft/`), cache WebP (`wp-content/uploads-webpc/`) và file cấu hình runtime nhằm đảm bảo an toàn dữ liệu, chống leak secrets và tinh gọn repository tuân thủ `REAL_WORLD_AGENCY_WORKFLOW.md` mục 13.1.
+
 ### Added - 2026-09-17
 - **Hoàn thành Feature 04: Booking Engine and Leads (`specs/04-booking-engine-and-leads/`):**
   - **Plugin — AJAX Handler & Lead Engine:**
