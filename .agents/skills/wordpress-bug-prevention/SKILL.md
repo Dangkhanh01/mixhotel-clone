@@ -173,3 +173,101 @@ function mixhotel_handle_booking() {
     }
     ```
   * Trong JavaScript điều khiển Accordion, sử dụng `e.preventDefault()` để kiểm soát trạng thái `open` và class `is-open` một cách tất định (deterministic), đồng thời đóng các item khác để đảm bảo single-open UX mượt mà.
+
+---
+
+## 7. PHÂN HỆ: FSE TEMPLATES & BLOCK PATTERNS
+
+### BUG-07: PHP KHÔNG CHẠY trong file `.html` của FSE Templates/Parts
+
+* **Triệu chứng:** PHP tags (`<?php ... ?>`), `get_template_part()`, `the_content()`, `WP_Query` bên trong file `.html` (templates/ hoặc parts/) bị render nguyên văn ra màn hình thay vì được thực thi.
+* **Root cause:** WordPress FSE chỉ parse Block Grammar trong `.html` files. PHP Engine KHÔNG được gọi cho các files này. Chỉ có `.php` files mới execute PHP.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **TUYỆT ĐỐI KHÔNG** đặt PHP code trong `templates/*.html` hay `parts/*.html`.
+  * Mọi logic PHP (WP_Query, the_content, get_post_meta, etc.) PHẢI nằm trong `patterns/*.php`.
+  * FSE Templates `.html` chỉ được chứa Block Grammar — `<!-- wp:template-part -->` và `<!-- wp:pattern {"slug":"..."} /-->`.
+  * Tham chiếu pattern từ template bằng block pattern slug, KHÔNG dùng `get_template_part()`.
+* **Code so sánh:**
+```html
+<!-- ❌ SAI: PHP trong .html template (sẽ không chạy!) -->
+<!-- wp:html -->
+<?php
+  $query = new WP_Query(['post_type' => 'post']);
+  while ($query->have_posts()) : $query->the_post();
+?>
+<article><?php the_title(); ?></article>
+<?php endwhile; ?>
+<!-- /wp:html -->
+
+<!-- ✅ ĐÚNG: Template .html chỉ có Block Grammar -->
+<!-- wp:template-part {"slug":"header","area":"header"} /-->
+<!-- wp:group {"tagName":"main","layout":{"type":"default"}} -->
+<main class="wp-block-group">
+    <!-- wp:pattern {"slug":"mixhotel/blog-archive-content"} /-->
+</main>
+<!-- /wp:group -->
+<!-- wp:template-part {"slug":"footer","area":"footer"} /-->
+```
+* **Pattern .php thực hiện PHP:**
+```php
+<?php
+/**
+ * Title: Blog - Archive Content
+ * Slug: mixhotel/blog-archive-content
+ * Categories: mixhotel
+ */
+?>
+<!-- wp:html -->
+<?php
+$query = new WP_Query(['post_type' => 'post', 'posts_per_page' => 9]);
+while ($query->have_posts()) : $query->the_post();
+?>
+<article><?php the_title(); ?></article>
+<?php endwhile; wp_reset_postdata(); ?>
+<!-- /wp:html -->
+```
+* **Phát hiện tại:** Feature 05 — `home.html`, `single.html`, `page-lien-he.html`, `page.html`, `404.html` — đều phải refactor thành pattern `.php` + template `.html` thuần.
+
+---
+
+## 8. PHÂN HỆ: FORM INPUTS, WEBKIT PSEUDO-ELEMENTS & DARK MODE
+
+### BUG-08: Lỗi chữ đen & vạch phân cách // trong HTML5 Date Input (`input[type="date"]`)
+* **Triệu chứng:** 
+  1. Chữ trong ô chọn ngày nhận phòng (`input[type="date"]`) bị màu đen hoặc xám tối (`rgb(0, 0, 0)`) trên nền tối (`#0c0806`), không đồng bộ chữ trắng (`#ffffff`) với các ô khác.
+  2. Xuất hiện 2 dấu phân cách gạch chéo `//` hoặc vạch thẳng `|` không mong muốn giữa ngày, tháng, năm.
+* **Root cause:** 
+  1. WebKit/Blink đóng gói các phần tử ngày tháng trong User-Agent Shadow DOM (`::-webkit-datetime-edit`, `::-webkit-datetime-edit-fields-wrapper`, `::-webkit-datetime-edit-month-field`, `::-webkit-datetime-edit-day-field`, `::-webkit-datetime-edit-year-field`, `::-webkit-datetime-edit-text`).
+  2. Mặc định Blink áp dụng `color: initial;` và `border-left: 1px solid` lên các sub-fields (`month-field`, `day-field`, `year-field`) nếu không được set tường minh. Đặt `color: #ffffff` chỉ ở thẻ cha `input` hoặc `::-webkit-datetime-edit` là không đủ để ghi đè shadow DOM sub-fields.
+  3. Dùng `display: none` trên `::-webkit-datetime-edit-text` cùng với `margin-right` làm gãy tính toán flexbox/inline-block của Blink bên trong `DateTimeEditElement`, khiến các ký tự số bị co lại chỉ còn 1px (biến mất hoặc như dấu gạch `' '`).
+  4. Gom selector có class kết hợp pseudo-element của WebKit (e.g. `.class::-webkit-datetime-edit`) vào chung một block phẩy `,` bị Blink coi là invalid và drop toàn bộ block CSS.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * Luôn khai báo tường minh cả `color: #ffffff !important;` và `-webkit-text-fill-color: #ffffff !important;` kèm `border: none !important;` cho từng sub-field:
+    ```css
+    input[type="date"]::-webkit-datetime-edit-month-field,
+    input[type="date"]::-webkit-datetime-edit-day-field,
+    input[type="date"]::-webkit-datetime-edit-year-field,
+    input[type="time"]::-webkit-datetime-edit-hour-field,
+    input[type="time"]::-webkit-datetime-edit-minute-field,
+    input[type="time"]::-webkit-datetime-edit-ampm-field {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      border: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      outline: none !important;
+    }
+    ```
+  * Để triệt tiêu hoàn toàn 2 dấu gạch chéo `//` mà vẫn giữ khoảng cách tự nhiên giữa các số:
+    ```css
+    input[type="date"]::-webkit-datetime-edit-text {
+      color: transparent !important;
+      -webkit-text-fill-color: transparent !important;
+      font-size: 0px !important;
+      width: 0px !important;
+      margin: 0 4px !important;
+      border: none !important;
+    }
+    ```
+  * Không áp dụng quy tắc này cho `input[type="time"]::-webkit-datetime-edit-text` vì ô giờ cần giữ dấu hai chấm `:` hiển thị màu trắng (`color: #ffffff !important;`).
+

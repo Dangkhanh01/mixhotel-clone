@@ -1,134 +1,125 @@
-# FEATURE SPECIFICATION: 05 - AUXILIARY PAGES & POLISH
+# FEATURE SPECIFICATION: 05 - AUXILIARY PAGES & POLISH (REVISED V2)
 
 **Feature Branch:** `feat/05-auxiliary-pages-and-polish`  
-**Status:** Spec Ready (Chờ duyệt)  
-**Mục tiêu:** Xây dựng toàn bộ các trang phụ trợ còn thiếu trên website clone Mix Boutique Hotel, hoàn thiện navigation đầy đủ, tối ưu SEO Schema với Rank Math, và đánh bóng giao diện/hiệu năng để sẵn sàng nghiệm thu bàn giao.
+**Status:** In Progress (Spec-Driven Development)  
+**Mục tiêu tối thượng:** Tái tạo chính xác 100% chuẩn mực thị giác (Pixel-Perfect Dark Luxury) của toàn bộ các trang phụ trợ từ prototype chuẩn Next.js tại thư mục `@ui/` sang WordPress FSE Block Theme `mixhotel-theme`, giải quyết triệt để vấn đề sụt giảm chất lượng (UI Downgrade) của mô hình incremental coding.
 
 ---
 
-## 1. CLARIFICATIONS (GỠ BỎ ĐIỂM MƠ HỒ)
+## 1. THIẾT LẬP NGUYÊN TẮC: GROUND TRUTH & ZERO DRIFT
 
-* **Q: Dự án clone kỹ thuật, các trang phụ trợ cần clone đến mức độ nào?**
-  * **A:** Clone bố cục visual và cấu trúc nội dung. Nội dung text/hình ảnh sử dụng nội dung mẫu có thể thay thế No-code qua Block Editor. Không hardcode nội dung tĩnh — tất cả phải quản trị được từ WP Admin.
+* **HIẾN PHÁP GIAO DIỆN (Single Source of Truth):**
+  Thư mục `@ui/src/app/` và `@ui/src/components/` là **Design Master tuyệt đối (tương đương bản vẽ Figma nghiệm thu)**.
+  Mọi mã nguồn WordPress Pattern, FSE Template, CSS và Assets sinh ra trong Spec 5 BẮT BUỘC phải đối chiếu 1:1 với component tương ứng trong `@ui`. TUYỆT ĐỐI KHÔNG tự chế HTML/CSS ngoài phạm vi prototype mẫu.
 
-* **Q: Website gốc `mixhotel.vn` có những trang phụ trợ nào cần tái tạo?**
-  * **A:** Dựa trên phân tích sitemap navigation của website gốc, cần tái tạo:
-    1. **Trang Giới Thiệu** (`/gioi-thieu/`) — Giới thiệu khách sạn, tiện nghi highlight, video YouTube, đánh giá khách hàng, carousel ảnh.
-    2. **Trang Gallery** (`/gallery/`) — Lưới hình ảnh tổng hợp tất cả phòng, nhóm theo chi nhánh, phân trang, lightbox xem ảnh lớn.
-    3. **Trang Tin Tức / Blog** (`/tin-tuc/`) — Archive bài viết WordPress Post type `post` sử dụng Categories để phân nhóm (Review, Địa điểm, Cẩm nang, Kiến thức).
-    4. **Trang Chi Nhánh Chi Tiết** (`/chi-nhanh/{slug}/` hoặc custom slug theo CPT `hotel_branch`) — Thông tin chi nhánh, danh sách phòng thuộc chi nhánh, bản đồ Google Maps embed, thông tin liên hệ.
-    5. **Trang Liên Hệ** (`/lien-he/`) — Form liên hệ (Tên, SĐT, Email, Nội dung), thông tin công ty, danh sách chi nhánh với map embed.
-    6. **Các Trang Chính Sách** (Thanh toán, Bảo mật thông tin, Đặt trả phòng) — WordPress Pages chuẩn với nội dung text mẫu.
-    7. **Trang 404** — Trang báo lỗi thân thiện, gợi ý quay về trang chủ hoặc trang phòng.
+* **BẢNG ÁNH XẠ NGUỒN (SOURCE-TO-TARGET MAPPING):**
 
-* **Q: Trang Liên hệ dùng form gì? Có cài plugin form không?**
-  * **A:** Để tuân thủ nguyên tắc "ít plugin nhất có thể" trong `AGENTS.md §2`, form liên hệ sẽ được xử lý bằng **custom AJAX handler trong `mixhotel-core`** (tương tự cơ chế Booking Lead), không cài thêm plugin form. Dữ liệu lưu vào WordPress Options hoặc gửi email. Vì đây là clone kỹ thuật, form chạy ở chế độ **Demo Sandbox** — lưu log mô phỏng thay vì gửi email thật.
-
-* **Q: Blog/Tin tức sử dụng CPT riêng hay WordPress Post mặc định?**
-  * **A:** Sử dụng **WordPress Post type mặc định (`post`)** kết hợp **Categories** để phân nhóm chuyên mục (Review, Địa điểm hẹn hò, Cẩm nang, Kiến thức khách sạn). Đây là giải pháp tối ưu vì tận dụng toàn bộ hạ tầng sẵn có của WordPress Core: RSS, Archive templates, Gutenberg editor, REST API, Rank Math SEO integration.
-
-* **Q: SEO Schema `LodgingBusiness` cấu hình ở đâu?**
-  * **A:** Plugin **Rank Math SEO** (đã cài và kích hoạt) hỗ trợ Local SEO Schema. Cấu hình thông qua WP Admin → Rank Math → Local SEO, khai báo thông tin khách sạn: tên, địa chỉ, số điện thoại, giờ làm việc, loại hình kinh doanh. Không cần code PHP thủ công cho phần này.
+| Trang | Source File trong `@ui` | WordPress Target Template / Pattern |
+|---|---|---|
+| **Giới Thiệu** | `ui/src/app/gioi-thieu/page.tsx` | `templates/page-gioi-thieu.html` $\rightarrow$ `patterns/about-*.php` |
+| **Gallery** | `ui/src/app/gallery/page.tsx` | `templates/page-gallery.html` $\rightarrow$ `patterns/gallery-grid.php` |
+| **Liên Hệ** | `ui/src/app/lien-he/page.tsx` | `templates/page-lien-he.html` $\rightarrow$ `patterns/contact-page-content.php` + `patterns/contact-maps.php` |
+| **Chi Nhánh** | `ui/src/components/branch/BranchDetailTemplate.tsx` | `templates/single-hotel_branch.html` $\rightarrow$ `patterns/branch-detail.php` |
+| **Tin Tức (Archive)** | `ui/src/app/tin-tuc/page.tsx` | `templates/home.html` $\rightarrow$ `patterns/blog-archive-content.php` |
+| **Bài Viết (Single)** | `ui/src/components/article/ArticleDetailClient.tsx` | `templates/single.html` $\rightarrow$ `patterns/blog-single-content.php` |
+| **Chính Sách Thanh Toán** | `ui/src/app/chinh-sach-thanh-toan/page.tsx` | `patterns/policy-payment.php` (hoặc Gutenberg Block Pattern) |
+| **Chính Sách Bảo Mật** | `ui/src/app/chinh-sach-bao-mat-thong-tin/page.tsx` | `patterns/policy-privacy.php` |
+| **Chính Sách Đặt Trả** | `ui/src/app/chinh-sach-dat-tra-phong/page.tsx` | `patterns/policy-booking.php` |
+| **Trang 404** | `ui/src/app/mixhotel-luxury.css` (`.block404`) | `templates/404.html` $\rightarrow$ `patterns/page-404.php` |
 
 ---
 
-## 2. BẢN ĐỒ TRANG (SITEMAP) VÀ TRẠNG THÁI HIỆN TẠI
+## 2. QUY CHUẨN DESIGN SYSTEM & TYPOGRAPHY
 
-| # | Trang | URL mục tiêu | Template FSE | Trạng thái |
-|:--|:------|:-------------|:-------------|:-----------|
-| 1 | Trang chủ | `/` | `front-page.html` | ✅ Feature 02 |
-| 2 | Danh mục phòng | `/khach-san-tinh-yeu/` | `archive-hotel_room.html` | ✅ Feature 03 |
-| 3 | Chi tiết phòng | `/khach-san-tinh-yeu/{slug}/` | `single-hotel_room.html` | ✅ Feature 03 |
-| 4 | **Giới thiệu** | `/gioi-thieu/` | `page-gioi-thieu.html` | 🔲 Feature 05 |
-| 5 | **Gallery** | `/gallery/` | `page-gallery.html` | 🔲 Feature 05 |
-| 6 | **Chi nhánh chi tiết** | `/chi-nhanh/{slug}/` | `single-hotel_branch.html` | 🔲 Feature 05 |
-| 7 | **Tin tức (Blog)** | `/tin-tuc/` | `home.html` (blog archive) | 🔲 Feature 05 |
-| 8 | **Bài viết chi tiết** | `/tin-tuc/{slug}/` | `single.html` | 🔲 Feature 05 |
-| 9 | **Liên hệ** | `/lien-he/` | `page-lien-he.html` | 🔲 Feature 05 |
-| 10 | **Chính sách Thanh toán** | `/chinh-sach-thanh-toan/` | `page.html` (generic) | 🔲 Feature 05 |
-| 11 | **Chính sách Bảo mật** | `/chinh-sach-bao-mat-thong-tin/` | `page.html` (generic) | 🔲 Feature 05 |
-| 12 | **Chính sách Đặt trả phòng** | `/chinh-sach-dat-tra-phong/` | `page.html` (generic) | 🔲 Feature 05 |
-| 13 | **Trang 404** | (bất kỳ URL không tồn tại) | `404.html` | 🔲 Feature 05 |
+1. **Font Chữ Thương Hiệu (Philosopher Font):**
+   * Font chữ chủ đạo của Mix Boutique Hotel là **Philosopher** (`Philosopher-Bold.ttf`, `Philosopher-Regular.ttf`).
+   * Phải được nạp qua `@font-face` trong `assets/css/` từ `assets/fonts/`.
+   * Toàn bộ Heading H1, H2, H3, kicker, giá phòng và nút CTA phải có class font hoặc thuộc tính `font-family: 'Philosopher', sans-serif`.
+
+2. **Bảng Màu Dark Luxury Chuẩn:**
+   * Nền chính: `#070503` (đen cà phê huyền bí).
+   * Nền thẻ Card / Section: `#140e0a` hoặc `#1c140e`.
+   * Viền thẻ (Border): `rgba(200, 137, 34, 0.25)` (vàng kim ánh mờ).
+   * Điểm nhấn vàng (Accent Gold): `#c88922`.
+   * Vàng kim rực rỡ (Highlight Gold): `#ffe2a0`.
+   * Chữ chính: `#fff8ec` (trắng kem ngà, dịu mắt).
+   * Chữ phụ / mô tả: `#a0a0a8` / `#c5b8a5`.
+   * Nút bấm CTA: Gradient vàng kim 3 điểm dừng `linear-gradient(to right, #c88922, #ffe2a0, #d9a83a)` bo tròn viên thuốc (`rounded-full` / `border-radius: 9999px`).
+
+3. **Kiến Trúc CSS:**
+   * Thay vì tự viết class BEM tùy tiện, sử dụng bộ CSS đồng bộ từ `@ui` (`assets/css/pages-luxury.css`), kế thừa hoàn toàn các lớp giao diện chuẩn: `.titleBlock_1`, `.wrapSubcateBlock_1`, `.gold-rectangle`, các utility classes, và hiệu ứng animation (`latdat_2`, `bigshake_1`, `appeared_1`).
 
 ---
 
 ## 3. USER SCENARIOS & ACCEPTANCE CRITERIA
 
-### US1 — Khách Xem Trang Giới Thiệu (Priority: P1)
-* **Given:** Khách bấm menu "GIỚI THIỆU" hoặc truy cập `/gioi-thieu/`.
-* **When:** Trang load xong.
+### US1 — Trang Giới Thiệu Chuẩn Dark Luxury (`/gioi-thieu/`)
+* **Given:** Khách truy cập `http://localhost:8888/gioi-thieu/`.
 * **Then:**
-  1. Hiển thị breadcrumb `Trang chủ > Giới thiệu`.
-  2. Section Hero: Tiêu đề "GIỚI THIỆU VỀ KHÁCH SẠN TÌNH YÊU", slogan brand, ảnh giới thiệu lớn (No-code replaceable qua Core Image Block).
-  3. Section Trải nghiệm: Grid 6 icon tiện nghi (WiFi, Bồn tắm, Cosplay, An toàn, Đồ chơi, Dịch vụ) — dùng Core Image Block + Heading.
-  4. Section Video YouTube embed (Responsive iframe 16:9).
-  5. Section Đánh giá khách hàng: Grid card 2 cột, mỗi card có avatar (Core Image Block), tên, chức danh, rating sao, nội dung đánh giá.
-  6. Section Thư viện hình ảnh: Carousel/Gallery ảnh phòng (Core Gallery Block hoặc pattern custom).
+  1. Breadcrumb chuẩn: `Trang chủ / Giới thiệu` trên nền `#0f0b08`.
+  2. Kicker vàng: `GIỚI THIỆU VỀ HỆ THỐNG`.
+  3. Tiêu đề H1 font Philosopher: `VỀ KHÁCH SẠN TÌNH YÊU MIX BOUTIQUE`.
+  4. Story quote nổi bật: *"ĐỪNG ĐỂ TÌNH YÊU CỦA BẠN CHỈ CÓ MỘT MÀU!"* màu `#ffe2a0`.
+  5. Banner ảnh lớn bo góc tròn `rounded-3xl` (ảnh `mixhotel-gt-.webp`) kèm badge nổi `Boutique Mood` và overlay tiêu đề `"Không Gian Riêng Tư • Cảm Xúc Thăng Hoa"`.
+  6. Lưới 6 Đặc quyền tiện nghi (WiFi nhanh, Bồn tắm đôi, Trang phục cosplay, Ghế Tantra, Smart TV & Netflix, Đồ uống & Cocktail) dạng thẻ card `#15100c` viền vàng kim, có icon SVG sắc nét.
+  7. Lưới 4 đánh giá thực tế từ khách hàng thân thiết kèm 5 sao vàng kim.
+  8. Banner CTA cuối trang với nút bấm gradient viên thuốc `"ĐẶT PHÒNG NGAY"`.
 
-### US2 — Khách Xem Gallery Tổng Hợp (Priority: P1)
-* **Given:** Khách bấm menu "GALLERY" hoặc truy cập `/gallery/`.
-* **When:** Trang load xong.
+### US2 — Trang Gallery Bộ Sưu Tập Chuẩn (`/gallery/`)
+* **Given:** Khách truy cập `http://localhost:8888/gallery/`.
 * **Then:**
-  1. Hiển thị breadcrumb `Trang chủ > Gallery`.
-  2. Tiêu đề trang "GALLERY".
-  3. Sidebar trái (hoặc filter trên mobile): Nhóm gallery theo chi nhánh (Gallery Mix Premium, Gallery 256B Đặng Tiến Đông, Gallery Phúc La).
-  4. Grid ảnh phòng dạng card: Thumbnail ảnh đại diện + Tên phòng. Click vào → chuyển đến trang chi tiết phòng tương ứng (`single-hotel_room`).
-  5. Phân trang (Pagination) nếu số phòng vượt quá 12 item/trang.
+  1. Header Gallery: Tiêu đề `GALLERY` với đường kẻ line vàng chân tiêu đề chuẩn class `.titleBlock_1`.
+  2. Thanh Tab lọc chi nhánh: `Tất Cả Các Cơ Sở`, `CS1: Mix Premium Huỳnh Thúc Kháng`, `CS2: 256B Đặng Tiến Đông`, `CS3: 20 Phúc La Hà Đông`. Tab hoạt động lọc ảnh mượt mà.
+  3. Lưới ảnh phòng: Khung ảnh chữ nhật tỷ lệ vàng (`gold-rectangle`), hover zoom mượt mà, overlay gradient đen-vàng kim hiển thị tên phòng và cơ sở.
+  4. Nút phân trang điều hướng.
 
-### US3 — Khách Xem Chi Nhánh Chi Tiết (Priority: P1)
-* **Given:** Khách bấm vào tên chi nhánh từ trang chủ, dropdown menu, hoặc từ link chi nhánh bất kỳ.
-* **When:** Trang `single-hotel_branch` load xong.
+### US3 — Trang Chi Nhánh Chi Tiết Chuẩn (`single-hotel_branch`)
+* **Given:** Khách xem chi tiết chi nhánh (ví dụ: `cs1-huynh-thuc-khang`).
 * **Then:**
-  1. Breadcrumb `Trang chủ > Chi nhánh > {Tên chi nhánh}`.
-  2. Hero banner chi nhánh (Featured Image) kèm tên chi nhánh.
-  3. Nội dung mô tả chi nhánh (Block Editor content, No-code editable).
-  4. Danh sách phòng thuộc chi nhánh: Query các `hotel_room` có `_mixhotel_room_branch_id` trùng với chi nhánh hiện tại. Hiển thị dạng card grid (ảnh, tên, giá tham khảo, link xem chi tiết).
-  5. Thông tin liên hệ chi nhánh: Hotline (link `tel:`), Zalo, Messenger.
-  6. Google Maps embed (lấy từ meta `_mixhotel_branch_map_embed`).
+  1. Hero section hoành tráng: Kicker, tiêu đề chi nhánh font Philosopher cỡ lớn, mô tả vị trí.
+  2. Hàng Stats nổi bật (4 chỉ số: 11 Phòng concept, 24/7 Phục vụ, Bồn sục đôi, 100% Riêng tư).
+  3. Form đặt phòng giữ chỗ nhanh gắn liền với chi nhánh.
+  4. Lưới danh sách phòng của chi nhánh kèm giá và tiện ích nổi bật.
+  5. Bản đồ Google Maps nhúng trực tiếp hoặc link chỉ đường chính xác.
+  6. 3 nút liên hệ nhanh: Gọi Hotline, Nhắn Zalo, Chỉ Đường.
 
-### US4 — Khách Đọc Tin Tức / Blog (Priority: P2)
-* **Given:** Khách bấm menu "TIN TỨC" hoặc truy cập `/tin-tuc/`.
-* **When:** Trang blog archive load xong.
+### US4 — Trang Tin Tức / Blog & Bài Viết Đơn
+* **Given:** Khách xem trang blog (`/tin-tuc/`) hoặc bài viết chi tiết.
 * **Then:**
-  1. Breadcrumb `Trang chủ > Tin tức`.
-  2. Danh sách bài viết dạng card: Featured Image, Tiêu đề (link), Ngày đăng, Excerpt 2 dòng, Danh mục.
-  3. Sidebar phải (desktop): Danh mục bài viết (Categories), Bài viết mới nhất (Recent Posts).
-  4. Phân trang WordPress Pagination chuẩn.
-  5. Click vào bài viết → chuyển đến `single.html` hiển thị nội dung đầy đủ, có breadcrumb, ảnh Featured, meta tác giả/ngày, nội dung Gutenberg blocks.
+  1. Trang archive có 8 chuyên mục tin tức chuẩn: `Review Khách Sạn`, `Địa Điểm Hẹn Hò`, `Địa Điểm Đi Chơi`, `Gợi Ý Quà Tặng`, `Kiến Thức Khách Sạn`, `Cẩm Nang Tình Yêu`, `Địa Chỉ Khách Sạn`.
+  2. Danh sách bài viết dạng thẻ card với ảnh chụp thật từ `assets/images/articles/`, ngày đăng, chuyên mục, tóm tắt.
+  3. Sidebar hiển thị chuyên mục, bài viết xem nhiều, banner CTA đặt phòng.
+  4. Trang bài viết chi tiết (`single.html`): Tiêu đề font Philosopher, ảnh đại diện lớn, Typography chuẩn Dark Luxury dễ đọc, hộp tóm tắt Mục lục bài viết (Table of Contents), và nút chia sẻ Zalo/Facebook.
 
-### US5 — Khách Gửi Form Liên Hệ (Priority: P1)
-* **Given:** Khách truy cập `/lien-he/`.
-* **When:** Điền đầy đủ form (Họ tên*, SĐT*, Email*, Nội dung) và bấm "Gửi".
+### US5 — Trang Liên Hệ & Form AJAX Hoàn Chỉnh (`/lien-he/`)
+* **Given:** Khách truy cập `http://localhost:8888/lien-he/`.
 * **Then:**
-  1. Client-side validation: Họ tên không trống, SĐT 10 số VN, Email hợp lệ.
-  2. Gửi AJAX request kèm Nonce Token (giống cơ chế Booking Lead).
-  3. Server: Sanitize input → Lưu vào log / gửi email demo → Trả JSON success.
-  4. Hiển thị thông báo "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất." màu xanh nổi bật.
-  5. Bên cạnh form: Hiển thị thông tin công ty (Tên, GPKD, Địa chỉ), Hotline, Email, và Google Maps embed các chi nhánh.
+  1. Cột trái: Card form bo góc `rounded-3xl` nền `#140e0a`, input nền `#0c0806` viền vàng kim `#c88922]/30`.
+  2. Form submit qua AJAX không tải lại trang, bảo mật Nonce CSRF, chống bot honeypot, rate limiting 3 lượt/10 phút.
+  3. Client validation (SĐT VN 10 số, Họ tên tối thiểu 2 ký tự).
+  4. Khi gửi thành công: Nút chuyển spinner $\rightarrow$ box thông báo xanh vàng thân thiện $\rightarrow$ ghi nhận lead vào Demo Sandbox CSDL WordPress.
+  5. Cột phải: Thông tin 3 cơ sở kèm icon MapPin vàng, hotline, email, giờ mở cửa 24/7, Box Zalo riêng biệt với nút bấm mở Zalo nhanh.
+  6. Phía dưới: Lưới 3 bản đồ Google Maps của 3 chi nhánh.
 
-### US6 — Khách Xem Trang Chính Sách (Priority: P3)
-* **Given:** Khách bấm link Chính sách từ Footer hoặc dropdown menu.
-* **When:** Trang chính sách load xong.
+### US6 — 3 Trang Chính Sách Chuẩn Dark Luxury Cards
+* **Given:** Khách xem `/chinh-sach-thanh-toan/`, `/chinh-sach-bao-mat-thong-tin/`, `/chinh-sach-dat-tra-phong/`.
 * **Then:**
-  1. Breadcrumb `Trang chủ > {Tên chính sách}`.
-  2. Nội dung chính sách là WordPress Page content, quản trị viên tự sửa qua Block Editor.
-  3. Styling nhất quán với tone Dark Luxury của toàn bộ website.
+  1. Không phải văn bản thô sơ, mà được đóng gói trong Card lớn `rounded-3xl p-8 md:p-12 bg-[#140e0a] border border-[#c88922]/25`.
+  2. Các điều khoản chia thành các hộp con `p-6 rounded-2xl bg-[#1c140e] border border-[#c88922]/20`.
+  3. Có icon trực quan: `Banknote` (tiền mặt), `CreditCard` (chuyển khoản QR/thẻ), `ShieldCheck` (bảo mật), `Clock` (khung giờ lưu trú), `Calendar` (đặt cọc).
+  4. Hộp cam kết bảo mật quyền riêng tư màu vàng kim nổi bật.
 
-### US7 — Trang 404 Thân Thiện (Priority: P3)
-* **Given:** Khách truy cập URL không tồn tại.
-* **When:** Trang 404 hiển thị.
+### US7 — Trang Báo Lỗi 404
+* **Given:** Khách vào đường dẫn không tồn tại.
 * **Then:**
-  1. Illustration/Icon "404" cách điệu theo tone Dark Luxury.
-  2. Thông điệp: "Trang bạn tìm không tồn tại hoặc đã được di chuyển."
-  3. Nút CTA: "Về Trang Chủ" và "Xem Phòng".
+  1. Giao diện Dark Luxury class `.block404` chuẩn styling của Mix Hotel.
+  2. Số 404 lớn nghệ thuật.
+  3. 2 nút bấm điều hướng rõ ràng: Về Trang Chủ và Xem Danh Sách Phòng.
 
 ---
 
-## 4. NON-FUNCTIONAL REQUIREMENTS (NFR)
+## 4. KẾ THỪA & BẢO TOÀN TÀI NGUYÊN BACKEND ĐÃ HOÀN THÀNH
 
-* **NFR-001 (SEO Schema):** Cấu hình Rank Math Local SEO Schema `LodgingBusiness` cho website. Mỗi trang có title tag, meta description phù hợp. XML Sitemap tự động cập nhật khi thêm trang/bài viết mới.
-* **NFR-002 (Hiệu năng):** Tất cả hình ảnh sử dụng `loading="lazy"` (WordPress 5.5+ mặc định). Plugin Converter for Media tự động chuyển đổi ảnh sang WebP/AVIF.
-* **NFR-003 (Responsive):** Tất cả trang phụ trợ responsive hoàn hảo trên viewport 375px (mobile) đến 1440px (desktop).
-* **NFR-004 (No-code Replaceability):** Mọi hình ảnh, nội dung text, video embed phải thay đổi được từ Block Editor mà không cần sửa code.
-* **NFR-005 (Navigation Consistency):** Menu Header và Footer phải bao gồm đầy đủ link đến tất cả trang phụ trợ, đúng thứ tự và cấu trúc dropdown như website gốc.
-* **NFR-006 (Bảo mật Form Liên hệ):** Tuân thủ `AGENTS.md §3` — Nonce, Sanitize, Escape, Rate-limiting.
+* `MixHotel_Contact_Handler` trong `wp-content/plugins/mixhotel-core/includes/class-contact-handler.php` được bảo lưu 100%.
+* Bảng nhật ký Contact Leads trong WP Admin (`mixhotel-sandbox-logs`) được bảo lưu 100%.
+* Quy chuẩn chống lỗi `BUG-07` (không nhúng PHP vào file FSE `.html`, luôn dùng `.php` patterns) được áp dụng nghiêm ngặt cho toàn bộ các trang.

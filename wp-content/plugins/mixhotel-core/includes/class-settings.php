@@ -95,8 +95,10 @@ class MixHotel_Settings {
         check_admin_referer('mixhotel_clear_logs_action');
 
         delete_option('mixhotel_demo_telegram_log');
+        delete_option('mixhotel_demo_contact_log');
         wp_safe_redirect(admin_url('admin.php?page=mixhotel-sandbox-logs&cleared=1'));
         exit;
+
     }
 
     /**
@@ -249,6 +251,49 @@ class MixHotel_Settings {
             <?php else : ?>
                 <div class="notice notice-info">
                     <p><?php esc_html_e('Chưa có bản ghi mô phỏng nào. Hãy thử gửi một đơn đặt phòng từ Hero form hoặc trang Chi tiết phòng để xem dữ liệu xuất hiện tại đây!', 'mixhotel-core'); ?></p>
+                </div>
+            <?php endif; ?>
+
+            <hr style="margin: 40px 0 20px;" />
+
+            <h2><?php esc_html_e('Nhật Ký Tin Nhắn Liên Hệ (Contact Form Leads)', 'mixhotel-core'); ?></h2>
+            <p><?php esc_html_e('Dưới đây là các tin nhắn gửi qua form liên hệ (/lien-he/) được hệ thống Demo Sandbox ghi nhận:', 'mixhotel-core'); ?></p>
+
+            <?php
+            $contact_logs = get_option('mixhotel_demo_contact_log', []);
+            if (!is_array($contact_logs)) {
+                $contact_logs = [];
+            }
+            ?>
+
+            <?php if (!empty($contact_logs)) : ?>
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 150px;"><?php esc_html_e('Thời Gian', 'mixhotel-core'); ?></th>
+                            <th style="width: 160px;"><?php esc_html_e('Họ Tên', 'mixhotel-core'); ?></th>
+                            <th style="width: 130px;"><?php esc_html_e('Số Điện Thoại', 'mixhotel-core'); ?></th>
+                            <th style="width: 180px;"><?php esc_html_e('Email', 'mixhotel-core'); ?></th>
+                            <th><?php esc_html_e('Nội Dung Tin Nhắn', 'mixhotel-core'); ?></th>
+                            <th style="width: 120px;"><?php esc_html_e('IP Client', 'mixhotel-core'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($contact_logs as $clog) : ?>
+                            <tr>
+                                <td><?php echo esc_html($clog['time'] ?? ''); ?></td>
+                                <td><strong><?php echo esc_html($clog['name'] ?? ''); ?></strong></td>
+                                <td><a href="<?php echo esc_url('tel:' . ($clog['phone'] ?? '')); ?>"><?php echo esc_html($clog['phone'] ?? ''); ?></a></td>
+                                <td><?php echo esc_html(!empty($clog['email']) ? $clog['email'] : '—'); ?></td>
+                                <td><pre style="margin: 0; background: #f6f7f7; padding: 6px; font-size: 11px; white-space: pre-wrap;"><?php echo esc_html($clog['message'] ?? ''); ?></pre></td>
+                                <td><code><?php echo esc_html($clog['ip'] ?? ''); ?></code></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php else : ?>
+                <div class="notice notice-info">
+                    <p><?php esc_html_e('Chưa có tin nhắn liên hệ nào. Hãy thử gửi form từ trang /lien-he/ để xem dữ liệu xuất hiện tại đây!', 'mixhotel-core'); ?></p>
                 </div>
             <?php endif; ?>
         </div>

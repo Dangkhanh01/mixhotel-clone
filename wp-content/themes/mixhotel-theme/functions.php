@@ -103,6 +103,16 @@ function mixhotel_enqueue_assets() {
         $theme_version
     );
 
+    // pages-luxury.css — Styles Dark Luxury & Font Philosopher cho toàn bộ trang (T003/T004 Feature 05)
+    $luxury_css_path = get_template_directory() . '/assets/css/pages-luxury.css';
+    $luxury_ver      = file_exists($luxury_css_path) ? (string) filemtime($luxury_css_path) : $theme_version;
+    wp_enqueue_style(
+        'mixhotel-pages-luxury',
+        $theme_uri . '/assets/css/pages-luxury.css',
+        array('mixhotel-style'),
+        $luxury_ver
+    );
+
     // 3. JavaScript files
     wp_enqueue_script(
         'mixhotel-header-scroll',
@@ -144,19 +154,35 @@ function mixhotel_enqueue_assets() {
         array('in_footer' => true, 'strategy' => 'defer')
     );
 
-    // Localize data for scripts
+    // contact-form.js — Xử lý form liên hệ trang /lien-he/ (T020 Feature 05)
+    wp_enqueue_script(
+        'mixhotel-contact-form',
+        $theme_uri . '/assets/js/contact-form.js',
+        array(),
+        $theme_version,
+        array('in_footer' => true, 'strategy' => 'defer')
+    );
+
+    // Localize data for scripts — bao gồm contactNonce cho form liên hệ (T026)
     $is_demo = get_option('mixhotel_demo_sandbox_mode', '1') === '1';
     $localize_data = array(
-        'themeUri' => $theme_uri,
-        'ajaxUrl'  => admin_url('admin-ajax.php'),
-        'nonce'    => wp_create_nonce('mixhotel_booking_nonce'),
-        'isDemo'   => $is_demo,
+        'themeUri'     => $theme_uri,
+        'ajaxUrl'      => admin_url('admin-ajax.php'),
+        'nonce'        => wp_create_nonce('mixhotel_booking_nonce'),
+        'contactNonce' => wp_create_nonce('mixhotel_contact_nonce'),
+        'isDemo'       => $is_demo,
+        'strings'      => array(
+            'contactSuccess' => __('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất.', 'mixhotel-theme'),
+            'contactError'   => __('Có lỗi xảy ra. Vui lòng thử lại hoặc liên hệ trực tiếp hotline.', 'mixhotel-theme'),
+            'networkError'   => __('Không thể kết nối máy chủ. Vui lòng liên hệ trực tiếp qua hotline: 038 310 4010', 'mixhotel-theme'),
+        ),
     );
 
     wp_localize_script('mixhotel-contact-modal', 'MixHotelData', $localize_data);
     wp_localize_script('mixhotel-booking-engine', 'MixHotelData', $localize_data);
+    wp_localize_script('mixhotel-contact-form', 'MixHotelData', $localize_data);
 
-    // 4. Conditional CSS/JS for Room Pages (T006, T011, T012)
+    // 4. Conditional CSS/JS for Room Pages
     if ( is_singular('hotel_room') ) {
         wp_enqueue_style(
             'mixhotel-room-detail',
@@ -190,3 +216,15 @@ function mixhotel_enqueue_assets() {
     }
 }
 add_action('wp_enqueue_scripts', 'mixhotel_enqueue_assets');
+
+/**
+ * Custom Rewrite Rules for Khach San Tinh Yeu branch subpaths
+ */
+function mixhotel_custom_rewrite_rules() {
+    add_rewrite_rule(
+        '^khach-san-tinh-yeu/(mix-boutique-[^/]+)/?$',
+        'index.php?pagename=$matches[1]',
+        'top'
+    );
+}
+add_action('init', 'mixhotel_custom_rewrite_rules');

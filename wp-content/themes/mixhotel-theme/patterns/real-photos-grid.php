@@ -34,7 +34,7 @@ $theme_uri = get_template_directory_uri();
 
         <div class="mixLuxuryPhotoBadge">
           <span class="mixLuxuryPhotoBadgeNumber">01</span>
-          <span class="mixLuxuryPhotoBadgeLabel">Featured room</span>
+          <strong class="mixLuxuryPhotoBadgeLabel">Featured room</strong>
         </div>
 
         <div class="mixLuxuryPhotoMainCaption">

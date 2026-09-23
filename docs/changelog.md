@@ -6,6 +6,57 @@ Tất cả các thay đổi kiến trúc, tính năng và sửa lỗi của dự
 
 ## [Unreleased]
 
+### Fixed & Polished - 2026-09-23
+- **Khắc phục triệt để lỗi 404 trên trang Khách Sạn Tình Yêu & 3 trang chi nhánh con:**
+  - Seed đầy đủ 4 WordPress pages trong cơ sở dữ liệu: `khach-san-tinh-yeu` (ID: 49), `mix-boutique-premium-hotel` (ID: 50), `mix-boutique-hotel-256b-dang-tien-dong` (ID: 51), `mix-boutique-hotel-20-phuc-la-ha-dong` (ID: 52).
+  - Bổ sung WordPress Rewrite Rule trong `functions.php`: ánh xạ đường dẫn dạng cấp con `/khach-san-tinh-yeu/(mix-boutique-[^/]+)/` trực tiếp sang query page tương ứng.
+  - Cập nhật bộ định tuyến template `patterns/page-content.php` tự động nạp `mixhotel/branch-detail` cho 3 chi nhánh và `mixhotel-theme/room-archive-content` cho trang Khách Sạn Tình Yêu.
+  - Tích hợp 100% nội dung Dark Luxury 12 sections của trang landing page `/khach-san-tinh-yeu/` (Hero, 3 showcase chi nhánh với đầy đủ phòng & giá, quy trình 4 bước đặt phòng, form tư vấn chọn chi nhánh/loại phòng, FAQ, CTA và bài viết SEO chuyên sâu kèm Table of Contents).
+- **Tái cấu trúc 1:1 giao diện Trang Gallery (`/gallery/`) theo chuẩn Next.js prototype:**
+  - Đồng bộ toàn bộ 32 hình ảnh concept phòng từ `ui/public/` vào thư mục assets của theme WordPress (`assets/images/`, `assets/tassets/`, `assets/external/`, `assets/storage/`, `assets/uploads/`).
+  - Nâng cấp CSS chuyên sâu trong `assets/css/pages-luxury.css`:
+    - Thanh tab chi nhánh viền vàng kim bo tròn `.subcateBlock_1 .subcateName` với gradient active `#c88922` $\rightarrow$ `#a46d14`.
+    - Lưới ảnh `.galleryMixGrid` tỷ lệ 4:3 (`gold-rectangle`) có viền vàng kim, hover phóng to mượt mà (`transform: scale(1.08)`).
+    - Bộ lọc JavaScript client-side hiển thị nhanh chóng theo chi nhánh, flex column chuẩn xác, phân trang và bài viết chuẩn SEO phía cuối trang.
+- **Kiểm thử tự động nâng cao (`test-spec5-automated.php`):**
+  - Mở rộng suite kiểm thử từ 129 lên **141 tests**, kiểm tra tự động mã HTTP 200 và từ khóa nhận diện của toàn bộ 7 biến thể URL chi nhánh và khách sạn tình yêu. Đạt kết quả: **141/141 PASSED, 0 FAILED, 0 WARNINGS**.
+
+### Added - 2026-09-23
+- **Nâng cấp toàn diện 1:1 Dark Luxury UI & Hoàn thành Feature 05: Auxiliary Pages & Polish (`specs/05-auxiliary-pages-and-polish/`):**
+  - **Typography & Font Philosopher:**
+    - Tích hợp trọn bộ font chữ thương hiệu `Philosopher-Regular.ttf` và `Philosopher-Bold.ttf` vào `assets/fonts/`.
+    - Đăng ký font family `Philosopher` vào `theme.json` cho toàn bộ headings `h1`–`h4` và khai báo `@font-face` chuẩn.
+  - **Hệ thống CSS Dark Luxury (`assets/css/pages-luxury.css` - 664KB):**
+    - Porting toàn bộ quy tắc giao diện cao cấp từ Next.js `@ui/src/app/mixhotel-luxury.css` kết hợp biến màu Design Tokens `--wp--preset--color--*`.
+    - Enqueue tự động qua `functions.php` (`mixhotel-pages-luxury`).
+  - **Trang Giới Thiệu (`page-gioi-thieu`):**
+    - `about-intro.php`: Câu chuyện thương hiệu, trích dẫn triết lý, 4 đoạn văn tinh tế, badge "Boutique Mood", banner `mixhotel-gt-.webp`.
+    - `about-amenities.php`: Grid 6 tiện nghi chuẩn (WiFi, Bồn tắm Jacuzzi, Cosplay, Ghế Tantra, Smart TV 4K, Cocktail) với SVG icons dát vàng.
+    - `about-testimonials.php`: 4 phản hồi khách hàng thực tế với avatar gradient và 5 sao vàng SVG.
+    - `about-cta.php`: Khung kêu gọi hành động bo góc gradient viền vàng kim.
+  - **Trang Gallery (`page-gallery`):**
+    - `gallery-grid.php`: 32 phòng concept từ prototype Next.js (kết hợp query động CPT `hotel_room`), 4 tab phân loại chi nhánh, hiệu ứng phóng to `.gold-rectangle`, bộ lọc client-side mượt mà, phân trang và khung nội dung SEO.
+  - **Trang Chi Nhánh (`single-hotel_branch`):**
+    - `branch-detail.php`: Banner `mixBoutiqueHero`, 4 stats boxes, danh sách phòng bố cục so le, bảng giá 3 nấc, form đặt phòng nhanh AJAX tích hợp và bản đồ Google Maps kèm 3 nút hành động.
+  - **Trang Tin Tức (`home`, `page-tin-tuc`, `single`):**
+    - `blog-archive-content.php`: 8 tab danh mục, 10+ bài viết tạp chí Next.js + query WP động, Dark Luxury cards, phân trang và bộ lọc client-side.
+    - `blog-single-content.php`: Category badge, sapo callout, mục lục tự động (TOC), nút chia sẻ mạng xã hội, khung booking CTA và lưới 3 bài viết liên quan.
+  - **Trang Liên Hệ (`page-lien-he`):**
+    - `contact-page-content.php`: Layout 2 cột tỉ lệ 7:5 chuẩn Dark Luxury, input tối viền vàng kim, chống spam honeypot + Nonce CSRF, cột phải 3 địa chỉ chi nhánh và hộp chat Zalo riêng biệt.
+    - `contact-maps.php`: Lưới bản đồ 3 chi nhánh với liên kết chỉ đường Google Maps.
+    - `assets/js/contact-form.js`: Đồng bộ tương thích hoàn toàn với endpoint AJAX `MixHotel_Contact_Handler` và hiển thị thông báo alert trạng thái.
+  - **3 Trang Chính Sách (`policy-payment`, `policy-privacy`, `policy-booking`):**
+    - `policy-payment.php`: Tiền mặt tại 4 cơ sở, chuyển khoản POS/VietQR, cam kết bảo mật.
+    - `policy-privacy.php`: 4 box điều khoản bảo mật thông tin và thông tin pháp nhân quản lý.
+    - `policy-booking.php`: Quy định đặt theo giờ (giữ 15-20p), đặt qua đêm (cọc 50%), độ tuổi 18+, đổi/hủy và bất khả kháng.
+    - `page-content.php`: Tự động điều hướng các slug chính sách và tin tức sang block pattern tương ứng.
+  - **Trang 404 (`page-404`, `404.html`):**
+    - `page-404.php`: Cấu trúc `.block404`, số 404 gradient vàng kim nghệ thuật, thông báo thân thiện và 2 nút điều hướng `.btnBlock`.
+  - **Kiểm Thử & Đảm Bảo Chất Lượng Toàn Diện (QA):**
+    - Lint cú pháp PHP: 100% không có lỗi trên 36 theme files và 10 plugin files.
+    - Test Suite tự động (`test-spec5-automated.php`): Đạt tuyệt đối **129/129 tests passed** (HTTP 200/404, templates BUG-07, pattern rendering, assets & fonts, contact AJAX security & rate limiting).
+    - Browser Subagent Audit: Kiểm tra trực quan trên trình duyệt thực tế cả Mobile (390x844) và Desktop (1280x800), ghi lại video WebP chứng thực layout Dark Luxury.
+
 ### Added - 2026-09-21
 - **Kiến trúc & Quản lý Phụ thuộc (Approved 3rd-party Plugins & Git Hardening):**
   - `docs/system-architecture.md`: Bổ sung danh sách 4 plugin bên thứ 3 được phê duyệt theo chuẩn SOP Agency (Spectra, Rank Math SEO, Converter for Media, UpdraftPlus).

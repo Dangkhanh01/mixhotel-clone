@@ -108,6 +108,8 @@
   position: absolute;
   top: 18px;
   left: 18px;
+  width: auto;
+  max-width: fit-content;
   padding: 6px 12px;
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.65);
