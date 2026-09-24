@@ -75,11 +75,13 @@ function mixhotel_enqueue_assets() {
         $theme_version
     );
 
+    $bar_css_path = get_template_directory() . '/assets/css/desktop-contact-bar.css';
+    $bar_ver      = file_exists($bar_css_path) ? (string) filemtime($bar_css_path) : $theme_version;
     wp_enqueue_style(
         'mixhotel-desktop-bar',
         $theme_uri . '/assets/css/desktop-contact-bar.css',
         array('mixhotel-style'),
-        $theme_version
+        $bar_ver
     );
 
     wp_enqueue_style(

@@ -271,3 +271,38 @@ while ($query->have_posts()) : $query->the_post();
     ```
   * Không áp dụng quy tắc này cho `input[type="time"]::-webkit-datetime-edit-text` vì ô giờ cần giữ dấu hai chấm `:` hiển thị màu trắng (`color: #ffffff !important;`).
 
+---
+
+### BUG-09: SVG Icon Bị Teo Nhỏ (Co Rút Còn Vài Pixel) Trong Circular Icon Buttons
+* **Triệu chứng:** Icon SVG (như icon điện thoại trong thanh liên hệ nổi `#contactBtnBlock .phoneBlock .imgPart img`) bị teo nhỏ chỉ còn một chấm tí hon (1–3px) bên trong nút tròn 35px.
+* **Root cause:** 
+  1. File SVG thiếu thuộc tính `viewBox="0 0 W H"`. Khi không có `viewBox`, trình duyệt không thể tính toán scale vector tự do theo kích thước của thẻ `<img>`.
+  2. Xung đột padding kép: Nút cha `.imgPart` có kích thước 35px kèm `padding: 6px` hoặc `7px`. Đồng thời, một stylesheet kế thừa (e.g. `pages-luxury.css` cào từ site cũ) đặt `#contactBtnBlock .smallBlock .imgPart img { padding: 10px; }`. Khi `box-sizing: content-box` (hoặc border-box trên img), `35px - 14px (padding cha) - 20px (padding img) = 1px`, bóp nghẹt toàn bộ diện tích hiển thị của SVG.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * BẮT BUỘC file SVG phải có `viewBox="0 0 W H"` đầy đủ và hợp lệ.
+  * Reset triệt để padding trên thẻ `img` bên trong các icon button:
+    ```css
+    #contactBtnBlock .phoneBlock .imgPart img {
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 !important;
+      object-fit: contain !important;
+      display: block !important;
+    }
+    ```
+  * Nút cha chứa icon (`.phoneBlock .imgPart`) phải dùng flexbox căn giữa với padding vừa phải (e.g. `7px` trên nút `36px` để icon đạt kích cỡ ~22px):
+    ```css
+    #contactBtnBlock .phoneBlock .imgPart {
+      width: 36px !important;
+      height: 36px !important;
+      padding: 7px !important;
+      box-sizing: border-box !important;
+      background-color: #043d6d !important;
+      border-radius: 50% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    ```
+  * Sử dụng `filemtime` làm version query parameter khi `wp_enqueue_style` để trình duyệt không lưu cache CSS cũ.
+
