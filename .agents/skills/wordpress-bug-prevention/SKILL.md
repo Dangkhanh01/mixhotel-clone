@@ -306,3 +306,39 @@ while ($query->have_posts()) : $query->the_post();
     ```
   * Sử dụng `filemtime` làm version query parameter khi `wp_enqueue_style` để trình duyệt không lưu cache CSS cũ.
 
+---
+
+### BUG-10: Xung đột CSS Scraped/Legacy với FSE Block Template Patterns (Vỡ Grid Hero Chi Tiết Phòng)
+* **Triệu chứng:** Khi xem chi tiết phòng (`/khach-san-tinh-yeu/<slug>/`), Breadcrumb bị đẩy dạt sang bên trái một mình lưng chừng màn hình, toàn bộ tiêu đề, nút bấm, thông số bị dồn ép sang góc phải hẹp (430px), và ảnh phòng chính bị co rúm thành thumbnail tí hon (~145px × 109px).
+* **Root cause:** 
+  1. Trong file CSS chung tải toàn trang (`pages-luxury.css`), tồn tại quy tắc kế thừa từ web cũ:
+     `.mixDetailHero .mixDetailHeroWrap { display: grid; grid-template-columns: minmax(0, 1.25fr) 430px; gap: 34px; align-items: center; }`
+     được viết cho cấu trúc cũ có 2 con: `.mixDetailHeroContent` và `.mixDetailHeroCard`.
+  2. Trong pattern hiện tại (`room-detail-content.php`), `.mixDetailHeroWrap` chứa 2 con trực tiếp: `<nav class="mixDetailBreadcrumb">` và `<div class="mixDetailHeroGrid">`.
+  3. Quy tắc của file chung có độ ưu tiên CSS Specificity cao hơn (`0,2,0` với 2 class) so với quy tắc trong file chi tiết `.mixDetailHeroWrap` (`0,1,0`). Trình duyệt ép breadcrumb vào cột 1 (688px), và ép toàn bộ `mixDetailHeroGrid` vào cột 2 (430px).
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Tránh rò rỉ namespace:** Khi copy/scrape CSS từ theme cũ, tuyệt đối không để các class trùng tên với component FSE pattern mới nếu cấu trúc DOM khác nhau. Bắt buộc namespace hoặc đổi tên (e.g. `.mixDetailHeroScraped`).
+  * **Tăng tính tự vệ cho Component Stylesheet:**
+    * Trong `room-detail.css`, luôn khai báo với specificity tương đương hoặc cao hơn:
+      ```css
+      .mixDetailHeroWrap,
+      .mixDetailHero .mixDetailHeroWrap {
+        display: block !important;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        box-sizing: border-box;
+      }
+      ```
+  * **Chuỗi phụ thuộc Enqueue:** Trong `functions.php`, stylesheet chuyên trang (`mixhotel-room-detail`) BẮT BUỘC phải khai báo dependency bao gồm stylesheet chung (`mixhotel-pages-luxury`) để luôn được tải sau:
+    ```php
+    wp_enqueue_style(
+        'mixhotel-room-detail',
+        $theme_uri . '/assets/css/room-detail.css',
+        array('mixhotel-style', 'mixhotel-pages-luxury'),
+        $room_detail_ver
+    );
+    ```
+
+

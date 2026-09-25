@@ -40,12 +40,16 @@
   );
 }
 
-.mixDetailHeroWrap {
+.mixDetailHeroWrap,
+.mixDetailHero .mixDetailHeroWrap {
   position: relative;
   z-index: 2;
+  display: block !important;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  box-sizing: border-box;
 }
 
 /* Breadcrumb */
@@ -55,8 +59,9 @@
   gap: 8px;
   font-size: 13px;
   color: var(--wp--preset--color--luxury-gold, #c5a880);
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .mixDetailBreadcrumb a {
@@ -132,12 +137,12 @@
 
 /* Hero Title */
 .mixDetailTitle {
-  font-family: var(--wp--preset--font-family--questrial, sans-serif);
-  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-family: var(--wp--preset--font-family--philosopher, 'Philosopher', sans-serif);
+  font-size: clamp(2rem, 4vw, 3.25rem);
   font-weight: 700;
   color: var(--wp--preset--color--gold-bright, #dfc299);
   line-height: 1.15;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
 }
 
 .mixDetailSubtitle {

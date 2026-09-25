@@ -186,11 +186,13 @@ function mixhotel_enqueue_assets() {
 
     // 4. Conditional CSS/JS for Room Pages
     if ( is_singular('hotel_room') ) {
+        $room_detail_css_path = get_template_directory() . '/assets/css/room-detail.css';
+        $room_detail_ver      = file_exists($room_detail_css_path) ? (string) filemtime($room_detail_css_path) : $theme_version;
         wp_enqueue_style(
             'mixhotel-room-detail',
             $theme_uri . '/assets/css/room-detail.css',
-            array('mixhotel-style'),
-            $theme_version
+            array('mixhotel-style', 'mixhotel-pages-luxury'),
+            $room_detail_ver
         );
         wp_enqueue_script(
             'mixhotel-room-gallery',

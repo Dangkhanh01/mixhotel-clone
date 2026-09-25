@@ -6,6 +6,33 @@ Tất cả các thay đổi kiến trúc, tính năng và sửa lỗi của dự
 
 ## [Unreleased]
 
+### Added & Fixed - 2026-09-25 (Fix Room Detail Hero UI Layout Conflict)
+- **Sửa triệt để lỗi vỡ giao diện Hero Section trên toàn bộ trang chi tiết phòng (`/khach-san-tinh-yeu/<slug>/`):**
+  - **Nguyên nhân:** File `pages-luxury.css` chứa 292 quy tắc kế thừa cũ `.mixDetailHero` (đặc biệt là `.mixDetailHero .mixDetailHeroWrap { display: grid; grid-template-columns: minmax(0, 1.25fr) 430px; }`) với CSS specificity cao hơn, khiến Breadcrumb bị đẩy sang cột trái còn toàn bộ nội dung phòng và ảnh chính bị co rúm vào cột phải 430px (ảnh chính chỉ còn 145px × 109px).
+  - **Giải pháp:**
+    - Đổi tên toàn bộ selector cũ trong `pages-luxury.css` sang `.mixDetailHeroScraped` để triệt tiêu hoàn toàn rò rỉ xung đột.
+    - Cập nhật `room-detail.css`: thiết lập `.mixDetailHeroWrap` với `display: block !important; width: 100%; max-width: 1200px;`, chuyển `.mixDetailTitle` sang font thương hiệu `Philosopher`, căn chỉnh tỷ lệ 4:3 cho ảnh chính lớn (467px × 350px) kèm viền vàng kim và bóng đổ sang trọng.
+    - Cập nhật `functions.php`: bổ sung `'mixhotel-pages-luxury'` vào mảng dependencies của `mixhotel-room-detail` và dùng `filemtime` dynamic version để luôn tải sau và tự động làm mới cache trình duyệt.
+  - **Xác thực:** Kiểm tra tự động bằng Headless Chrome CDP trên cả Desktop (1920x1080) và Mobile (390x844) cho các phòng mẫu (`Karma`, `Bad girl`, `Inferno`, `Get High`), layout 2 cột 7:5 trên Desktop hiển thị chuẩn xác 100% theo prototype.
+
+### Added & Fixed - 2026-09-24 (Seed-First Real Data Migration)
+- **Chuyển đổi toàn diện dữ liệu phòng tĩnh sang CPT Database (Lựa chọn A: "Seed-First"):**
+  - **Mở rộng Seeder (`seed-rooms-branches.php`):**
+    - Nhập toàn bộ 32 phòng thực tế vào WordPress CPT `hotel_room` với đầy đủ meta (mã phòng, chi nhánh, giá 4 mức 2h/thêm giờ/qua đêm/ngày đêm, video YouTube, cờ nổi bật).
+    - Nâng cấp bộ nhập media `mix_import_attachment` hỗ trợ tự động tìm kiếm và tải ảnh đại diện từ `assets/images/`, `assets/storage/`, và `assets/uploads/` vào WordPress Media Library.
+    - Gán tự động bộ tiện nghi `room_amenity` (Jacuzzi, ghế tình yêu, cosplay, trần sao, máy chiếu, BDSM, Smart TV) theo concept của từng phòng.
+    - Thiết lập shared gallery gồm 5 hình ảnh trải nghiệm cao cấp cho từng phòng.
+  - **Tái cấu trúc Pattern Danh mục Phòng (`patterns/room-archive-content.php`):**
+    - Loại bỏ hoàn toàn sự phụ thuộc vào file mảng tĩnh `inc-branches-data.php`.
+    - Truy vấn động toàn bộ chi nhánh và phòng qua `WP_Query` và meta `_mixhotel_room_branch_id`.
+    - Tạo danh sách lựa chọn phòng và chi nhánh trong Form tư vấn nhanh tự động từ cơ sở dữ liệu.
+    - Cập nhật liên kết phòng dùng trực tiếp permalink chuẩn của WordPress (`get_permalink()`).
+  - **Xóa bỏ mã nguồn thừa:**
+    - Xóa file mock `inc-branches-data.php` (51KB), chuyển hệ thống sang hoạt động 100% dựa trên database.
+  - **Kiểm thử tự động 100%:**
+    - Kiểm tra tự động 32/32 phòng qua HTTP cURL (`verify-all-rooms.php`): 32/32 đường dẫn trả về mã HTTP 200 OK (0 lỗi 404).
+    - Kiểm tra `wp-content/debug.log`: 0 lỗi PHP syntax, 0 Warning, 0 Notice.
+
 ### Fixed & Polished - 2026-09-23
 - **Khắc phục triệt để lỗi 404 trên trang Khách Sạn Tình Yêu & 3 trang chi nhánh con:**
   - Seed đầy đủ 4 WordPress pages trong cơ sở dữ liệu: `khach-san-tinh-yeu` (ID: 49), `mix-boutique-premium-hotel` (ID: 50), `mix-boutique-hotel-256b-dang-tien-dong` (ID: 51), `mix-boutique-hotel-20-phuc-la-ha-dong` (ID: 52).
