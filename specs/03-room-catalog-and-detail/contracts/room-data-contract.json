@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HotelRoomDataContract",
+  "description": "Schema definition for hotel_room Custom Post Type and its associated post meta in Mix Hotel.",
+  "type": "object",
+  "required": [
+    "slug",
+    "title",
+    "branch_slug",
+    "price_2h",
+    "price_extra",
+    "price_night",
+    "price_allday"
+  ],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "Unique URL slug for the room (e.g., 'bad-girl', 'inferno', 'karma')"
+    },
+    "title": {
+      "type": "string",
+      "description": "Display title of the room (e.g., 'Room 001 - Bad girl', 'VIP Room 102 - Inferno')"
+    },
+    "code": {
+      "type": "string",
+      "description": "Internal room identifier code (e.g., 'BADGIRL-001')"
+    },
+    "branch_slug": {
+      "type": "string",
+      "enum": ["cs1-huynh-thuc-khang", "cs2-dang-tien-dong", "cs3-phuc-la"],
+      "description": "Slug of the hotel_branch post that this room belongs to"
+    },
+    "excerpt": {
+      "type": "string",
+      "description": "Brief description used in card previews and meta tags"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full description and concept story of the room"
+    },
+    "price_2h": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Price for the first 2 hours in VND (e.g., 199000, 300000, 400000)"
+    },
+    "price_extra": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Price per additional hour in VND (e.g., 50000, 60000, 80000, 100000)"
+    },
+    "price_night": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Overnight stay price in VND (e.g., 500000, 600000, 800000)"
+    },
+    "price_allday": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "All-day stay price in VND (e.g., 700000, 800000, 1000000)"
+    },
+    "youtube_id": {
+      "type": "string",
+      "description": "YouTube video ID for room video preview (empty string if none)"
+    },
+    "featured": {
+      "type": "string",
+      "enum": ["0", "1"],
+      "description": "Whether the room is featured on homepage / highlights"
+    },
+    "thumb_path": {
+      "type": "string",
+      "description": "Theme-relative path to the primary room thumbnail image"
+    },
+    "amenities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "bon-tam-jacuzzi",
+          "smart-tv",
+          "cosplay",
+          "ghe-tinh-yeu",
+          "tran-sao",
+          "may-chieu",
+          "dung-cu-bdsm"
+        ]
+      },
+      "description": "List of room_amenity taxonomy term slugs assigned to the room"
+    }
+  }
+}

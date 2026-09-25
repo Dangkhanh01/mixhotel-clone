@@ -13,13 +13,155 @@ if (!defined('ABSPATH')) {
 }
 
 $theme_uri = get_template_directory_uri();
-$branches_pack = require get_template_directory() . '/inc-branches-data.php';
 $article_pack  = require get_template_directory() . '/inc-khach-san-tinh-yeu-article.php';
 
-$branches_data = $branches_pack['branches'];
-$form_rooms_by_branch = $branches_pack['form_rooms'];
 $article_toc   = $article_pack['toc'];
 $article_html  = $article_pack['html'];
+
+// Query all published branches dynamically from DB
+$branch_posts = get_posts([
+    'post_type'      => 'hotel_branch',
+    'post_status'    => 'publish',
+    'posts_per_page' => -1,
+    'orderby'        => 'post_name',
+    'order'          => 'ASC',
+]);
+
+// Map slugs to standard DOM anchor IDs & Areas
+$branch_anchor_map = [
+    'cs1-huynh-thuc-khang' => 'branch-mix-boutique-premium-hotel',
+    'cs2-dang-tien-dong'    => 'branch-mix-boutique-hotel-256b-dang-tien-dong',
+    'cs3-phuc-la'          => 'branch-mix-boutique-hotel-20-phuc-la-ha-dong',
+];
+
+$branch_area_map = [
+    'cs1-huynh-thuc-khang' => 'Huỳnh Thúc Kháng',
+    'cs2-dang-tien-dong'    => 'Đống Đa',
+    'cs3-phuc-la'          => 'Hà Đông',
+];
+
+// Sort branches in canonical order: cs1, cs2, cs3
+usort($branch_posts, function($a, $b) {
+    $order = ['cs1-huynh-thuc-khang' => 1, 'cs2-dang-tien-dong' => 2, 'cs3-phuc-la' => 3];
+    $pos_a = $order[$a->post_name] ?? 99;
+    $pos_b = $order[$b->post_name] ?? 99;
+    return $pos_a <=> $pos_b;
+});
+
+$branches_data = [];
+$form_rooms_by_branch = [
+    'All' => [],
+];
+
+foreach ($branch_posts as $b_post) {
+    $b_id      = $b_post->ID;
+    $b_slug    = $b_post->post_name;
+    $anchor_id = $branch_anchor_map[$b_slug] ?? ('branch-' . $b_slug);
+    $area_name = $branch_area_map[$b_slug] ?? 'Hà Nội';
+
+    $b_thumb = get_the_post_thumbnail_url($b_id, 'full');
+    if (!$b_thumb) {
+        $b_thumb = $theme_uri . '/assets/tassets/images/banner-home.jpg';
+    }
+
+    $b_address = get_post_meta($b_id, '_mixhotel_branch_address', true);
+
+    // Query published rooms belonging to this branch
+    $room_posts = get_posts([
+        'post_type'      => 'hotel_room',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'meta_key'       => '_mixhotel_room_branch_id',
+        'meta_value'     => $b_id,
+        'orderby'        => 'ID',
+        'order'          => 'ASC',
+    ]);
+
+    $branch_rooms = [];
+    $form_key = $b_post->post_title;
+    if (!isset($form_rooms_by_branch[$form_key])) {
+        $form_rooms_by_branch[$form_key] = [];
+    }
+
+    foreach ($room_posts as $r_post) {
+        $r_id    = $r_post->ID;
+        $r_thumb = get_the_post_thumbnail_url($r_id, 'large');
+        if (!$r_thumb) {
+            $gallery = MixHotel_Helpers::get_room_gallery($r_id);
+            if (!empty($gallery)) {
+                $r_thumb = wp_get_attachment_image_url($gallery[0], 'large');
+            }
+        }
+        if (!$r_thumb) {
+            $r_thumb = $theme_uri . '/assets/tassets/images/banner-home.jpg';
+        }
+
+        $price_2h     = get_post_meta($r_id, '_mixhotel_room_price_2h', true);
+        $price_extra  = get_post_meta($r_id, '_mixhotel_room_price_extra_hour', true);
+        $price_night  = get_post_meta($r_id, '_mixhotel_room_price_overnight', true);
+        $price_allday = get_post_meta($r_id, '_mixhotel_room_price_allday', true);
+
+        $price_formatted = $price_2h ? ('Giá từ: ' . number_format(absint($price_2h), 0, ',', '.') . ' VND/2h') : 'Giá từ: Liên hệ';
+        $excerpt = $r_post->post_excerpt ?: wp_trim_words($r_post->post_content, 35);
+
+        $room_item = [
+            'id'    => $r_id,
+            'name'  => $r_post->post_title,
+            'link'  => get_permalink($r_id),
+            'price' => $price_formatted,
+            'desc'  => $excerpt,
+            'image' => $r_thumb,
+        ];
+        $branch_rooms[] = $room_item;
+
+        // Build options for booking form dropdown
+        $form_item = [
+            'value'    => $r_post->post_title,
+            'text'     => $r_post->post_title,
+            'price1'   => (float)$price_2h,
+            'price2'   => (float)$price_night,
+            'price3'   => $price_allday ? (number_format(absint($price_allday), 0, ',', '.') . 'VND') : '',
+            'pricesub' => $price_extra ? ('(thêm ' . (absint($price_extra) / 1000) . 'k/h)') : '',
+        ];
+        $form_rooms_by_branch[$form_key][] = $form_item;
+        $form_rooms_by_branch['All'][] = $form_item;
+    }
+
+    // Support trimmed and alias keys for booking form compatibility
+    $trimmed_key = trim($form_key);
+    $form_rooms_by_branch[$trimmed_key] = $form_rooms_by_branch[$form_key];
+    $form_rooms_by_branch[$trimmed_key . ' '] = $form_rooms_by_branch[$form_key];
+
+    if (strpos($b_slug, 'huynh-thuc-khang') !== false) {
+        $form_rooms_by_branch['Mix Boutique Premium'] = $form_rooms_by_branch[$form_key];
+    } elseif (strpos($b_slug, 'dang-tien-dong') !== false) {
+        $form_rooms_by_branch['Mix Boutique Hotel 256B Đặng Tiến Đông'] = $form_rooms_by_branch[$form_key];
+        $form_rooms_by_branch['Mix Boutique Hotel 256B Đặng Tiến Đông '] = $form_rooms_by_branch[$form_key];
+    } elseif (strpos($b_slug, 'phuc-la') !== false) {
+        $form_rooms_by_branch['Mix Boutique Hotel 20 Phúc La Hà Đông'] = $form_rooms_by_branch[$form_key];
+        $form_rooms_by_branch['Mix Boutique Hotel 20 Phúc La Hà Đông '] = $form_rooms_by_branch[$form_key];
+    }
+
+    $room_count = count($branch_rooms);
+
+    $branches_data[] = [
+        'id'        => $anchor_id,
+        'image'     => $b_thumb,
+        'badge'     => $b_post->post_title,
+        'area'      => $area_name,
+        'name'      => $b_post->post_title,
+        'address'   => $b_address,
+        'notice'    => 'Đặt phòng tại chi nhánh này nếu bạn muốn chọn đúng khu vực, đúng concept và không nhầm sang chi nhánh khác.',
+        'tags'      => [
+            $room_count . ' phòng',
+            'Superior từ 199k',
+            'Deluxe từ 300k',
+            'VIP từ 400k',
+        ],
+        'roomTitle' => 'Tất cả phòng tại ' . $b_post->post_title,
+        'rooms'     => $branch_rooms,
+    ];
+}
 ?>
 <!-- wp:html -->
 <div class="mixLuxuryBreadcrumbs">
@@ -177,7 +319,7 @@ $article_html  = $article_pack['html'];
               <?php foreach ($branch['rooms'] as $room) : ?>
                 <div class="cateBranchRoom">
                   <a
-                    href="<?php echo esc_url(home_url($room['link'])); ?>"
+                    href="<?php echo esc_url($room['link']); ?>"
                     class="cateBranchRoomImageLink"
                     style="position: relative; display: block; width: 100%; height: 190px; overflow: hidden; border-radius: 12px 12px 0 0;"
                     title="<?php echo esc_attr('Xem chi tiết ' . $room['name']); ?>"
@@ -190,7 +332,7 @@ $article_html  = $article_pack['html'];
                   </a>
                   <div class="cateBranchRoomText">
                     <a
-                      href="<?php echo esc_url(home_url($room['link'])); ?>"
+                      href="<?php echo esc_url($room['link']); ?>"
                       class="cateBranchRoomNameLink"
                       style="display: block; text-decoration: none;"
                       title="<?php echo esc_attr('Xem chi tiết ' . $room['name']); ?>"
@@ -200,7 +342,7 @@ $article_html  = $article_pack['html'];
                     <b><?php echo esc_html($room['price']); ?></b>
                     <span><?php echo esc_html($room['desc']); ?></span>
                     <a
-                      href="<?php echo esc_url(home_url($room['link'])); ?>"
+                      href="<?php echo esc_url($room['link']); ?>"
                       class="cateBranchRoomDetail"
                       style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none;"
                     >
@@ -755,9 +897,9 @@ $article_html  = $article_pack['html'];
                 <div class="cateConsultFormSelectWrap">
                   <select id="landing_branch" name="branch">
                     <option value="All">Chọn chi nhánh</option>
-                    <option value="Mix Boutique Premium">Mix Boutique Premium (Huỳnh Thúc Kháng)</option>
-                    <option value="Mix Boutique Hotel 256B Đặng Tiến Đông ">Mix Boutique Hotel 256B Đặng Tiến Đông</option>
-                    <option value="Mix Boutique Hotel 20 Phúc La Hà Đông ">Mix Boutique Hotel 20 Phúc La Hà Đông</option>
+                    <?php foreach ($branches_data as $b) : ?>
+                      <option value="<?php echo esc_attr($b['name']); ?>"><?php echo esc_html($b['name']); ?></option>
+                    <?php endforeach; ?>
                   </select>
                 </div>
               </div>
