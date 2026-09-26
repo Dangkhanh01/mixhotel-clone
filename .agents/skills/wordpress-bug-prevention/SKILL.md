@@ -341,4 +341,95 @@ while ($query->have_posts()) : $query->the_post();
     );
     ```
 
+---
 
+## 9. PHÂN HỆ: GUTENBERG BLOCK EDITOR & PHP META BOXES
+
+### BUG-11: Xoá/Thêm ảnh trong Custom Meta Box không lưu được trong Gutenberg (Dirty State Failure)
+* **Triệu chứng:** Trong trang chỉnh sửa bài viết/phòng (CPT có `show_in_rest => true`), người dùng bấm xoá ảnh hoặc thêm ảnh trong Custom Meta Box Gallery. Ảnh trên UI biến mất/thêm vào thành công, bấm "Cập nhật / Lưu" hiện thông báo thành công, nhưng khi F5 tải lại trang thì các ảnh đã xoá vẫn còn nguyên (hoặc ảnh thêm mới không lưu).
+* **Root cause:** 
+  1. Gutenberg lưu bài viết qua REST API JSON payload. Đối với các Meta Box PHP truyền thống (`add_meta_box`), Gutenberg chỉ gửi request phụ (`post.php?meta-box-loader=1`) để lưu khi và chỉ khi **Gutenberg nhận diện được Meta Box đã bị thay đổi (`areMetaBoxesDirty() === true`)**.
+  2. Gutenberg theo dõi sự kiện qua listener: `$('#poststuff').on('change input', ':input')`.
+  3. Khi script JS cập nhật input ẩn: `$input.val(new_ids);`, jQuery `.val()` **KHÔNG tự động kích hoạt sự kiện DOM `change` hay `input`**.
+  4. Do không có event nào bắn ra, Gutenberg coi Meta Box chưa từng bị sửa đổi (`isMetaBoxDirty = false`). Nút "Cập nhật" có thể bị vô hiệu hóa, hoặc nếu người dùng bấm lưu (nhờ sửa tiêu đề), Gutenberg **chỉ lưu tiêu đề qua REST API và bỏ qua hoàn toàn việc gửi dữ liệu Meta Box lên server**.
+  5. CPT chưa đăng ký `register_post_meta` với `show_in_rest => true`, khiến REST API không thể nhận và lưu trực tiếp mảng attachment IDs.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Kích hoạt sự kiện kép (Dual Event Trigger):** Mỗi khi thay đổi giá trị của hidden input trong Meta Box bằng JS, BẮT BUỘC phải trigger cả jQuery event lẫn Native Event:
+    ```javascript
+    $input.val(newIds.join(',')).trigger('change').trigger('input');
+    if ($input[0]) {
+        $input[0].dispatchEvent(new Event('change', { bubbles: true }));
+        $input[0].dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    ```
+  * **Đồng bộ Redux Store của Gutenberg:** Gọi trực tiếp action của Gutenberg để nút "Cập nhật" lập tức sáng lên và đánh dấu dirty:
+    ```javascript
+    if (window.wp && wp.data && wp.data.dispatch) {
+        if (wp.data.dispatch('core/edit-post')) {
+            wp.data.dispatch('core/edit-post').setMetaBoxDirty();
+        }
+        if (wp.data.dispatch('core/editor')) {
+            wp.data.dispatch('core/editor').editPost({ metaBoxes: { isDirty: true } });
+        }
+    }
+    ```
+  * **Đăng ký `register_post_meta`:** Luôn đăng ký meta key với `show_in_rest` trong hook `init` để REST API hỗ trợ:
+    ```php
+    register_post_meta('hotel_room', '_mixhotel_room_gallery', [
+        'show_in_rest'  => ['schema' => ['type' => 'array', 'items' => ['type' => 'integer']]],
+        'single'        => true,
+        'type'          => 'array',
+        'auth_callback' => fn() => current_user_can('edit_posts'),
+    ]);
+    ```
+  * **Tự vệ Nonce:** Luôn output `wp_nonce_field` trực tiếp bên trong từng meta box để phòng trường hợp người dùng kéo thả meta box sang các container khác nhau (`normal` vs `side`).
+
+---
+
+## 10. PHÂN HỆ: DOCKER, QUYỀN TRUY CẬP TỆP (FILE PERMISSIONS) & UPLOADS
+
+### BUG-12: Lỗi không thể upload hình ảnh ("Tập tin được tải không thể chuyển tới wp-content/uploads/...")
+* **Triệu chứng:** Khi tải ảnh lên Media Library hoặc qua nút thêm ảnh Gallery trong admin, WordPress hiển thị lỗi:
+  *"Tập tin được tải không thể chuyển tới wp-content/uploads/YYYY/MM."*
+* **Root cause:** 
+  1. Thư mục `wp-content/uploads` hoặc các thư mục con theo năm/tháng được tạo ra bởi lệnh chạy CLI với quyền `root` (khi chạy seed data, import script hoặc tạo thư mục từ host Windows), khiến quyền sở hữu thư mục thuộc về `root:root` (chmod 755).
+  2. Web server Apache / PHP bên trong container chạy dưới danh nghĩa user `www-data` (UID 33). Với quyền `755` của `root`, `www-data` thuộc nhóm "others" và chỉ có quyền đọc/thực thi (`r-x`), hoàn toàn KHÔNG có quyền ghi (`w`).
+  3. Hàm `move_uploaded_file()` của PHP bị chặn (Permission Denied).
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Phân quyền sở hữu chuẩn cho `www-data`:**
+    ```bash
+    docker exec store_app chown -R www-data:www-data /var/www/html/wp-content/uploads
+    docker exec store_app chmod -R 775 /var/www/html/wp-content/uploads
+    ```
+  * **Chạy CLI Script với User `www-data`:** Khi thực thi các lệnh tạo file/seed data qua Docker CLI, luôn truyền cờ `-u www-data`:
+    ```bash
+    docker exec -u www-data store_app php wp-content/plugins/.../seed.php
+    ```
+
+---
+
+### BUG-13: Lỗi Meta Box Script trong Gutenberg (Inline Script & Đồng Bộ Meta Box Loader)
+* **Triệu chứng:** Trong trang chỉnh sửa CPT có Gutenberg, người dùng thêm hoặc xoá ảnh trong Meta Box Gallery. Dù trên giao diện đã biến mất/thêm mới, nhưng sau khi bấm "Cập nhật / Lưu" hoặc nhấn F5 thì trạng thái cũ lại xuất hiện (dữ liệu không được lưu).
+* **Root cause:** 
+  1. **Inline `<script>` trong Callback Meta Box:** Khi nhúng script trực tiếp trong PHP render callback, script chạy trước khi React của Gutenberg mount xong, hoặc khi Gutenberg di chuyển DOM giữa `#metaboxes` và `.edit-post-meta-boxes-area`, các event listener trực tiếp (`$('#btn').on('click')`) bị mất hoặc không bắt được các DOM node mới.
+  2. **Xung đột 2 kênh lưu của Gutenberg:** Khi bấm "Cập nhật", Gutenberg gửi song song REST API JSON request và Meta Box Loader (`POST post.php?meta-box-loader=1`). Meta Box Loader thu thập form inputs qua `new FormData()`. Nếu script chỉ sửa property `.val()` của 1 input mà không sửa attribute `value` hoặc không cập nhật toàn bộ các input cùng tên ở mọi container form, Meta Box Loader sẽ submit giá trị ban đầu và PHP `save_post` sẽ ghi đè giá trị cũ lên DB.
+  3. **Độ trễ do hiệu ứng xóa (`fadeOut`):** Dùng `$thumb.fadeOut(200, function() { $(this).remove(); })` khiến phần tử vẫn còn tồn tại trong DOM suốt 200ms. Nếu hàm thu thập ID chạy ngay, ID vừa bấm xóa vẫn bị gom lại.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Enqueue Script Độc Lập:** Luôn tách JS sang file riêng (e.g. `assets/js/admin-gallery.js`), enqueue qua `admin_enqueue_scripts` với dependencies `['jquery', 'jquery-ui-sortable']` và truyền tham số qua `wp_localize_script`.
+  * **Event Delegation:** Luôn dùng delegated event listener trên `$(document)`:
+    ```javascript
+    $(document).on('click', '.mixhotel-remove-img', function(e) { ... });
+    $(document).on('click', '#mixhotel-add-gallery-btn', function(e) { ... });
+    ```
+  * **Xóa DOM Ngay Lập Tức:** Loại bỏ `$thumb.remove()` ngay lập tức không dùng animation delay trước khi gọi hàm cập nhật dữ liệu.
+  * **Thu thập ID Thực Tế Từ DOM:** Luôn đọc mảng ID trực tiếp từ các thumbnail còn lại trong `#mixhotel-gallery-preview` (`$preview.find('.mixhotel-gallery-thumb')`) thay vì parse/cắt ghép chuỗi cũ.
+  * **Cập Nhật Toàn Bộ Input & Bắn Native Event:**
+    ```javascript
+    $('input[name="mixhotel_room_gallery"]').each(function() {
+        $(this).val(idString).attr('value', idString);
+        $(this).trigger('change').trigger('input');
+        this.dispatchEvent(new Event('input', { bubbles: true }));
+        this.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    ```
+  * **Lưu Tức Thì Qua AJAX Kép:** Mỗi khi có thay đổi (thêm/xóa/reorder), bắn AJAX lưu ngay vào DB kèm nonce và phản hồi status trực quan trên UI ("Đang lưu...", "✓ Đã lưu thay đổi"). Bằng cách này, dù người dùng bấm F5 ngay hay bấm Cập nhật của Gutenberg, dữ liệu đều đã được lưu bảo đảm 100%.

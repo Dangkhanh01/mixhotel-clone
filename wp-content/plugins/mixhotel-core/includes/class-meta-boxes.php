@@ -23,9 +23,68 @@ class MixHotel_Meta_Boxes {
      * Khởi tạo hooks
      */
     public static function init() {
+        add_action( 'init', [ __CLASS__, 'register_post_meta_fields' ] );
+        add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_admin_scripts' ] );
         add_action( 'add_meta_boxes', [ __CLASS__, 'register_meta_boxes' ] );
         add_action( 'save_post_hotel_room', [ __CLASS__, 'save_room_meta' ], 10, 2 );
         add_action( 'save_post_hotel_branch', [ __CLASS__, 'save_branch_meta' ], 10, 2 );
+        add_action( 'wp_ajax_mixhotel_save_room_gallery', [ __CLASS__, 'ajax_save_gallery' ] );
+    }
+
+    /**
+     * Đăng ký post meta với REST API để hỗ trợ Gutenberg dirty tracking và auto-save
+     */
+    public static function register_post_meta_fields() {
+        register_post_meta( 'hotel_room', self::PREFIX . 'room_gallery', [
+            'show_in_rest' => [
+                'schema' => [
+                    'type'  => 'array',
+                    'items' => [
+                        'type' => 'integer',
+                    ],
+                ],
+            ],
+            'single'        => true,
+            'type'          => 'array',
+            'auth_callback' => function() {
+                return current_user_can( 'edit_posts' );
+            },
+        ] );
+    }
+
+    /**
+     * Enqueue wp.media và admin gallery script trên trang edit hotel_room
+     *
+     * @param string $hook_suffix Hook suffix của trang admin hiện tại.
+     */
+    public static function enqueue_admin_scripts( $hook_suffix ) {
+        if ( in_array( $hook_suffix, [ 'post.php', 'post-new.php' ], true ) ) {
+            $screen = get_current_screen();
+            if ( $screen && 'hotel_room' === $screen->post_type ) {
+                wp_enqueue_media();
+
+                wp_enqueue_script(
+                    'mixhotel-admin-gallery',
+                    plugins_url( 'assets/js/admin-gallery.js', dirname( __FILE__ ) ),
+                    [ 'jquery', 'jquery-ui-sortable' ],
+                    '1.1.0',
+                    true
+                );
+
+                global $post;
+                $post_id = $post ? $post->ID : ( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0 );
+
+                wp_localize_script( 'mixhotel-admin-gallery', 'mixhotelGalleryConfig', [
+                    'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+                    'postId'      => $post_id,
+                    'nonce'       => wp_create_nonce( 'mixhotel_room_gallery_ajax' ),
+                    'mediaTitle'  => __( 'Chọn ảnh Gallery Phòng', 'mixhotel-core' ),
+                    'mediaButton' => __( 'Thêm vào Gallery', 'mixhotel-core' ),
+                    'savingText'  => __( 'Đang lưu gallery...', 'mixhotel-core' ),
+                    'savedText'   => __( '✓ Đã lưu thay đổi gallery', 'mixhotel-core' ),
+                ] );
+            }
+        }
     }
 
     /**
@@ -202,73 +261,54 @@ class MixHotel_Meta_Boxes {
      * @param WP_Post $post Current post object.
      */
     public static function render_room_gallery_box( $post ) {
+        // Output nonce trực tiếp trong box
+        wp_nonce_field( 'mixhotel_room_meta_nonce', 'mixhotel_room_nonce' );
+
         $gallery_ids = get_post_meta( $post->ID, self::PREFIX . 'room_gallery', true );
-        $gallery_ids = is_array( $gallery_ids ) ? $gallery_ids : [];
+        if ( is_string( $gallery_ids ) ) {
+            $gallery_ids = array_filter( array_map( 'absint', explode( ',', $gallery_ids ) ) );
+        } elseif ( ! is_array( $gallery_ids ) ) {
+            $gallery_ids = [];
+        }
+
+        $ajax_nonce = wp_create_nonce( 'mixhotel_room_gallery_ajax' );
         ?>
-        <div id="mixhotel-gallery-container">
+        <div id="mixhotel-gallery-container"
+             data-post-id="<?php echo esc_attr( $post->ID ); ?>"
+             data-nonce="<?php echo esc_attr( $ajax_nonce ); ?>"
+             data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+
             <input type="hidden" id="mixhotel_room_gallery" name="mixhotel_room_gallery"
                    value="<?php echo esc_attr( implode( ',', $gallery_ids ) ); ?>">
-            <div id="mixhotel-gallery-preview" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+
+            <div id="mixhotel-gallery-preview" style="display:flex;flex-wrap:wrap;gap:10px;padding:8px 0;margin-bottom:12px;">
                 <?php foreach ( $gallery_ids as $img_id ) :
                     $img_url = wp_get_attachment_image_url( absint( $img_id ), 'thumbnail' );
                     if ( $img_url ) : ?>
                         <div class="mixhotel-gallery-thumb" data-id="<?php echo esc_attr( $img_id ); ?>"
-                             style="position:relative;width:100px;height:100px;">
-                            <img src="<?php echo esc_url( $img_url ); ?>" style="width:100%;height:100%;object-fit:cover;border-radius:4px;">
+                             style="position:relative;width:100px;height:100px;cursor:grab;border:1px solid #ddd;border-radius:4px;overflow:visible;">
+                            <img src="<?php echo esc_url( $img_url ); ?>" style="width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;">
                             <button type="button" class="mixhotel-remove-img"
-                                    style="position:absolute;top:-6px;right:-6px;background:#d63638;color:#fff;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;line-height:1;"
+                                    style="position:absolute;top:-8px;right:-8px;background:#d63638;color:#fff;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:14px;font-weight:bold;line-height:1;display:flex;align-items:center;justify-content:center;z-index:99;box-shadow:0 1px 3px rgba(0,0,0,0.3);"
                                     title="<?php esc_attr_e( 'Xóa ảnh', 'mixhotel-core' ); ?>">&times;</button>
                         </div>
                     <?php endif;
                 endforeach; ?>
             </div>
-            <button type="button" id="mixhotel-add-gallery-btn" class="button">
-                <?php esc_html_e( '+ Thêm ảnh Gallery', 'mixhotel-core' ); ?>
-            </button>
+
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button type="button" id="mixhotel-add-gallery-btn" class="button button-secondary">
+                    <?php esc_html_e( '+ Thêm ảnh Gallery', 'mixhotel-core' ); ?>
+                </button>
+                <span id="mixhotel-gallery-status" style="font-size:13px;font-weight:500;display:none;"></span>
+            </div>
         </div>
+
         <script>
-        (function($) {
-            var frame;
-            $('#mixhotel-add-gallery-btn').on('click', function(e) {
-                e.preventDefault();
-                if (frame) { frame.open(); return; }
-                frame = wp.media({
-                    title: '<?php echo esc_js( __( 'Chọn ảnh Gallery', 'mixhotel-core' ) ); ?>',
-                    button: { text: '<?php echo esc_js( __( 'Thêm vào Gallery', 'mixhotel-core' ) ); ?>' },
-                    multiple: true
-                });
-                frame.on('select', function() {
-                    var attachments = frame.state().get('selection').toJSON();
-                    var $preview = $('#mixhotel-gallery-preview');
-                    var $input = $('#mixhotel_room_gallery');
-                    var currentIds = $input.val() ? $input.val().split(',') : [];
-
-                    attachments.forEach(function(att) {
-                        if (currentIds.indexOf(String(att.id)) === -1) {
-                            currentIds.push(att.id);
-                            var thumbUrl = att.sizes && att.sizes.thumbnail ? att.sizes.thumbnail.url : att.url;
-                            $preview.append(
-                                '<div class="mixhotel-gallery-thumb" data-id="' + att.id + '" style="position:relative;width:100px;height:100px;">' +
-                                '<img src="' + thumbUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:4px;">' +
-                                '<button type="button" class="mixhotel-remove-img" style="position:absolute;top:-6px;right:-6px;background:#d63638;color:#fff;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;line-height:1;" title="Xóa ảnh">&times;</button>' +
-                                '</div>'
-                            );
-                        }
-                    });
-                    $input.val(currentIds.join(','));
-                });
-                frame.open();
-            });
-
-            $(document).on('click', '.mixhotel-remove-img', function() {
-                var $thumb = $(this).closest('.mixhotel-gallery-thumb');
-                var removeId = String($thumb.data('id'));
-                var $input = $('#mixhotel_room_gallery');
-                var ids = $input.val().split(',').filter(function(id) { return id !== removeId; });
-                $input.val(ids.join(','));
-                $thumb.remove();
-            });
-        })(jQuery);
+        window.mixhotelGalleryConfig = window.mixhotelGalleryConfig || {};
+        window.mixhotelGalleryConfig.ajaxUrl = <?php echo wp_json_encode( admin_url( 'admin-ajax.php' ) ); ?>;
+        window.mixhotelGalleryConfig.postId = <?php echo absint( $post->ID ); ?>;
+        window.mixhotelGalleryConfig.nonce = <?php echo wp_json_encode( $ajax_nonce ); ?>;
         </script>
         <?php
     }
@@ -416,13 +456,47 @@ class MixHotel_Meta_Boxes {
         // === Lưu Gallery IDs ===
         if ( isset( $_POST['mixhotel_room_gallery'] ) ) {
             $raw = sanitize_text_field( wp_unslash( $_POST['mixhotel_room_gallery'] ) );
-            if ( empty( $raw ) ) {
+            $raw = trim( $raw );
+            if ( $raw === '' ) {
                 delete_post_meta( $post_id, self::PREFIX . 'room_gallery' );
             } else {
                 $ids = array_map( 'absint', explode( ',', $raw ) );
-                $ids = array_filter( $ids ); // Loại bỏ giá trị 0
+                $ids = array_values( array_filter( $ids ) ); // Loại bỏ giá trị 0 và reindex
+                if ( empty( $ids ) ) {
+                    delete_post_meta( $post_id, self::PREFIX . 'room_gallery' );
+                } else {
+                    update_post_meta( $post_id, self::PREFIX . 'room_gallery', $ids );
+                }
+            }
+        }
+    }
+
+    /**
+     * AJAX handler lưu gallery ảnh phòng ngay lập tức khi thêm/xoá ảnh
+     */
+    public static function ajax_save_gallery() {
+        check_ajax_referer( 'mixhotel_room_gallery_ajax', 'nonce' );
+
+        $post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+        if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
+            wp_send_json_error( [ 'message' => __( 'Quyền bị từ chối.', 'mixhotel-core' ) ] );
+        }
+
+        $raw = isset( $_POST['gallery_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['gallery_ids'] ) ) : '';
+        $raw = trim( $raw );
+
+        if ( $raw === '' ) {
+            delete_post_meta( $post_id, self::PREFIX . 'room_gallery' );
+            wp_send_json_success( [ 'ids' => [] ] );
+        } else {
+            $ids = array_map( 'absint', explode( ',', $raw ) );
+            $ids = array_values( array_filter( $ids ) ); // Loại bỏ 0 và reindex
+            if ( empty( $ids ) ) {
+                delete_post_meta( $post_id, self::PREFIX . 'room_gallery' );
+            } else {
                 update_post_meta( $post_id, self::PREFIX . 'room_gallery', $ids );
             }
+            wp_send_json_success( [ 'ids' => $ids ] );
         }
     }
 
