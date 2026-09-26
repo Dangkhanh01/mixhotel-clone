@@ -6,6 +6,21 @@ Tất cả các thay đổi kiến trúc, tính năng và sửa lỗi của dự
 
 ## [Unreleased]
 
+### Added - 2026-09-26 (Feature 06: FSE Gutenberg Refactor — Spec Kit Creation)
+- **Kiểm toán tuân thủ quy chuẩn `REAL_WORLD_AGENCY_WORKFLOW.md` và phát hiện vi phạm nghiêm trọng:**
+  - Phát hiện hơn 30/33 Block Patterns và Template Parts sử dụng `<!-- wp:html -->` bao trùm, biến codebase thành "vỏ bọc FSE nhưng ruột HTML tĩnh".
+  - Vi phạm Mục 7.4 (No-code Replaceability): Logo, hero banner, ảnh gallery, ảnh phòng đều hardcode thẻ `<img>` tĩnh → Admin không có nút "Replace" để thay ảnh.
+  - Vi phạm Mục 6 & 9.4 (Gutenberg-first): Admin không thể kéo thả, click-to-edit, hay sử dụng Inspector Controls trong Site Editor.
+  - Vi phạm Mục 7.3 (Dynamic Data Binding): Danh sách phòng concept, chi nhánh trên trang chủ hardcode HTML thay vì dùng Query Loop Block.
+- **Khởi tạo bộ Spec Kit `specs/06-fse-gutenberg-refactor/` gồm 3 tài liệu:**
+  - `spec.md` (18.7KB): Đặc tả yêu cầu, phân loại 23 components Nhóm A (chuyển đổi) + 9 Nhóm B (giữ nguyên) + 4 Nhóm C (UI parts), 5 User Stories Gherkin (click-to-edit, replace image, Inspector Controls, layout lock, visual regression), 5 rào cản kỹ thuật và giải pháp.
+  - `plan.md` (23.0KB): CSS Preservation Strategy, bảng Block Grammar Mapping (16 phần tử HTML → Core Blocks), chiến lược xử lý inline styles, 4-Wave Progressive Migration (POC → Static → Images → Complex), 3 Conversion Templates mẫu code (Text-only, Cover background, Site Logo), CSS utility classes cần tạo, ADR-006 draft.
+  - `tasks.md` (15.5KB): 37 Atomic Tasks chia 6 Phases (Phase 0: CSS Resets + ADR, Phase 1: POC 2 components, Phase 2: 8 static patterns, Phase 3: 7 image/cover components, Phase 4: 7 complex hybrid patterns, Phase 5: Final verification + documentation).
+- **Cập nhật tài liệu dự án:**
+  - `docs/roadmap.md`: Bổ sung TUẦN 5+ — FSE Gutenberg Refactor với chiến lược Progressive Migration 4 Waves và Gate 5 criteria.
+  - `docs/system-architecture.md`: Bổ sung mục "Chiến lược FSE Refactor" ghi nhận tình trạng kiến trúc hiện tại và kế hoạch chuyển đổi.
+  - `docs/changelog.md`: Ghi nhận toàn bộ hoạt động kiểm toán và khởi tạo spec kit.
+
 ### Added & Fixed - 2026-09-25 (Fix Room Detail Hero UI Layout Conflict)
 - **Sửa triệt để lỗi vỡ giao diện Hero Section trên toàn bộ trang chi tiết phòng (`/khach-san-tinh-yeu/<slug>/`):**
   - **Nguyên nhân:** File `pages-luxury.css` chứa 292 quy tắc kế thừa cũ `.mixDetailHero` (đặc biệt là `.mixDetailHero .mixDetailHeroWrap { display: grid; grid-template-columns: minmax(0, 1.25fr) 430px; }`) với CSS specificity cao hơn, khiến Breadcrumb bị đẩy sang cột trái còn toàn bộ nội dung phòng và ảnh chính bị co rúm vào cột phải 430px (ảnh chính chỉ còn 145px × 109px).

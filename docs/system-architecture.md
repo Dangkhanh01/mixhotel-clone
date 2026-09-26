@@ -105,3 +105,46 @@ Dự án vận hành trên 3 containers độc lập thông qua file [docker-com
 * **WordPress Container (`store_app`):** Chạy Apache + PHP 8.2, port `8888:80`.
 * **Database Container (`store_db`):** Chạy MySQL 8.0, port `3307:3306` (đã mở cổng `3307` để kết nối DBeaver / Navicat).
 * **phpMyAdmin Container (`store_pma`):** Chạy phpMyAdmin, port `8889:80`.
+
+---
+
+## 5. CHIẾN LƯỢC FSE REFACTOR (Feature 06 — No-code Admin UI)
+
+> **Spec Kit:** `specs/06-fse-gutenberg-refactor/` (spec.md, plan.md, tasks.md)  
+> **Governing Documents:** `REAL_WORLD_AGENCY_WORKFLOW.md` (Mục 6, 7.3, 7.4, 9.4), `AGENTS.md` (Mục 2, 3)
+
+### 5.1. Tình Trạng Kiến Trúc Hiện Tại (Technical Debt)
+
+Toàn bộ Block Patterns và phần lớn Template Parts trong `mixhotel-theme/` sử dụng `<!-- wp:html -->` (Custom HTML Block) bao trùm toàn bộ nội dung section. Kỹ thuật này đảm bảo pixel-perfect khi chuyển đổi từ Next.js prototype nhưng gây ra **4 hệ quả nghiêm trọng:**
+
+1. **Không Click-to-Edit:** Admin không thể sửa text (tiêu đề, giá, mô tả) trực tiếp trong Site Editor.
+2. **Không Replace Image:** Ảnh hero, sự kiện, phòng concept đều là thẻ `<img>` tĩnh, không có nút "Replace" của Gutenberg.
+3. **Không Inspector Controls:** Không đổi được màu nền, font chữ, padding qua panel bên phải.
+4. **Không Kéo Thả:** Admin không thể kéo đổi vị trí section hoặc thêm block mới.
+
+### 5.2. Chiến Lược CSS Preservation
+
+```
+  NGUYÊN TẮC BẤT BIẾN:
+  ├── KHÔNG XÓA bất kỳ file CSS hiện có
+  ├── KHÔNG ĐỔI TÊN class CSS hiện có
+  ├── GẮN class CSS cũ vào Core Blocks qua "className" attribute
+  ├── CHỈ BỔ SUNG CSS resets cho wp-block-* defaults nếu gây xung đột
+  └── TẠO utility classes mới thay cho inline styles bị xóa
+```
+
+### 5.3. Phân Loại Components
+
+| Nhóm | Hành động | Ví dụ |
+|:---|:---|:---|
+| **A: Static Content** (23 patterns + 2 parts) | Chuyển `wp:html` → Core Blocks | `why-choose-us`, `pricing-table`, `booking-steps`, `final-cta`, `events-decoration`, `about-*`, `policy-*`, Header/Footer logo |
+| **B: Dynamic PHP** (9 patterns) | Giữ nguyên `wp:html` → Feature 07 | `concept-rooms`, `branches-list`, `room-detail-content`, `room-archive-content`, `branch-detail`, `blog-*`, `gallery-grid` |
+| **C: Interactive UI** (4 parts) | Giữ nguyên `wp:html` | `mobile-action-bar`, `desktop-contact-bar`, `contact-modal`, `booking-modal` |
+
+### 5.4. Quyết Định Kiến Trúc (ADR-006)
+
+* **Progressive Migration:** 4 Waves bắt đầu từ POC (2 components đơn giản nhất) → kiểm chứng → mở rộng.
+* **Navigation Block Deferred:** Header menu giữ raw HTML thay vì `<!-- wp:navigation -->` vì WordPress 6.x chưa hỗ trợ tốt multi-level dropdown custom styling. Chỉ đổi Logo → `<!-- wp:site-logo -->`.
+* **Layout Lock:** Section wrappers sử dụng `"lock":{"move":true,"remove":true}` ngăn Admin xóa/kéo nhầm bố cục.
+* **Buttons CTA:** Các nút có `data-contact-action` giữ trong `<!-- wp:html -->` vì cần Vanilla JS dispatcher.
+
