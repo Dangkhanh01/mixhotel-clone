@@ -433,3 +433,56 @@ while ($query->have_posts()) : $query->the_post();
     });
     ```
   * **Lưu Tức Thì Qua AJAX Kép:** Mỗi khi có thay đổi (thêm/xóa/reorder), bắn AJAX lưu ngay vào DB kèm nonce và phản hồi status trực quan trên UI ("Đang lưu...", "✓ Đã lưu thay đổi"). Bằng cách này, dù người dùng bấm F5 ngay hay bấm Cập nhật của Gutenberg, dữ liệu đều đã được lưu bảo đảm 100%.
+
+---
+
+## 11. PHÂN HỆ: GUTENBERG CORE BLOCKS & CSS MIGRATION
+
+### BUG-14: `wp-block-columns` ép `display: flex` làm hỏng layout CSS Grid của theme
+* **Triệu chứng:** Khi chuyển đổi component dạng cột từ HTML thuần sang `<!-- wp:columns -->` kèm class CSS Grid có sẵn của theme (ví dụ `.mix-grid-4col`, `.mixLuxuryStepsGrid`, `.mixLuxuryPricingGrid`), layout trên frontend bị tràn ngang, co rúm, hoặc không giữ đúng tỷ lệ cột `grid-template-columns`.
+* **Root cause:** Gutenberg Core mặc định inject class `wp-block-columns` với thuộc tính `display: flex; flex-direction: row; flex-wrap: wrap;`. Khi selector flexbox của WordPress Core có specificity tương đương hoặc nạp sau file CSS của theme, nó ghi đè `display: grid`.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * Bổ sung quy tắc override tường minh trong file CSS của theme:
+    ```css
+    .wp-block-columns.mix-grid-4col,
+    .wp-block-columns.mixLuxuryStepsGrid,
+    .wp-block-columns.mixLuxuryPricingGrid {
+      display: grid !important;
+    }
+    ```
+  * Xóa bỏ margin mặc định của Gutenberg columns để bảo toàn khoảng cách:
+    ```css
+    .wp-block-columns.mix-grid-4col > .wp-block-column,
+    .wp-block-columns.mixLuxuryStepsGrid > .wp-block-column,
+    .wp-block-columns.mixLuxuryPricingGrid > .wp-block-column {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    ```
+
+---
+
+### BUG-15: `wp:site-logo` không hiển thị ảnh nếu theme mod `custom_logo` chưa được khởi tạo
+* **Triệu chứng:** Thay thẻ `<img>` logo thành `<!-- wp:site-logo -->` trong template parts (`header.html`, `footer.html`), nhưng ngoài frontend và trong Site Editor chỉ xuất hiện thẻ `<div>` rỗng (`<div class="wp-block-site-logo"></div>`) hoặc logo bị biến mất hoàn toàn.
+* **Root cause:** Block `core/site-logo` trong WordPress FSE phụ thuộc 100% vào giá trị của theme mod `custom_logo` (`get_theme_mod('custom_logo')`). Nếu logo mới chỉ nằm dưới dạng file ảnh trong theme mà chưa được nhập thành Attachment Post trong WordPress Media Library và gán vào `custom_logo`, block sẽ không render thẻ `<img>`.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * Luôn đảm bảo logo được nhập vào Media Library và gán theme mod:
+    ```php
+    // Gán attachment ID của logo vào custom_logo theme mod
+    set_theme_mod('custom_logo', $attachment_id);
+    ```
+  * Đồng thời kiểm tra styling của container: `wp-block-site-logo img` cần có `width: 100%; height: auto; display: block;` để không bị co kích thước ngoài ý muốn.
+
+---
+
+### BUG-16: Lỗi "Khối chứa nội dung không hợp lệ hoặc không mong đợi" (Block Invalidation) do comment HTML hoặc thuộc tính không chuẩn trong Container Blocks
+* **Triệu chứng:** Mở trang trong trình soạn thảo Gutenberg (`wp-admin/post.php?post=X&action=edit`), xuất hiện thông báo lỗi màu trắng: *"Khối chứa nội dung không hợp lệ hoặc không mong đợi"* kèm nút *"Thử khôi phục"*.
+* **Root cause:** 
+  1. Đặt comment HTML tự do (như `<!-- Review 1: Nguyễn Minh Anh -->`) nằm trực tiếp giữa các block bên trong một container block (`<!-- wp:group -->`, `<!-- wp:columns -->`). Parser của Gutenberg yêu cầu mọi comment bên trong container phải tuân thủ chuẩn block grammar `<!-- wp:... -->` hoặc `<!-- /wp:... -->`. Mọi comment tự do sẽ bị Gutenberg xem là token ngoại lai và tạo ra khối lỗi Classic chiếm vị trí trong layout.
+  2. Khai báo các thuộc tính HTML tự ý (như `aria-label="..."` hoặc `ariaLabel` trong JSON comment của `wp:group`) không thuộc schema chuẩn của Core Block. Khi Gutenberg so sánh HTML nhận được với output render chuẩn, sự sai khác thuộc tính dẫn đến block validation error.
+  3. Đặt thẻ HTML thô (ví dụ `<div class="...">` hoặc thẻ `<figure>` kèm `loading="eager"` tự ý) trực tiếp bên trong `wp:group` mà không đóng gói trong `<!-- wp:html -->...<!-- /wp:html -->`.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Tuyệt đối không** đặt comment HTML thường `<!-- ... -->` giữa các block bên trong `wp:group`. Nếu cần chú thích cấu trúc code, hãy dùng block metadata comment chuẩn `<!-- wp:group {"metadata":{"name":"Tên khối"}} -->` hoặc dùng PHP comments `//` trong file pattern.
+  * Chỉ dùng các thuộc tính được Core Block schema hỗ trợ. Không nhồi nhét `aria-label` trực tiếp vào thẻ wrapper của `wp:group` trừ khi nằm trong `wp:html`.
+  * Mọi phân đoạn chứa mã HTML tùy biến (như SVG icon, badge, overlay phức tạp) phải được đóng gói gọn gàng bên trong `<!-- wp:html -->...<!-- /wp:html -->`.
+
