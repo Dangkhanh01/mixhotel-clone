@@ -34,7 +34,7 @@
     }
   };
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function initContactModal() {
     var modal = document.getElementById('popupContact_1');
     if (!modal) return;
 
@@ -45,14 +45,14 @@
     var lastFocusedElement = null;
 
     // 1. Open Modal Function
-    function openModal(contactType, roomTitle, prefilledMessage) {
+    function openModal(contactType, roomTitle, prefilledMessage, branchId) {
       contactType = contactType || 'zalo';
       lastFocusedElement = document.activeElement;
 
       // Update branch links & labels according to contactType
       branchItems.forEach(function (item) {
-        var branchId = item.getAttribute('data-branch-id');
-        var data = BRANCH_DATA[branchId];
+        var bId = item.getAttribute('data-branch-id');
+        var data = BRANCH_DATA[bId];
         if (!data) return;
 
         var labelEl = item.querySelector('.mix-action-label');
@@ -84,6 +84,21 @@
         }
       });
 
+      // Highlight specific branch if provided
+      if (branchId) {
+        branchItems.forEach(function (item) {
+          if (item.getAttribute('data-branch-id') === branchId) {
+            item.classList.add('mix-branch-selected');
+          } else {
+            item.classList.remove('mix-branch-selected');
+          }
+        });
+      } else {
+        branchItems.forEach(function (item) {
+          item.classList.remove('mix-branch-selected');
+        });
+      }
+
       // Update description with roomTitle if present
       if (modalDesc) {
         if (roomTitle) {
@@ -101,7 +116,7 @@
       }
 
       // Dispatch open event
-      var evt = new CustomEvent('mixhotel:modal:open', { detail: { contactType: contactType, roomTitle: roomTitle } });
+      var evt = new CustomEvent('mixhotel:modal:open', { detail: { contactType: contactType, roomTitle: roomTitle, branchId: branchId } });
       document.dispatchEvent(evt);
     }
 
@@ -138,26 +153,64 @@
       var target = e.target.closest('[data-contact-action]');
       if (!target) return;
 
-      e.preventDefault();
       var actionType = target.getAttribute('data-contact-action') || 'zalo';
       var branchId = target.getAttribute('data-branch-id');
       var roomTitle = target.getAttribute('data-room-title');
 
-      // If specific branch is targeted directly with a phone or zalo action:
+      // If specific branch is targeted directly with a phone action:
       if (branchId && BRANCH_DATA[branchId]) {
         var b = BRANCH_DATA[branchId];
         if (actionType === 'phone') {
           window.location.href = b.phoneTel;
           return;
-        } else if (actionType === 'zalo') {
-          window.open(b.zaloUrl, '_blank', 'noopener,noreferrer');
-          return;
         }
       }
 
+      e.preventDefault();
       // Otherwise open branch select modal
-      openModal(actionType, roomTitle);
+      openModal(actionType, roomTitle, null, branchId);
     });
+
+    // 3b. Delegate #booking, .mix-btn-booking, .callContactLocate, and text containing "Hỏi phòng"
+    document.addEventListener('click', function (e) {
+      var bookingTrigger = e.target.closest('a[href="#booking"], .mix-btn-booking, .callContactLocate, .mixLuxuryBranchBtnZalo a');
+      if (!bookingTrigger) {
+        var link = e.target.closest('a, button');
+        if (link && link.textContent && link.textContent.indexOf('Hỏi phòng') !== -1) {
+          bookingTrigger = link;
+        }
+      }
+      if (!bookingTrigger) return;
+
+      e.preventDefault();
+      var roomTitle = bookingTrigger.getAttribute('data-room-title') || '';
+      var branchId = bookingTrigger.getAttribute('data-branch-id') || '';
+
+      if (!roomTitle) {
+        // If button is inside a card with a heading, detect room/item name
+        var card = bookingTrigger.closest('.mixLuxuryRoomCard, .mixLuxuryRoomItem, .mixLuxuryConceptCard, .mixLuxuryPricingCard');
+        if (card) {
+          var heading = card.querySelector('h3, .mixLuxuryRoomTitle, .mixLuxuryPricingClass');
+          if (heading) {
+            roomTitle = heading.textContent.trim();
+          }
+        }
+      }
+
+      if (!branchId) {
+        var branchCard = bookingTrigger.closest('.mixLuxuryBranchCard, [data-branch-id]');
+        if (branchCard) {
+          branchId = branchCard.getAttribute('data-branch-id') || '';
+        }
+      }
+
+      openModal('zalo', roomTitle, null, branchId);
+    });
+
+    // Expose openModal to window for external callers
+    window.mixhotelOpenBookingModal = function (contactType, roomTitle, branchId) {
+      openModal(contactType || 'zalo', roomTitle || '', null, branchId || '');
+    };
 
     function copyToClipboard(text) {
       if (navigator.clipboard && window.isSecureContext) {
@@ -185,9 +238,6 @@
       }
       document.body.removeChild(textArea);
     }
-
-    // 4. Hero Booking Form is handled by booking-engine.js (Feature 04)
-
 
     // 5. Desktop Contact Bar Scroll-To-Top
     var btnScrollTop = document.getElementById('btnScrollToTop');
@@ -219,5 +269,11 @@
       };
       return String(text).replace(/[&<>"']/g, function (m) { return map[m]; });
     }
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initContactModal);
+  } else {
+    initContactModal();
+  }
 })();

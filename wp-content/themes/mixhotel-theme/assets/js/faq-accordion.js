@@ -10,8 +10,7 @@
   'use strict';
 
   function initFaqAccordion() {
-    var faqItems = document.querySelectorAll('.mixLuxuryFaqItem');
-    console.log('[FAQ Accordion] initFaqAccordion found items:', faqItems.length);
+    var faqItems = document.querySelectorAll('.mixLuxuryFaqItem, .mix-faq-details');
     if (!faqItems.length) return;
 
     faqItems.forEach(function (item, idx) {
@@ -20,9 +19,20 @@
         item.classList.add('is-open');
       } else {
         item.classList.remove('is-open');
+        item.removeAttribute('open');
+        item.open = false;
       }
 
-      var summary = item.querySelector('.mixLuxuryFaqQuestion');
+      // Sync on native toggle event (keyboard accessibility, browser automation)
+      item.addEventListener('toggle', function () {
+        if (item.open) {
+          item.classList.add('is-open');
+        } else {
+          item.classList.remove('is-open');
+        }
+      });
+
+      var summary = item.querySelector('summary, .mixLuxuryFaqQuestion');
       if (!summary) return;
 
       summary.addEventListener('click', function (e) {
@@ -30,10 +40,9 @@
 
         var isCurrentlyOpen = item.hasAttribute('open') || item.open;
         var willOpen = !isCurrentlyOpen;
-        console.log('[FAQ Accordion] Clicked item #' + (idx + 1) + ', currently open:', isCurrentlyOpen, 'will open:', willOpen);
 
         // Close all other items for single-accordion UX
-        faqItems.forEach(function (otherItem, otherIdx) {
+        faqItems.forEach(function (otherItem) {
           if (otherItem !== item) {
             otherItem.removeAttribute('open');
             otherItem.open = false;
@@ -46,12 +55,10 @@
           item.setAttribute('open', '');
           item.open = true;
           item.classList.add('is-open');
-          console.log('[FAQ Accordion] Item #' + (idx + 1) + ' opened. Classlist:', item.className);
         } else {
           item.removeAttribute('open');
           item.open = false;
           item.classList.remove('is-open');
-          console.log('[FAQ Accordion] Item #' + (idx + 1) + ' closed. Classlist:', item.className);
         }
       });
     });

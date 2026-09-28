@@ -86,22 +86,36 @@
   cursor: pointer;
 }
 
+.mixLuxuryPhotoMain::after,
+.mixLuxuryPhotoTile::after,
+.mixLuxuryPhotoMainOverlay {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.mixLuxuryPhotoMain .wp-block-image,
+.mixLuxuryPhotoTile .wp-block-image {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mixLuxuryPhotoMain .wp-block-image img,
+.mixLuxuryPhotoTile .wp-block-image img,
 .mixLuxuryPhotoMain img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform 0.5s ease;
 }
 
 .mixLuxuryPhotoMain:hover img {
   transform: scale(1.04);
-}
-
-.mixLuxuryPhotoMainOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 100%);
-  pointer-events: none;
 }
 
 .mixLuxuryPhotoBadge {
@@ -446,10 +460,52 @@
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
 
+.mixLuxuryConceptStack {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.wp-block-group.mixLuxuryConceptCard {
+  padding: 28px;
+}
+
+.wp-block-columns.mixLuxuryConceptGrid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 32px !important;
+  align-items: center !important;
+}
+
+.wp-block-columns.mixLuxuryConceptGrid > .wp-block-column {
+  margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .wp-block-columns.mixLuxuryConceptGrid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 .mixLuxuryRoomThumb {
   position: relative;
   aspect-ratio: 16/10;
   overflow: hidden;
+  border-radius: 14px;
+}
+
+.mixLuxuryRoomThumb .wp-block-image {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mixLuxuryRoomThumb .wp-block-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
 }
 
 .mixLuxuryRoomThumb img {
@@ -552,10 +608,22 @@
 /* --------------------------------------------------------------------------
    Section 4: Branches System (#branches)
    -------------------------------------------------------------------------- */
-.mixLuxuryBranchesGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+.mixLuxuryBranchesGrid,
+.wp-block-columns.mixLuxuryBranchesGrid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 24px !important;
+}
+
+.wp-block-columns.mixLuxuryBranchesGrid > .wp-block-column {
+  margin: 0 !important;
+}
+
+@media (max-width: 992px) {
+  .mixLuxuryBranchesGrid,
+  .wp-block-columns.mixLuxuryBranchesGrid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 .mixLuxuryBranchCard {
@@ -580,11 +648,19 @@
   overflow: hidden;
 }
 
+.mixLuxuryBranchThumb .wp-block-image {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mixLuxuryBranchThumb .wp-block-image img,
 .mixLuxuryBranchThumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
+  display: block;
 }
 
 .mixLuxuryBranchCard:hover .mixLuxuryBranchThumb img {
@@ -636,8 +712,13 @@
   margin-top: auto;
 }
 
-.mixLuxuryBranchBtn {
+.mixLuxuryBranchActions .wp-block-button {
   flex: 1;
+}
+
+.mixLuxuryBranchBtn,
+.wp-block-button.mixLuxuryBranchBtn .wp-block-button__link {
+  width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -650,23 +731,27 @@
   border: none;
   transition: all 0.2s ease;
   line-height: 1;
+  text-decoration: none;
 }
 
-.mixLuxuryBranchBtnZalo {
+.mixLuxuryBranchBtnZalo,
+.wp-block-button.mixLuxuryBranchBtnZalo .wp-block-button__link {
   background: linear-gradient(135deg, var(--wp--preset--color--luxury-gold, #c5a880), var(--wp--preset--color--gold-bright, #dfc299));
-  color: var(--wp--preset--color--dark-primary, #0f0f12);
+  color: var(--wp--preset--color--dark-primary, #0f0f12) !important;
 }
 
-.mixLuxuryBranchBtnPhone {
+.mixLuxuryBranchBtnPhone,
+.wp-block-button.mixLuxuryBranchBtnPhone .wp-block-button__link {
   background-color: var(--wp--preset--color--dark-tertiary, #22222a);
-  color: #ffffff;
+  color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.mixLuxuryBranchBtnPhone:hover {
+.mixLuxuryBranchBtnPhone:hover,
+.wp-block-button.mixLuxuryBranchBtnPhone .wp-block-button__link:hover {
   background-color: rgba(197, 168, 128, 0.2);
   border-color: var(--wp--preset--color--luxury-gold, #c5a880);
-  color: var(--wp--preset--color--gold-bright, #dfc299);
+  color: var(--wp--preset--color--gold-bright, #dfc299) !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -815,6 +900,19 @@
   font-size: 13px;
 }
 
+.mixLuxuryPricingActions {
+  margin-top: auto;
+  padding-top: 14px;
+  width: 100%;
+}
+
+.mixLuxuryPricingActions .wp-block-button,
+.mixLuxuryPricingActions .wp-block-button__link {
+  width: 100% !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
 /* --------------------------------------------------------------------------
    Section 7: Events & Decoration (#events)
    -------------------------------------------------------------------------- */
@@ -938,20 +1036,23 @@
   gap: 12px;
 }
 
-.mixLuxuryFaqItem {
+.mixLuxuryFaqItem,
+.wp-block-details.mix-faq-details {
   background-color: var(--wp--preset--color--dark-secondary, #17171c);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   overflow: hidden;
   transition: border-color 0.25s ease, background-color 0.25s ease;
+  margin-bottom: 12px;
 }
 
 .mixLuxuryFaqItem[open],
-.mixLuxuryFaqItem.is-open {
+.wp-block-details.mix-faq-details[open] {
   border-color: rgba(197, 168, 128, 0.4);
 }
 
-.mixLuxuryFaqQuestion {
+.mixLuxuryFaqQuestion,
+.wp-block-details.mix-faq-details summary {
   width: 100%;
   padding: 18px 22px;
   background: transparent;
@@ -967,23 +1068,39 @@
   font-size: 16px;
   font-weight: 600;
   list-style: none;
+  list-style-type: none;
   user-select: none;
   transition: color 0.25s ease;
 }
 
-/* Remove default browser disclosure triangles across WebKit/Firefox */
-.mixLuxuryFaqQuestion::-webkit-details-marker,
-.mixLuxuryFaqQuestion::marker {
-  display: none;
+/* Remove default browser disclosure triangles across WebKit/Safari/Blink */
+.wp-block-details.mix-faq-details summary::-webkit-details-marker,
+.mixLuxuryFaqQuestion::-webkit-details-marker {
+  display: none !important;
 }
 
-/* Ensure clicks on inner text or icon always cleanly activate summary */
-.mixLuxuryFaqQuestion > * {
-  pointer-events: none;
+/* Remove default browser disclosure triangles across standard browsers / Firefox */
+.wp-block-details.mix-faq-details summary::marker,
+.mixLuxuryFaqQuestion::marker {
+  display: none !important;
+}
+
+.wp-block-details.mix-faq-details summary::after {
+  content: "▾";
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  font-size: 16px;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.mixLuxuryFaqItem[open] summary::after,
+.wp-block-details.mix-faq-details[open] summary::after {
+  transform: rotate(180deg);
 }
 
 .mixLuxuryFaqItem[open] .mixLuxuryFaqQuestion,
-.mixLuxuryFaqItem.is-open .mixLuxuryFaqQuestion {
+.mixLuxuryFaqItem[open] summary,
+.wp-block-details.mix-faq-details[open] summary {
   color: var(--wp--preset--color--luxury-gold, #c5a880);
 }
 
@@ -994,13 +1111,12 @@
   flex-shrink: 0;
 }
 
-.mixLuxuryFaqItem[open] .mixLuxuryFaqQuestion i,
-.mixLuxuryFaqItem.is-open .mixLuxuryFaqQuestion i {
+.mixLuxuryFaqItem[open] .mixLuxuryFaqQuestion i {
   transform: rotate(180deg);
 }
 
-.mixLuxuryFaqAnswer {
-  display: none;
+.mixLuxuryFaqAnswer,
+.wp-block-details.mix-faq-details > :not(summary) {
   padding: 0 22px 20px;
   font-size: 14px;
   color: var(--wp--preset--color--text-muted, #a0a0a8);
@@ -1010,8 +1126,11 @@
   padding-top: 14px;
 }
 
-.mixLuxuryFaqItem[open] .mixLuxuryFaqAnswer,
-.mixLuxuryFaqItem.is-open .mixLuxuryFaqAnswer {
+.mixLuxuryFaqAnswer {
+  display: none;
+}
+
+.mixLuxuryFaqItem[open] .mixLuxuryFaqAnswer {
   display: block;
 }
 

@@ -58,16 +58,24 @@ $theme_uri = get_template_directory_uri();
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div class="mixAboutBanner">
-  <img src="<?php echo esc_url($theme_uri . '/assets/images/mixhotel-gt-.webp'); ?>" alt="Mix Boutique Hotel — Không Gian Riêng Tư &bull; Cảm Xúc Thăng Hoa" loading="eager" />
-  <div class="mixAboutBannerOverlay"></div>
-  <div class="mixAboutBannerContent">
-    <span class="mixAboutBadge">Boutique Mood</span>
-    <h2 class="mixAboutBannerTitle">Không Gian Riêng Tư &bull; Cảm Xúc Thăng Hoa</h2>
-  </div>
+<?php
+$banner_img = function_exists('mixhotel_get_theme_image_attachment') ? mixhotel_get_theme_image_attachment('mixhotel-gt-.webp') : ['id' => 0, 'url' => $theme_uri . '/assets/images/mixhotel-gt-.webp'];
+?>
+<!-- wp:cover {"url":"<?php echo esc_url($banner_img['url']); ?>","id":<?php echo (int) $banner_img['id']; ?>,"dimRatio":40,"overlayColor":"black","isUserOverlayColor":true,"className":"mixAboutBanner"} -->
+<div class="wp-block-cover mixAboutBanner"><span aria-hidden="true" class="wp-block-cover__background has-black-background-color has-background-dim-40 has-background-dim"></span><img class="wp-block-cover__image-background wp-image-<?php echo (int) $banner_img['id']; ?>" alt="Mix Boutique Hotel — Không Gian Riêng Tư • Cảm Xúc Thăng Hoa" src="<?php echo esc_url($banner_img['url']); ?>" data-object-fit="cover"/>
+<div class="wp-block-cover__inner-container">
+<!-- wp:group {"className":"mixAboutBannerContent"} -->
+<div class="wp-block-group mixAboutBannerContent">
+<!-- wp:paragraph {"className":"mixAboutBadge"} -->
+<p class="mixAboutBadge">Boutique Mood</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":2,"className":"mixAboutBannerTitle"} -->
+<h2 class="wp-block-heading mixAboutBannerTitle">Không Gian Riêng Tư • Cảm Xúc Thăng Hoa</h2>
+<!-- /wp:heading -->
 </div>
-<!-- /wp:html -->
+<!-- /wp:group -->
+</div></div>
+<!-- /wp:cover -->
 
 </section>
 <!-- /wp:group -->

@@ -6,29 +6,31 @@ Tất cả các thay đổi kiến trúc, tính năng và sửa lỗi của dự
 
 ## [Unreleased]
 
-### Planned - SPEC-07 (Toàn Diện No-code WYSIWYG Figma-Style Cho Toàn Bộ Khối Phức Hợp)
-- **Feature 07: Chuyển đổi 100% các khối nội dung phức hợp còn lại sang WordPress Native Core Blocks (`specs/07-wysiwyg-no-code-full-refactor/`):**
-  - **Phase 1 — Auto Media Importer:**
-    - Script tự động nạp toàn bộ ảnh gốc từ `assets/images/` vào WordPress Media Library (`wp_insert_attachment` + `wp_generate_attachment_metadata`).
-    - Trả về mapping `[filename => attachment_id]` để các khối `wp:image` và `wp:cover` liên kết chính xác cả ID và URL.
+### Added & Completed - 2026-09-28 (SPEC-07: Toàn Diện No-code WYSIWYG Figma-Style Cho Toàn Bộ Khối Phức Hợp)
+- **Feature 07 Hoàn Tất 100%: Chuyển đổi toàn bộ các khối nội dung phức hợp còn lại sang WordPress Native Core Blocks (`specs/07-wysiwyg-no-code-full-refactor/`):**
+  - **Phase 1 — Auto Media Importer Thành Công:**
+    - Tự động nạp 81 file ảnh gốc của theme vào WordPress Media Library (`wp_insert_attachment`, `wp_generate_attachment_metadata`) với alt text và meta `_mixhotel_theme_image_filename`.
+    - Cung cấp helper `mixhotel_get_theme_image_attachment($filename)` trả về Attachment ID & URL cho các Core Blocks.
   - **Phase 2 — Banner & Ảnh Nền → `wp:cover`:**
-    - Chuyển đổi `about-intro.php`, `final-cta.php`, `about-cta.php` sang `<!-- wp:cover -->` có nút "Thay thế" ảnh nền 1-click.
-    - Bổ sung CSS cho `.wp-block-cover.mixAboutBanner` trong `pages-luxury.css` và `editor-custom.css`.
+    - `patterns/about-intro.php`: Chuyển đổi Banner Giới Thiệu sang `<!-- wp:cover -->` với ID ảnh và class `wp-image-{id}`, chứa badge `wp:paragraph` và tiêu đề `wp:heading` chỉnh sửa trực quan.
+    - `patterns/final-cta.php` & `patterns/about-cta.php`: Chuyển đổi sang `<!-- wp:cover -->` kết hợp `<!-- wp:buttons -->` và `<!-- wp:button -->`.
+    - Bổ sung CSS cho `.wp-block-cover.mixAboutBanner` trong `assets/css/pages-luxury.css` và `assets/css/editor-custom.css`.
   - **Phase 3 — Lưới Ảnh & Card → `wp:image` + `wp:group` + `wp:buttons`:**
-    - Chuyển đổi `real-photos-grid.php` (6 ảnh thật → 6 khối `wp:image` riêng biệt).
-    - Chuyển đổi `concept-rooms.php` (Card phòng concept: `wp:group` + `wp:image` + `wp:heading` + `wp:paragraph` + `wp:button`).
-    - Chuyển đổi `branches-list.php` (3 Card chi nhánh tương tự).
-    - Chuyển đổi `pricing-table.php` (3 Card biểu phí dịch vụ).
+    - `patterns/real-photos-grid.php`: Chuyển đổi Photo Stage (1 ảnh chính + 5 ô ảnh phụ) thành các khối `<!-- wp:image -->` độc lập có nút "Thay thế" (Replace) kèm `::after` gradient overlay chống vỡ layout.
+    - `patterns/concept-rooms.php`: Chuyển đổi 4 card phòng concept (Karma, Katana, Amora, Cloud Nine) sang `wp:group` + `wp:columns` + `wp:image` + `wp:buttons`.
+    - `patterns/branches-list.php`: Chuyển đổi 3 card chi nhánh sang `wp:columns` + `wp:group` + `wp:image` + `wp:buttons`.
+    - `patterns/pricing-table.php`: Chuyển đổi 3 card bảng giá sang `wp:columns` + `wp:group` + `wp:buttons`.
   - **Phase 4 — FAQ → Native `core/details`:**
-    - Chuyển đổi `faq-accordion.php` sang `<!-- wp:details {"className":"mix-faq-details"} -->`.
-    - CSS viền vàng bo góc cho `.wp-block-details.mix-faq-details`.
+    - `patterns/faq-accordion.php`: Chuyển đổi toàn bộ danh sách câu hỏi sang native Core Block `<!-- wp:details {"className":"mix-faq-details"} -->` với `<summary>` và `wp:paragraph`.
+    - CSS viền vàng, arrow xoay 180 độ và đóng/mở mượt mà trong `assets/css/sections.css` và `assets/css/editor-custom.css`.
   - **Phase 5 — Event Delegation `#booking` & Đồng bộ Seeder:**
-    - JS theme event delegation bắt click `href="#booking"` / `.mix-btn-booking` → mở popup đặt phòng.
-    - Cập nhật Seeder `mixhotel_restore_all_pages_content()` với cấu trúc blocks mới.
-  - **Phase 6 — Kiểm thử toàn diện E2E:**
-    - Xác nhận nút "Thay thế" (Replace) xuất hiện trên tất cả ảnh/banner.
-    - Xác nhận gõ sửa trực tiếp tên phòng, giá tiền, câu hỏi FAQ. 0 lỗi invalid block.
-    - Popup đặt phòng hoạt động bình thường trên frontend.
+    - `assets/js/contact-modal.js`: Bổ sung delegated click listener cho `a[href="#booking"]`, `.mix-btn-booking`, `.callContactLocate` tự động nhận diện tiêu đề phòng và mở Contact Modal popup.
+    - `inc/seed-pages.php`: Cập nhật `mixhotel_restore_all_pages_content()` và đồng bộ lại 100% các trang trong CSDL WordPress.
+    - Kiểm tra `php -l` cho toàn bộ các file: 0 lỗi cú pháp.
+  - **Phase 6 — Kiểm thử E2E Toàn Diện:**
+    - Kiểm thử Gutenberg Editor: Nút "Thay thế" (Replace) xuất hiện trên toàn bộ hình ảnh và banner, chữ gõ sửa trực tiếp inline.
+    - Kiểm thử Frontend: HTTP 200, hiển thị đầy đủ các thẻ native `<details>`, `<summary>`, `wp-block-cover`, nút `#booking` kích hoạt popup thành công.
+    - `wp-content/debug.log`: 0 lỗi, 0 cảnh báo.
 
 ### Added & Enhanced - 2026-09-28 (Toàn Diện: Trình Chỉnh Sửa Trực Quan WYSIWYG Figma-Style Cho Toàn Bộ Trang)
 - **Mở rộng phạm vi chỉnh sửa trực quan (WYSIWYG) từ Trang Chủ ra TOÀN BỘ TRANG (`post_type=page`) trong `wp-admin/edit.php?post_type=page`:**

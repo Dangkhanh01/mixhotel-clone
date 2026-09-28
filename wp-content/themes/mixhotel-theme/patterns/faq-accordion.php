@@ -28,53 +28,43 @@
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div class="mixLuxuryFaqList">
-  <!-- FAQ 1 -->
-  <details name="mixhotel-faq" open class="mixLuxuryFaqItem is-open">
-    <summary class="mixLuxuryFaqQuestion">
-      <span>Mix có nhận khách dưới 18 tuổi không?</span>
-      <i class="fa fa-angle-down">&#9662;</i>
-    </summary>
-    <div class="mixLuxuryFaqAnswer">
-      <p>Không. Mix Boutique Hotel chỉ nhận khách từ 18 tuổi trở lên để đảm bảo quy định và sự riêng tư.</p>
-    </div>
-  </details>
+<!-- wp:group {"className":"mixLuxuryFaqList","lock":{"move":true,"remove":true},"metadata":{"name":"Danh Sách Câu Hỏi FAQ"}} -->
+<div class="wp-block-group mixLuxuryFaqList">
 
-  <!-- FAQ 2 -->
-  <details name="mixhotel-faq" class="mixLuxuryFaqItem">
-    <summary class="mixLuxuryFaqQuestion">
-      <span>Chưa đặt cọc có giữ phòng được không?</span>
-      <i class="fa fa-angle-down">&#9662;</i>
-    </summary>
-    <div class="mixLuxuryFaqAnswer">
-      <p>Có thể giữ phòng khoảng 15 - 20 phút tùy tình trạng phòng thực tế tại thời điểm liên hệ. Nếu thời tiết xấu hoặc có lý do đặc biệt, lễ tân có thể hỗ trợ linh hoạt hơn.</p>
-    </div>
-  </details>
+<!-- wp:details {"className":"mixLuxuryFaqItem mix-faq-details"} -->
+<details class="wp-block-details mixLuxuryFaqItem mix-faq-details"><summary>Mix có nhận khách dưới 18 tuổi không?</summary>
+<!-- wp:paragraph -->
+<p>Không. Mix Boutique Hotel chỉ nhận khách từ 18 tuổi trở lên để đảm bảo quy định và sự riêng tư.</p>
+<!-- /wp:paragraph -->
+</details>
+<!-- /wp:details -->
 
-  <!-- FAQ 3 -->
-  <details name="mixhotel-faq" class="mixLuxuryFaqItem">
-    <summary class="mixLuxuryFaqQuestion">
-      <span>Có cần đặt cọc trước không?</span>
-      <i class="fa fa-angle-down">&#9662;</i>
-    </summary>
-    <div class="mixLuxuryFaqAnswer">
-      <p>Nghỉ giờ dưới 4 tiếng thông thường không cần cọc. Đối với các trường hợp nghỉ trên 4 tiếng, nghỉ qua đêm, ngày đêm hoặc đặt phòng vào cuối tuần/dịp lễ, khách cần cọc 50% tổng tiền phòng để chắc chắn giữ phòng.</p>
-    </div>
-  </details>
+<!-- wp:details {"className":"mixLuxuryFaqItem mix-faq-details"} -->
+<details class="wp-block-details mixLuxuryFaqItem mix-faq-details"><summary>Chưa đặt cọc có giữ phòng được không?</summary>
+<!-- wp:paragraph -->
+<p>Có thể giữ phòng khoảng 15 - 20 phút tùy tình trạng phòng thực tế tại thời điểm liên hệ. Nếu thời tiết xấu hoặc có lý do đặc biệt, lễ tân có thể hỗ trợ linh hoạt hơn.</p>
+<!-- /wp:paragraph -->
+</details>
+<!-- /wp:details -->
 
-  <!-- FAQ 4 -->
-  <details name="mixhotel-faq" class="mixLuxuryFaqItem">
-    <summary class="mixLuxuryFaqQuestion">
-      <span>Có được mang đồ ăn vào phòng không?</span>
-      <i class="fa fa-angle-down">&#9662;</i>
-    </summary>
-    <div class="mixLuxuryFaqAnswer">
-      <p>Khách được thoải mái mang đồ ăn thức uống riêng vào phòng, tuy nhiên nên hạn chế các món có mùi nồng nặng. Một số hạng mục setup như hoa tươi, bánh kem sinh nhật hoặc rượu vang nên báo trước để Mix hỗ trợ ly, đĩa và trang trí đẹp mắt.</p>
-    </div>
-  </details>
+<!-- wp:details {"className":"mixLuxuryFaqItem mix-faq-details"} -->
+<details class="wp-block-details mixLuxuryFaqItem mix-faq-details"><summary>Có cần đặt cọc trước không?</summary>
+<!-- wp:paragraph -->
+<p>Nghỉ giờ dưới 4 tiếng thông thường không cần cọc. Đối với các trường hợp nghỉ trên 4 tiếng, nghỉ qua đêm, ngày đêm hoặc đặt phòng vào cuối tuần/dịp lễ, khách cần cọc 50% tổng tiền phòng để chắc chắn giữ phòng.</p>
+<!-- /wp:paragraph -->
+</details>
+<!-- /wp:details -->
+
+<!-- wp:details {"className":"mixLuxuryFaqItem mix-faq-details"} -->
+<details class="wp-block-details mixLuxuryFaqItem mix-faq-details"><summary>Có được mang đồ ăn vào phòng không?</summary>
+<!-- wp:paragraph -->
+<p>Khách được thoải mái mang đồ ăn thức uống riêng vào phòng, tuy nhiên nên hạn chế các món có mùi nồng nặng. Một số hạng mục setup như hoa tươi, bánh kem sinh nhật hoặc rượu vang nên báo trước để Mix hỗ trợ ly, đĩa và trang trí đẹp mắt.</p>
+<!-- /wp:paragraph -->
+</details>
+<!-- /wp:details -->
+
 </div>
-<!-- /wp:html -->
+<!-- /wp:group -->
 
 </div>
 <!-- /wp:group -->

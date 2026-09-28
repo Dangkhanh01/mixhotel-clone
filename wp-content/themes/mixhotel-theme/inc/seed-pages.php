@@ -9,6 +9,112 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/**
+ * Import all images from assets/images to WordPress Media Library
+ *
+ * @return array Array of [filename => ['id' => int, 'url' => string]]
+ */
+function mixhotel_import_theme_images_to_media_library() {
+    $images_dir = get_template_directory() . '/assets/images';
+    if (!is_dir($images_dir)) {
+        return [];
+    }
+
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/media.php';
+
+    $upload_dir = wp_upload_dir();
+    $target_dir = $upload_dir['basedir'] . '/mixhotel';
+    $target_url = $upload_dir['baseurl'] . '/mixhotel';
+    if (!file_exists($target_dir)) {
+        wp_mkdir_p($target_dir);
+    }
+
+    $map = [];
+    $files = scandir($images_dir);
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..' || is_dir($images_dir . '/' . $file)) {
+            continue;
+        }
+
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        if (!in_array($ext, ['webp', 'jpg', 'jpeg', 'png'])) {
+            continue;
+        }
+
+        // Check if attachment already exists
+        $existing = get_posts([
+            'post_type'   => 'attachment',
+            'meta_key'    => '_mixhotel_theme_image_filename',
+            'meta_value'  => $file,
+            'post_status' => 'any',
+            'numberposts' => 1
+        ]);
+
+        if (!empty($existing)) {
+            $attach_id = $existing[0]->ID;
+            $map[$file] = [
+                'id'  => $attach_id,
+                'url' => wp_get_attachment_url($attach_id)
+            ];
+            continue;
+        }
+
+        $source_file = $images_dir . '/' . $file;
+        $dest_file   = $target_dir . '/' . $file;
+
+        if (!file_exists($dest_file)) {
+            copy($source_file, $dest_file);
+        }
+
+        $filetype = wp_check_filetype($file, null);
+        $clean_title = sanitize_text_field(preg_replace('/\.[^.]+$/', '', str_replace(['-', '_'], ' ', $file)));
+        $attachment = [
+            'guid'           => $target_url . '/' . $file,
+            'post_mime_type' => $filetype['type'],
+            'post_title'     => 'Mix Hotel - ' . ucwords($clean_title),
+            'post_content'   => '',
+            'post_status'    => 'inherit'
+        ];
+
+        $attach_id = wp_insert_attachment($attachment, $dest_file);
+        if (!is_wp_error($attach_id) && $attach_id > 0) {
+            $attach_data = wp_generate_attachment_metadata($attach_id, $dest_file);
+            wp_update_attachment_metadata($attach_id, $attach_data);
+            update_post_meta($attach_id, '_mixhotel_theme_image_filename', $file);
+            update_post_meta($attach_id, '_wp_attachment_image_alt', 'Mix Boutique Hotel ' . $clean_title);
+
+            $map[$file] = [
+                'id'  => $attach_id,
+                'url' => wp_get_attachment_url($attach_id)
+            ];
+        }
+    }
+
+    return $map;
+}
+
+/**
+ * Get attachment info by theme image filename
+ *
+ * @param string $filename
+ * @return array ['id' => int, 'url' => string]
+ */
+function mixhotel_get_theme_image_attachment($filename) {
+    static $theme_images_map = null;
+    if ($theme_images_map === null) {
+        $theme_images_map = mixhotel_import_theme_images_to_media_library();
+    }
+    if (isset($theme_images_map[$filename])) {
+        return $theme_images_map[$filename];
+    }
+    return [
+        'id'  => 0,
+        'url' => get_template_directory_uri() . '/assets/images/' . $filename,
+    ];
+}
+
 function mixhotel_restore_all_pages_content() {
     global $wpdb;
 

@@ -660,18 +660,36 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* --- About Page: Feature Banner --- */
-.mixAboutBanner {
+.mixAboutBanner,
+.wp-block-cover.mixAboutBanner {
   position: relative;
   width: 100%;
-  height: clamp(320px, 45vw, 540px);
+  min-height: clamp(320px, 45vw, 540px);
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid rgba(200, 137, 34, 0.3);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
   margin-bottom: 80px;
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
 }
 
-.mixAboutBanner img {
+.wp-block-cover.mixAboutBanner .wp-block-cover__inner-container {
+  width: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.wp-block-cover.mixAboutBanner .mixAboutBannerContent {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  right: auto;
+}
+
+.mixAboutBanner img,
+.wp-block-cover.mixAboutBanner img.wp-block-cover__image-background {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -852,7 +870,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* --- About Page & Global: CTA Banner --- */
-.mixCtaBanner {
+.mixCtaBanner,
+.wp-block-cover.mixCtaBanner {
   border-radius: 24px;
   padding: clamp(32px, 5vw, 48px);
   text-align: center;
@@ -860,7 +879,16 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(200, 137, 34, 0.4);
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
   margin-bottom: 60px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
+
+.wp-block-cover.mixCtaBanner .wp-block-cover__inner-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 
 .mixCtaTitle {
   font-size: clamp(22px, 3vw, 36px);
@@ -879,7 +907,8 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.6;
 }
 
-.mixCtaBtn {
+.mixCtaBtn,
+.wp-block-button.mixCtaBtn .wp-block-button__link {
   display: inline-block;
   padding: 14px 36px;
   border-radius: 9999px;
@@ -897,7 +926,8 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
 }
 
-.mixCtaBtn:hover {
+.mixCtaBtn:hover,
+.wp-block-button.mixCtaBtn .wp-block-button__link:hover {
   transform: scale(1.05);
   box-shadow: 0 15px 35px rgba(200, 137, 34, 0.6);
 }

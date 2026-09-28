@@ -1,8 +1,8 @@
 # ADR-007: Chiến Lược Chuyển Đổi Toàn Diện No-code WYSIWYG Figma-Style (Feature 07)
 
-* **Status:** Proposed
+* **Status:** Accepted & Implemented
 * **Date:** 2026-09-28
-* **Deciders:** Engineering Team / AI Agent
+* **Deciders:** Engineering Team / AI Agent (Approved via /grill-me)
 * **Technical Context:** `specs/07-wysiwyg-no-code-full-refactor/spec.md`, `specs/07-wysiwyg-no-code-full-refactor/plan.md`, `AGENTS.md`, `docs/decisions/ADR-006-fse-refactor-strategy.md`
 
 ---

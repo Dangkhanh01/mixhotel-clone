@@ -28,12 +28,11 @@
 </div>
 <!-- /wp:group -->
 
-<!-- wp:columns {"className":"mixLuxuryPricingGrid"} -->
+<!-- wp:columns {"className":"mixLuxuryPricingGrid","lock":{"move":true,"remove":true},"metadata":{"name":"Lưới 3 Thẻ Giá"}} -->
 <div class="wp-block-columns mixLuxuryPricingGrid">
 
 <!-- wp:column {"className":"mixLuxuryPricingCard"} -->
 <div class="wp-block-column mixLuxuryPricingCard">
-
 <!-- wp:group {"className":"mixLuxuryPricingHeader"} -->
 <div class="wp-block-group mixLuxuryPricingHeader">
 <!-- wp:heading {"level":3,"className":"mixLuxuryPricingClass"} -->
@@ -48,42 +47,32 @@
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div class="mixLuxuryPricingList">
-  <div class="mixLuxuryPricingItem">
-    <i class="fa fa-clock-o">&#9200;</i>
-    <span>Thêm mỗi giờ: <strong>50k / h</strong></span>
-  </div>
-  <div class="mixLuxuryPricingItem">
-    <i class="fa fa-moon-o">&#127769;</i>
-    <span>Nghỉ qua đêm: <strong>500k</strong></span>
-  </div>
-  <div class="mixLuxuryPricingItem">
-    <i class="fa fa-sun-o">&#9728;</i>
-    <span>Cả ngày đêm: <strong>700k</strong></span>
-  </div>
+<!-- wp:group {"className":"mixLuxuryPricingList"} -->
+<div class="wp-block-group mixLuxuryPricingList">
+<!-- wp:paragraph {"className":"mixLuxuryPricingItem"} -->
+<p class="mixLuxuryPricingItem">⏰ Thêm mỗi giờ: <strong>50k / h</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mixLuxuryPricingItem"} -->
+<p class="mixLuxuryPricingItem">🌙 Nghỉ qua đêm: <strong>500k</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mixLuxuryPricingItem"} -->
+<p class="mixLuxuryPricingItem">☀️ Cả ngày đêm: <strong>700k</strong></p>
+<!-- /wp:paragraph -->
 </div>
+<!-- /wp:group -->
 
-<div style="margin-top: auto; padding-top: 14px;">
-  <button
-    type="button"
-    class="mixLuxuryBtn mixLuxuryBtnOutline"
-    style="width: 100%; justify-content: center;"
-    data-contact-action="zalo"
-    data-room-title="Hạng phòng Superior"
-  >
-    <i class="fa fa-commenting">&#9993;</i>
-    <span>Hỏi phòng Superior</span>
-  </button>
+<!-- wp:buttons {"className":"mixLuxuryPricingActions"} -->
+<div class="wp-block-buttons mixLuxuryPricingActions">
+<!-- wp:button {"className":"mixLuxuryBtn mixLuxuryBtnOutline mix-btn-booking"} -->
+<div class="wp-block-button mixLuxuryBtn mixLuxuryBtnOutline mix-btn-booking"><a class="wp-block-button__link wp-element-button" href="#booking">✉ Hỏi phòng Superior</a></div>
+<!-- /wp:button -->
 </div>
-<!-- /wp:html -->
-
+<!-- /wp:buttons -->
 </div>
 <!-- /wp:column -->
 
 <!-- wp:column {"className":"mixLuxuryPricingCard mixLuxuryPricingCard--featured"} -->
 <div class="wp-block-column mixLuxuryPricingCard mixLuxuryPricingCard--featured">
-
 <!-- wp:paragraph {"className":"mixLuxuryPricingBadge"} -->
 <p class="mixLuxuryPricingBadge">Được chọn nhiều</p>
 <!-- /wp:paragraph -->
@@ -102,42 +91,32 @@
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div class="mixLuxuryPricingList">
-  <div class="mixLuxuryPricingItem">
-    <i class="fa fa-clock-o">&#9200;</i>
-    <span>Thêm mỗi giờ: <strong>50k / h</strong></span>
-  </div>
-  <div class="mixLuxuryPricingItem">
-    <i class="fa fa-moon-o">&#127769;</i>
-    <span>Nghỉ qua đêm: <strong>600k</strong></span>
-  </div>
-  <div class="mixLuxuryPricingItem">
-    <i class="fa fa-sun-o">&#9728;</i>
-    <span>Cả ngày đêm: <strong>800k</strong></span>
-  </div>
+<!-- wp:group {"className":"mixLuxuryPricingList"} -->
+<div class="wp-block-group mixLuxuryPricingList">
+<!-- wp:paragraph {"className":"mixLuxuryPricingItem"} -->
+<p class="mixLuxuryPricingItem">⏰ Thêm mỗi giờ: <strong>50k / h</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mixLuxuryPricingItem"} -->
+<p class="mixLuxuryPricingItem">🌙 Nghỉ qua đêm: <strong>600k</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mixLuxuryPricingItem"} -->
+<p class="mixLuxuryPricingItem">☀️ Cả ngày đêm: <strong>800k</strong></p>
+<!-- /wp:paragraph -->
 </div>
+<!-- /wp:group -->
 
-<div style="margin-top: auto; padding-top: 14px;">
-  <button
-    type="button"
-    class="mixLuxuryBtn mixLuxuryBtnPrimary"
-    style="width: 100%; justify-content: center;"
-    data-contact-action="zalo"
-    data-room-title="Hạng phòng Deluxe"
-  >
-    <i class="fa fa-commenting">&#9993;</i>
-    <span>Hỏi phòng Deluxe</span>
-  </button>
+<!-- wp:buttons {"className":"mixLuxuryPricingActions"} -->
+<div class="wp-block-buttons mixLuxuryPricingActions">
+<!-- wp:button {"className":"mixLuxuryBtn mixLuxuryBtnPrimary mix-btn-booking"} -->
+<div class="wp-block-button mixLuxuryBtn mixLuxuryBtnPrimary mix-btn-booking"><a class="wp-block-button__link wp-element-button" href="#booking">✉ Hỏi phòng Deluxe</a></div>
+<!-- /wp:button -->
 </div>
-<!-- /wp:html -->
-
+<!-- /wp:buttons -->
 </div>
 <!-- /wp:column -->
 
 <!-- wp:column {"className":"mixLuxuryPricingCard"} -->
 <div class="wp-block-column mixLuxuryPricingCard">
-
 <!-- wp:group {"className":"mixLuxuryPricingHeader"} -->
 <div class="wp-block-group mixLuxuryPricingHeader">
 <!-- wp:heading {"level":3,"className":"mixLuxuryPricingClass"} -->
@@ -152,36 +131,27 @@
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div class="mixLuxuryPricingList">
-  <div class="mixLuxuryPricingItem">
-    <i class="fa fa-clock-o">&#9200;</i>
-    <span>Thêm mỗi giờ: <strong>80k / h</strong></span>
-  </div>
-  <div class="mixLuxuryPricingItem">
-    <i class="fa fa-moon-o">&#127769;</i>
-    <span>Nghỉ qua đêm: <strong>800k</strong></span>
-  </div>
-  <div class="mixLuxuryPricingItem">
-    <i class="fa fa-sun-o">&#9728;</i>
-    <span>Cả ngày đêm: <strong>1.000k</strong></span>
-  </div>
+<!-- wp:group {"className":"mixLuxuryPricingList"} -->
+<div class="wp-block-group mixLuxuryPricingList">
+<!-- wp:paragraph {"className":"mixLuxuryPricingItem"} -->
+<p class="mixLuxuryPricingItem">⏰ Thêm mỗi giờ: <strong>80k / h</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mixLuxuryPricingItem"} -->
+<p class="mixLuxuryPricingItem">🌙 Nghỉ qua đêm: <strong>800k</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mixLuxuryPricingItem"} -->
+<p class="mixLuxuryPricingItem">☀️ Cả ngày đêm: <strong>1.000k</strong></p>
+<!-- /wp:paragraph -->
 </div>
+<!-- /wp:group -->
 
-<div style="margin-top: auto; padding-top: 14px;">
-  <button
-    type="button"
-    class="mixLuxuryBtn mixLuxuryBtnOutline"
-    style="width: 100%; justify-content: center;"
-    data-contact-action="zalo"
-    data-room-title="Hạng phòng VIP"
-  >
-    <i class="fa fa-commenting">&#9993;</i>
-    <span>Hỏi phòng VIP</span>
-  </button>
+<!-- wp:buttons {"className":"mixLuxuryPricingActions"} -->
+<div class="wp-block-buttons mixLuxuryPricingActions">
+<!-- wp:button {"className":"mixLuxuryBtn mixLuxuryBtnOutline mix-btn-booking"} -->
+<div class="wp-block-button mixLuxuryBtn mixLuxuryBtnOutline mix-btn-booking"><a class="wp-block-button__link wp-element-button" href="#booking">✉ Hỏi phòng VIP</a></div>
+<!-- /wp:button -->
 </div>
-<!-- /wp:html -->
-
+<!-- /wp:buttons -->
 </div>
 <!-- /wp:column -->
 

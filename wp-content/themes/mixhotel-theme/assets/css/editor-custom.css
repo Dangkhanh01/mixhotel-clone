@@ -82,3 +82,236 @@
   color: #c5a880;
   text-decoration: none;
 }
+
+/* About Page Banner in Editor */
+.editor-styles-wrapper .wp-block-cover.mixAboutBanner {
+  border-radius: 24px !important;
+  min-height: 420px;
+  position: relative;
+  align-items: flex-end;
+  border: 1px solid rgba(200, 137, 34, 0.3);
+}
+
+.editor-styles-wrapper .wp-block-cover.mixAboutBanner .wp-block-cover__inner-container {
+  width: 100%;
+  padding: 30px;
+}
+
+.editor-styles-wrapper .wp-block-cover.mixCtaBanner {
+  border-radius: 24px !important;
+  min-height: 280px;
+  border: 1px solid rgba(200, 137, 34, 0.4);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.editor-styles-wrapper .wp-block-cover.mixCtaBanner .wp-block-cover__inner-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: clamp(32px, 5vw, 48px);
+  text-align: center;
+}
+
+
+.editor-styles-wrapper .mixAboutBadge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #d8a85a, #f3cb82) !important;
+  color: #151008 !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: 'Philosopher', serif !important;
+  margin-bottom: 8px;
+}
+
+.editor-styles-wrapper .mixAboutBannerTitle {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  font-family: 'Philosopher', serif !important;
+  color: #fff8ec !important;
+  margin: 0 !important;
+}
+
+/* Luxury Button styling in editor */
+.editor-styles-wrapper .wp-block-button.mixLuxuryBtnPrimary .wp-block-button__link,
+.editor-styles-wrapper .wp-block-button.callContactLocate .wp-block-button__link {
+  background: linear-gradient(135deg, #d8a85a 0%, #c5a880 100%) !important;
+  color: #151008 !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+  padding: 12px 28px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none !important;
+}
+
+.editor-styles-wrapper .wp-block-button.mixLuxuryBtnOutline .wp-block-button__link {
+  background: transparent !important;
+  color: #ffe2a0 !important;
+  border: 1px solid rgba(200, 137, 34, 0.6) !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+  padding: 12px 28px !important;
+  text-transform: uppercase;
+}
+
+/* Photo Stage Grid inside Editor */
+.editor-styles-wrapper .mixLuxuryPhotosStage {
+  display: grid !important;
+  grid-template-columns: repeat(12, 1fr) !important;
+  gap: 20px !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoMain {
+  grid-column: span 6 !important;
+  min-height: 520px !important;
+  position: relative !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoGrid {
+  grid-column: span 6 !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 16px !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoTile {
+  position: relative !important;
+  height: 190px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoTileLarge {
+  grid-column: span 2 !important;
+  height: 200px !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoMain .wp-block-image,
+.editor-styles-wrapper .mixLuxuryPhotoTile .wp-block-image {
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoMain .wp-block-image img,
+.editor-styles-wrapper .mixLuxuryPhotoTile .wp-block-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Concept Rooms Editor Styles */
+.editor-styles-wrapper .mixLuxuryConceptStack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 40px !important;
+}
+
+.editor-styles-wrapper .wp-block-group.mixLuxuryConceptCard {
+  padding: 28px !important;
+  border-radius: 16px !important;
+  background-color: #17171c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.editor-styles-wrapper .wp-block-columns.mixLuxuryConceptGrid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 32px !important;
+  align-items: center !important;
+}
+
+.editor-styles-wrapper .wp-block-columns.mixLuxuryConceptGrid > .wp-block-column {
+  margin: 0 !important;
+}
+
+.editor-styles-wrapper .mixLuxuryRoomThumb {
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  aspect-ratio: 16/10 !important;
+}
+
+.editor-styles-wrapper .mixLuxuryRoomThumb .wp-block-image {
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.editor-styles-wrapper .mixLuxuryRoomThumb .wp-block-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 14px !important;
+  display: block !important;
+}
+
+/* Branches Grid Editor Styles */
+.editor-styles-wrapper .wp-block-columns.mixLuxuryBranchesGrid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 24px !important;
+}
+
+.editor-styles-wrapper .wp-block-columns.mixLuxuryBranchesGrid > .wp-block-column {
+  margin: 0 !important;
+}
+
+.editor-styles-wrapper .mixLuxuryBranchThumb {
+  position: relative !important;
+  aspect-ratio: 16/10 !important;
+  overflow: hidden !important;
+}
+
+.editor-styles-wrapper .mixLuxuryBranchThumb .wp-block-image {
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.editor-styles-wrapper .mixLuxuryBranchThumb .wp-block-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.editor-styles-wrapper .mixLuxuryBranchActions .wp-block-button {
+  flex: 1 !important;
+}
+
+/* FAQ Accordion Editor Styles */
+.editor-styles-wrapper .wp-block-details.mix-faq-details {
+  background-color: #17171c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-bottom: 12px !important;
+}
+
+.editor-styles-wrapper .wp-block-details.mix-faq-details summary {
+  padding: 18px 22px !important;
+  color: #ffffff !important;
+  font-family: var(--wp--preset--font-family--questrial, sans-serif) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.editor-styles-wrapper .wp-block-details.mix-faq-details > :not(summary) {
+  padding: 0 22px 20px !important;
+  font-size: 14px !important;
+  color: #a0a0a8 !important;
+  line-height: 1.65 !important;
+}
+
+
+
+
