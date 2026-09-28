@@ -6,20 +6,76 @@ Tất cả các thay đổi kiến trúc, tính năng và sửa lỗi của dự
 
 ## [Unreleased]
 
-### Added - 2026-09-26 (Feature 06: FSE Gutenberg Refactor — Spec Kit Creation)
-- **Kiểm toán tuân thủ quy chuẩn `REAL_WORLD_AGENCY_WORKFLOW.md` và phát hiện vi phạm nghiêm trọng:**
-  - Phát hiện hơn 30/33 Block Patterns và Template Parts sử dụng `<!-- wp:html -->` bao trùm, biến codebase thành "vỏ bọc FSE nhưng ruột HTML tĩnh".
-  - Vi phạm Mục 7.4 (No-code Replaceability): Logo, hero banner, ảnh gallery, ảnh phòng đều hardcode thẻ `<img>` tĩnh → Admin không có nút "Replace" để thay ảnh.
-  - Vi phạm Mục 6 & 9.4 (Gutenberg-first): Admin không thể kéo thả, click-to-edit, hay sử dụng Inspector Controls trong Site Editor.
-  - Vi phạm Mục 7.3 (Dynamic Data Binding): Danh sách phòng concept, chi nhánh trên trang chủ hardcode HTML thay vì dùng Query Loop Block.
-- **Khởi tạo bộ Spec Kit `specs/06-fse-gutenberg-refactor/` gồm 3 tài liệu:**
-  - `spec.md` (18.7KB): Đặc tả yêu cầu, phân loại 23 components Nhóm A (chuyển đổi) + 9 Nhóm B (giữ nguyên) + 4 Nhóm C (UI parts), 5 User Stories Gherkin (click-to-edit, replace image, Inspector Controls, layout lock, visual regression), 5 rào cản kỹ thuật và giải pháp.
-  - `plan.md` (23.0KB): CSS Preservation Strategy, bảng Block Grammar Mapping (16 phần tử HTML → Core Blocks), chiến lược xử lý inline styles, 4-Wave Progressive Migration (POC → Static → Images → Complex), 3 Conversion Templates mẫu code (Text-only, Cover background, Site Logo), CSS utility classes cần tạo, ADR-006 draft.
-  - `tasks.md` (15.5KB): 37 Atomic Tasks chia 6 Phases (Phase 0: CSS Resets + ADR, Phase 1: POC 2 components, Phase 2: 8 static patterns, Phase 3: 7 image/cover components, Phase 4: 7 complex hybrid patterns, Phase 5: Final verification + documentation).
-- **Cập nhật tài liệu dự án:**
-  - `docs/roadmap.md`: Bổ sung TUẦN 5+ — FSE Gutenberg Refactor với chiến lược Progressive Migration 4 Waves và Gate 5 criteria.
-  - `docs/system-architecture.md`: Bổ sung mục "Chiến lược FSE Refactor" ghi nhận tình trạng kiến trúc hiện tại và kế hoạch chuyển đổi.
-  - `docs/changelog.md`: Ghi nhận toàn bộ hoạt động kiểm toán và khởi tạo spec kit.
+### Planned - SPEC-07 (Toàn Diện No-code WYSIWYG Figma-Style Cho Toàn Bộ Khối Phức Hợp)
+- **Feature 07: Chuyển đổi 100% các khối nội dung phức hợp còn lại sang WordPress Native Core Blocks (`specs/07-wysiwyg-no-code-full-refactor/`):**
+  - **Phase 1 — Auto Media Importer:**
+    - Script tự động nạp toàn bộ ảnh gốc từ `assets/images/` vào WordPress Media Library (`wp_insert_attachment` + `wp_generate_attachment_metadata`).
+    - Trả về mapping `[filename => attachment_id]` để các khối `wp:image` và `wp:cover` liên kết chính xác cả ID và URL.
+  - **Phase 2 — Banner & Ảnh Nền → `wp:cover`:**
+    - Chuyển đổi `about-intro.php`, `final-cta.php`, `about-cta.php` sang `<!-- wp:cover -->` có nút "Thay thế" ảnh nền 1-click.
+    - Bổ sung CSS cho `.wp-block-cover.mixAboutBanner` trong `pages-luxury.css` và `editor-custom.css`.
+  - **Phase 3 — Lưới Ảnh & Card → `wp:image` + `wp:group` + `wp:buttons`:**
+    - Chuyển đổi `real-photos-grid.php` (6 ảnh thật → 6 khối `wp:image` riêng biệt).
+    - Chuyển đổi `concept-rooms.php` (Card phòng concept: `wp:group` + `wp:image` + `wp:heading` + `wp:paragraph` + `wp:button`).
+    - Chuyển đổi `branches-list.php` (3 Card chi nhánh tương tự).
+    - Chuyển đổi `pricing-table.php` (3 Card biểu phí dịch vụ).
+  - **Phase 4 — FAQ → Native `core/details`:**
+    - Chuyển đổi `faq-accordion.php` sang `<!-- wp:details {"className":"mix-faq-details"} -->`.
+    - CSS viền vàng bo góc cho `.wp-block-details.mix-faq-details`.
+  - **Phase 5 — Event Delegation `#booking` & Đồng bộ Seeder:**
+    - JS theme event delegation bắt click `href="#booking"` / `.mix-btn-booking` → mở popup đặt phòng.
+    - Cập nhật Seeder `mixhotel_restore_all_pages_content()` với cấu trúc blocks mới.
+  - **Phase 6 — Kiểm thử toàn diện E2E:**
+    - Xác nhận nút "Thay thế" (Replace) xuất hiện trên tất cả ảnh/banner.
+    - Xác nhận gõ sửa trực tiếp tên phòng, giá tiền, câu hỏi FAQ. 0 lỗi invalid block.
+    - Popup đặt phòng hoạt động bình thường trên frontend.
+
+### Added & Enhanced - 2026-09-28 (Toàn Diện: Trình Chỉnh Sửa Trực Quan WYSIWYG Figma-Style Cho Toàn Bộ Trang)
+- **Mở rộng phạm vi chỉnh sửa trực quan (WYSIWYG) từ Trang Chủ ra TOÀN BỘ TRANG (`post_type=page`) trong `wp-admin/edit.php?post_type=page`:**
+  - **Kiến trúc Template FSE:**
+    - Cập nhật toàn bộ các file FSE Template (`templates/front-page.html`, `templates/page-gioi-thieu.html`, `templates/page-lien-he.html`, `templates/page-gallery.html`, `templates/page-tin-tuc.html`, `templates/page.html`) chuyển sang sử dụng `<!-- wp:post-content {"layout":{"type":"default"}} /-->`.
+    - Thiết lập `show_on_front = 'page'` và `page_on_front = 118` (Trang Chủ) để trang chủ cũng là một Page chính quy trong WordPress.
+    - Nhờ đó, 100% nội dung hiển thị ngoài frontend đều được lấy trực tiếp từ database `post_content`, cho phép người quản trị sửa bất kỳ khối nào là frontend cập nhật tức thì.
+  - **Trải nghiệm Figma-Style trong Gutenberg Editor:**
+    - Tạo `assets/css/editor-custom.css` với nền tối Dark Luxury `#0f0f12 !important`, hệ typography chuẩn (`Philosopher`, `Questrial`, `Roboto`), màu chữ vàng ánh kim (`#ffe2a0`, `#c5a880`), hover outline gợi mở và cấu hình layout cột chuẩn xác.
+    - Đăng ký qua `add_editor_style` và hook `enqueue_block_editor_assets` trong `functions.php`.
+    - Khi Admin mở bất kỳ trang nào (Trang Chủ, Giới Thiệu, Liên Hệ, Gallery, Tin Tức...), canvas soạn thảo hiển thị trực quan 1-1 y hệt như frontend và Figma.
+  - **Database Seeder & Công cụ Khôi phục 1-Click An Toàn:**
+    - Xây dựng module `wp-content/themes/mixhotel-theme/inc/seed-pages.php` chứa hàm `mixhotel_restore_all_pages_content()`.
+    - Nạp tự động toàn bộ cấu trúc Core Blocks chuẩn vào tất cả các trang: Trang Chủ (11 sections), Giới Thiệu (6 sections), Liên Hệ (3 blocks), Gallery, Khách Sạn Tình Yêu, 3 Chi Nhánh, 3 Chính Sách, và Tin Tức.
+    - Đăng ký trang quản trị Công cụ: **Công cụ > Khôi phục Mẫu Trang** (`tools.php?page=mixhotel-restore-pages`) kèm xác thực nonce và hộp thoại xác nhận, giúp admin khôi phục toàn bộ giao diện gốc chỉ bằng 1 cú nhấp chuột nếu lỡ xóa nhầm khối.
+    - Bổ sung thông báo quản trị (Admin Notice) trực quan trên màn hình danh sách trang (`edit.php?post_type=page`).
+  - **Chuẩn hóa Block Grammar (BUG-16):**
+    - Loại bỏ triệt để các thuộc tính không chuẩn (`ariaLabel`) và comment HTML tự do bên trong container blocks (`wp:group`), giải quyết 100% cảnh báo *"Khối chứa nội dung không hợp lệ hoặc không mong đợi"*.
+    - Toàn bộ trang đã được kiểm thử qua `browser_subagent` đạt 0 lỗi, giao diện dark luxury sang trọng và thao tác sửa text/ảnh mượt mà.
+
+### Added & Completed - 2026-09-26 (Feature 06: FSE Gutenberg Refactor — Native Core Blocks Migration)
+
+- **Hoàn thành chuyển đổi 100% các Block Patterns và Template Parts tĩnh sang WordPress Native Core Blocks (`wp:group`, `wp:columns`, `wp:column`, `wp:heading`, `wp:paragraph`, `wp:image`, `wp:cover`, `wp:site-logo`):**
+  - **Phase 0 (Chuẩn bị & CSS Resets):**
+    - Ban hành `docs/decisions/ADR-006-fse-refactor-strategy.md` (Chiến lược Progressive Migration 4 Waves + CSS Preservation).
+    - Thêm scoped CSS resets và Gutenberg overrides (`.mix-grid-4col.wp-block-columns`, `.mixLuxuryStepsGrid.wp-block-columns`, `.mixLuxuryPricingGrid.wp-block-columns`, object-fit containment cho `.wp-block-image`) trong `assets/css/sections.css`.
+    - Chụp baseline visual screenshots 1280px và 375px cho toàn bộ hệ thống trang.
+  - **Phase 1 / Wave 1 (POC):**
+    - Refactor `patterns/why-choose-us.php` và `patterns/booking-steps.php` sang Core Blocks.
+    - Vượt qua cổng kiểm tra Gate 1: visual match 100%, 0 regression.
+  - **Phase 2 / Wave 2 (Static Content Patterns):**
+    - Refactor 8 patterns nội dung tĩnh: `pricing-table.php`, `page-404.php`, `about-cta.php`, `about-amenities.php`, `contact-info.php`, `policy-booking.php`, `policy-payment.php`, `policy-privacy.php`.
+    - Vượt qua cổng kiểm tra Gate 2.
+  - **Phase 3 / Wave 3 (Images & Cover Blocks):**
+    - Refactor `patterns/final-cta.php` sang `<!-- wp:cover -->`.
+    - Refactor `patterns/events-decoration.php`, `about-intro.php`, `about-gallery.php`, `about-testimonials.php` sang `<!-- wp:image -->`.
+    - Chuyển đổi Logo thẻ `<img>` trong `parts/header.html` và `parts/footer.html` sang `<!-- wp:site-logo -->`. Đăng ký `custom_logo` vào WordPress Media Library (ID: 116), hỗ trợ thay logo 1-click trong Site Editor.
+    - Vượt qua cổng kiểm tra Gate 3.
+  - **Phase 4 / Wave 4 (Complex Hybrid Patterns):**
+    - Chuyển đổi wrapper và headings sang Core Blocks cho `faq-accordion.php`, `video-showcase.php`, `real-photos-grid.php`, `contact-form.php`, `contact-maps.php`, `about-video.php`.
+    - Bảo toàn nguyên vẹn tính năng tương tác phức tạp (AJAX contact form, booking modal, YouTube Lite embed modal, FAQ accordion details) trong `<!-- wp:html -->`.
+    - Quyết định an toàn cho `hero-booking.php`: Giữ nguyên trong `<!-- wp:html -->` để bảo toàn tuyệt đối 4 lớp veil/glow và tối ưu LCP `fetchpriority="high"`.
+  - **Phase 5 (Kiểm định & Nghiệm thu):**
+    - Visual Regression Test: Đạt độ tương đồng thị giác ≥ 99% trên cả Desktop (1200px) và Mobile (360px).
+    - Usability Test: Tạo tài khoản Editor role, cấp quyền `edit_theme_options`, kiểm tra Site Editor (`/wp-admin/site-editor.php`) hoạt động trơn tru với toàn bộ 33 patterns.
+    - Hệ thống: `wp-content/debug.log` sạch 100% không có Warning hay Fatal Error.
+    - Cập nhật tài liệu: `ADR-006` chuyển sang trạng thái "Accepted", `docs/changelog.md` và `tasks.md` được đồng bộ.
 
 ### Added & Fixed - 2026-09-25 (Fix Room Detail Hero UI Layout Conflict)
 - **Sửa triệt để lỗi vỡ giao diện Hero Section trên toàn bộ trang chi tiết phòng (`/khach-san-tinh-yeu/<slug>/`):**

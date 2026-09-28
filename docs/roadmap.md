@@ -15,7 +15,8 @@ specs/
 ├── 03-room-catalog-and-detail/      # TUẦN 3: CPT Room/Branch, Single Room Template, Archive & Filter tiện nghi
 ├── 04-booking-engine-and-leads/     # TUẦN 3-4: AJAX Lead Processing, Nonce check, Telegram Bot Alert
 ├── 05-auxiliary-pages-and-polish/   # TUẦN 4: Gallery, Chi nhánh, Blog/Cẩm nang, SEO Schema, PageSpeed
-└── 06-fse-gutenberg-refactor/      # TUẦN 5+: Chuyển wp:html → Native Core Blocks, No-code Admin UI
+├── 06-fse-gutenberg-refactor/      # TUẦN 5+: Chuyển wp:html → Native Core Blocks, No-code Admin UI
+└── 07-wysiwyg-no-code-full-refactor/ # TUẦN 6+: Chuyển toàn bộ khối phức hợp → Native Core Blocks, Auto Media Import
 ```
 
 ---
@@ -82,4 +83,26 @@ specs/
   * **Wave 3 (Images & Cover):** `final-cta.php`, `events-decoration.php`, `about-gallery.php`, Header/Footer logo → `wp:site-logo`.
   * **Wave 4 (Complex Hybrid):** `hero-booking.php`, `video-showcase.php`, `faq-accordion.php` (partial refactor).
 * **Gate 5:** Admin Usability Test đạt chuẩn — Editor role tự sửa text, thay ảnh, đổi giá phòng thành công trong Site Editor mà không vỡ layout.
+
+---
+
+### TUẦN 6+: TOÀN DIỆN NO-CODE WYSIWYG FIGMA-STYLE (Ngày 38+)
+* **Gói tính năng:** `specs/07-wysiwyg-no-code-full-refactor/`
+* **Bối cảnh:**
+  * Feature 06 đã chuyển đổi thành công 23+ Block Patterns tĩnh sang Core Blocks, nhưng nhiều thành phần phức hợp (Banner hình ảnh, Lưới ảnh phòng, Card phòng concept, Card chi nhánh, FAQ accordion, các nút CTA) vẫn đang bị đóng gói trong `<!-- wp:html -->`.
+  * Feature 07 hoàn tất việc chuyển đổi 100% toàn bộ hệ thống, đưa trải nghiệm quản trị lên mức **Figma-style no-code 100%**.
+* **Mục tiêu:**
+  * Tự động nạp toàn bộ kho ảnh gốc vào WordPress Media Library (Auto Media Importer).
+  * Chuyển đổi Banner → `wp:cover`, Card & Grid → `wp:group` + `wp:image` + `wp:buttons`, FAQ → `wp:details`.
+  * Thiết lập Block Locking bảo vệ khung bố cục, mở khóa 100% nội dung click-to-edit.
+  * Thêm event delegation `#booking` cho nút `wp:button` kích hoạt popup đặt phòng.
+  * Cập nhật Seeder `mixhotel_restore_all_pages_content()` với cấu trúc blocks mới.
+* **Chiến lược:** 6 Phases tuần tự:
+  * **Phase 1:** Auto Media Importer — Nạp kho ảnh vào Media Library.
+  * **Phase 2:** Chuyển đổi Banner & Ảnh Nền → `wp:cover`.
+  * **Phase 3:** Chuyển đổi Lưới Ảnh & Card → `wp:image` + `wp:group` + `wp:buttons`.
+  * **Phase 4:** Chuyển đổi FAQ → Native `core/details`.
+  * **Phase 5:** Xử lý `#booking` Event Delegation & Đồng bộ Seeder toàn trang.
+  * **Phase 6:** Kiểm thử toàn diện E2E (Gutenberg Editor + Frontend + Debug log).
+* **Gate 6:** Admin nhấp vào bất kỳ ảnh/text/nút bấm nào trên toàn bộ hệ thống trang đều có thể sửa trực quan 100% — Nút "Thay thế" xuất hiện trên mọi ảnh, 0 lỗi invalid block, popup đặt phòng hoạt động bình thường.
 

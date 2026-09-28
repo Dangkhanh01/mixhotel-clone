@@ -108,9 +108,10 @@ Dự án vận hành trên 3 containers độc lập thông qua file [docker-com
 
 ---
 
-## 5. CHIẾN LƯỢC FSE REFACTOR (Feature 06 — No-code Admin UI)
+## 5. CHIẾN LƯỢC FSE REFACTOR (Feature 06 & 07 — No-code Admin UI)
 
-> **Spec Kit:** `specs/06-fse-gutenberg-refactor/` (spec.md, plan.md, tasks.md)  
+> **Spec Kit Feature 06:** `specs/06-fse-gutenberg-refactor/` (spec.md, plan.md, tasks.md)  
+> **Spec Kit Feature 07:** `specs/07-wysiwyg-no-code-full-refactor/` (spec.md, plan.md, tasks.md)  
 > **Governing Documents:** `REAL_WORLD_AGENCY_WORKFLOW.md` (Mục 6, 7.3, 7.4, 9.4), `AGENTS.md` (Mục 2, 3)
 
 ### 5.1. Tình Trạng Kiến Trúc Hiện Tại (Technical Debt)
@@ -133,18 +134,34 @@ Toàn bộ Block Patterns và phần lớn Template Parts trong `mixhotel-theme/
   └── TẠO utility classes mới thay cho inline styles bị xóa
 ```
 
-### 5.3. Phân Loại Components
+### 5.3. Phân Loại Components (Đã Cập Nhật Cho Feature 07)
 
-| Nhóm | Hành động | Ví dụ |
-|:---|:---|:---|
-| **A: Static Content** (23 patterns + 2 parts) | Chuyển `wp:html` → Core Blocks | `why-choose-us`, `pricing-table`, `booking-steps`, `final-cta`, `events-decoration`, `about-*`, `policy-*`, Header/Footer logo |
-| **B: Dynamic PHP** (9 patterns) | Giữ nguyên `wp:html` → Feature 07 | `concept-rooms`, `branches-list`, `room-detail-content`, `room-archive-content`, `branch-detail`, `blog-*`, `gallery-grid` |
-| **C: Interactive UI** (4 parts) | Giữ nguyên `wp:html` | `mobile-action-bar`, `desktop-contact-bar`, `contact-modal`, `booking-modal` |
+| Nhóm | Trạng thái Feature 06 | Trạng thái Feature 07 | Ví dụ |
+|:---|:---|:---|:---|
+| **A: Static Content** (23 patterns + 2 parts) | ✅ Hoàn thành — Chuyển `wp:html` → Core Blocks | Kế thừa nguyên vẹn | `why-choose-us`, `pricing-table`, `booking-steps`, `final-cta`, `events-decoration`, `about-*`, `policy-*`, Header/Footer logo |
+| **B: Dynamic PHP → No-code** (7 patterns) | Giữ nguyên `wp:html` | 🔄 **Feature 07: Chuyển sang Core Blocks** (`wp:cover`, `wp:image`, `wp:group`, `wp:columns`, `wp:buttons`, `wp:details`) | `about-intro` (Banner), `real-photos-grid`, `concept-rooms`, `branches-list`, `pricing-table`, `faq-accordion`, `final-cta`/`about-cta` |
+| **C: Interactive UI** (4 parts) | Giữ nguyên `wp:html` | Giữ nguyên `wp:html` | `mobile-action-bar`, `desktop-contact-bar`, `contact-modal`, `booking-modal` |
+| **D: Special Keep** (2 patterns) | Giữ nguyên `wp:html` | Giữ nguyên `wp:html` | `hero-booking` (LCP optimization), Contact Form (AJAX + nonce) |
 
 ### 5.4. Quyết Định Kiến Trúc (ADR-006)
 
 * **Progressive Migration:** 4 Waves bắt đầu từ POC (2 components đơn giản nhất) → kiểm chứng → mở rộng.
 * **Navigation Block Deferred:** Header menu giữ raw HTML thay vì `<!-- wp:navigation -->` vì WordPress 6.x chưa hỗ trợ tốt multi-level dropdown custom styling. Chỉ đổi Logo → `<!-- wp:site-logo -->`.
 * **Layout Lock:** Section wrappers sử dụng `"lock":{"move":true,"remove":true}` ngăn Admin xóa/kéo nhầm bố cục.
-* **Buttons CTA:** Các nút có `data-contact-action` giữ trong `<!-- wp:html -->` vì cần Vanilla JS dispatcher.
+* **Buttons CTA:** Chuyển sang `<!-- wp:button -->` chuẩn (Feature 07). JS theme sử dụng event delegation bắt các liên kết `#booking` để kích hoạt Booking Modal Popup.
+
+### 5.5. Chiến Lược Feature 07: Toàn Diện No-code WYSIWYG Figma-Style (ADR-007)
+
+> **Spec Kit:** `specs/07-wysiwyg-no-code-full-refactor/` (spec.md, plan.md, tasks.md)
+
+**Mục tiêu:** Chuyển đổi 100% các khối nội dung tĩnh và phức hợp còn lại trên toàn bộ website sang WordPress Native Core Blocks, mang lại trải nghiệm chỉnh sửa trực quan dạng Figma no-code 100%.
+
+**Các thành phần chính:**
+
+1. **Auto Media Importer:** Script tự động nạp toàn bộ ảnh gốc từ `assets/images/` vào WordPress Media Library (`wp_insert_attachment` + `wp_generate_attachment_metadata`), trả về mapping `[filename => attachment_id]`.
+2. **Banner → `wp:cover`:** Chuyển đổi `about-intro.php`, `final-cta.php`, `about-cta.php` sang `<!-- wp:cover -->` có nút "Thay thế" ảnh nền 1-click.
+3. **Card & Grid → `wp:group` + `wp:image` + `wp:buttons`:** Chuyển đổi `real-photos-grid.php`, `concept-rooms.php`, `branches-list.php`, `pricing-table.php` sang cấu trúc Core Blocks có thể click-to-edit.
+4. **FAQ → `wp:details`:** Chuyển đổi `faq-accordion.php` sang Native `<!-- wp:details -->` có thể gõ sửa câu hỏi/trả lời trực tiếp.
+5. **Block Locking:** Khóa cấu trúc container (`lock: {"move": true, "remove": true}`) ở cấp Section/Columns, mở khóa 100% nội dung con (text, ảnh, nút bấm).
+6. **`#booking` Event Delegation:** JS theme bắt click link `#booking` / class `.mix-btn-booking` để mở popup đặt phòng, thay thế cơ chế `data-contact-action` cũ.
 
