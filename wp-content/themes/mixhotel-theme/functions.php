@@ -16,6 +16,14 @@ if (!defined('ABSPATH')) {
 function mixhotel_theme_setup() {
     add_theme_support('wp-block-styles');
     add_theme_support('editor-styles');
+    add_editor_style(array(
+        'https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&family=Questrial&family=Roboto:wght@300;400;500;700&display=swap',
+        'assets/css/sections.css',
+        'assets/css/hero.css',
+        'assets/css/pages-luxury.css',
+        'assets/css/pages.css',
+        'assets/css/editor-custom.css',
+    ));
     add_theme_support('html5', array(
         'comment-list',
         'comment-form',
@@ -232,3 +240,54 @@ function mixhotel_custom_rewrite_rules() {
     );
 }
 add_action('init', 'mixhotel_custom_rewrite_rules');
+
+/**
+ * Enqueue scripts and styles for Gutenberg Block Editor (WYSIWYG Figma-style)
+ */
+function mixhotel_enqueue_block_editor_assets() {
+    $theme_version = wp_get_theme()->get('Version');
+    $theme_uri     = get_template_directory_uri();
+
+    wp_enqueue_style(
+        'mixhotel-google-fonts-editor',
+        'https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&family=Questrial&family=Roboto:wght@300;400;500;700&display=swap',
+        array(),
+        null
+    );
+
+    wp_enqueue_style(
+        'mixhotel-sections-editor',
+        $theme_uri . '/assets/css/sections.css',
+        array(),
+        $theme_version
+    );
+
+    wp_enqueue_style(
+        'mixhotel-hero-editor',
+        $theme_uri . '/assets/css/hero.css',
+        array(),
+        $theme_version
+    );
+
+    wp_enqueue_style(
+        'mixhotel-pages-luxury-editor',
+        $theme_uri . '/assets/css/pages-luxury.css',
+        array(),
+        $theme_version
+    );
+
+    $editor_css_path = get_template_directory() . '/assets/css/editor-custom.css';
+    $editor_ver      = file_exists($editor_css_path) ? (string) filemtime($editor_css_path) : $theme_version;
+    wp_enqueue_style(
+        'mixhotel-editor-custom',
+        $theme_uri . '/assets/css/editor-custom.css',
+        array(),
+        $editor_ver
+    );
+}
+add_action('enqueue_block_editor_assets', 'mixhotel_enqueue_block_editor_assets');
+
+/**
+ * Page Seeder & Restorer Admin Tool
+ */
+require_once get_template_directory() . '/inc/seed-pages.php';
