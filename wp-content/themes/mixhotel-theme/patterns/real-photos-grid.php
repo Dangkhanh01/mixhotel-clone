@@ -9,18 +9,27 @@
  */
 $theme_uri = get_template_directory_uri();
 ?>
-<!-- wp:html -->
-<section id="real-photos" class="mix-section mix-section--dark-3">
-  <div class="mix-container">
-    <!-- Section Head -->
-    <div class="mix-section-head">
-      <span class="mix-section-kicker">ẢNH THẬT PHÒNG THẬT</span>
-      <h2 class="mix-section-title">Xem ảnh thật 100% từng phòng để dễ dàng chọn không gian trước khi đặt</h2>
-      <p class="mix-section-desc">
-        Mỗi hạng phòng đều có ảnh thực tế của bồn tắm, máy chiếu, ghế tình yêu, gương trần và các tiện nghi nổi bật.
-      </p>
-    </div>
+<!-- wp:group {"tagName":"section","className":"mix-section mix-section--dark-3","anchor":"real-photos","lock":{"move":true,"remove":true},"metadata":{"name":"Ảnh Thật Phòng Thật (Photo Stage)"}} -->
+<section id="real-photos" class="wp-block-group mix-section mix-section--dark-3">
 
+<!-- wp:group {"className":"mix-container"} -->
+<div class="wp-block-group mix-container">
+
+<!-- wp:group {"className":"mix-section-head"} -->
+<div class="wp-block-group mix-section-head">
+<!-- wp:paragraph {"className":"mix-section-kicker"} -->
+<p class="mix-section-kicker">ẢNH THẬT PHÒNG THẬT</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"className":"mix-section-title"} -->
+<h2 class="wp-block-heading mix-section-title">Xem ảnh thật 100% từng phòng để dễ dàng chọn không gian trước khi đặt</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"mix-section-desc"} -->
+<p class="mix-section-desc">Mỗi hạng phòng đều có ảnh thực tế của bồn tắm, máy chiếu, ghế tình yêu, gương trần và các tiện nghi nổi bật.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:html -->
     <!-- Photo Stage Grid -->
     <div class="mixLuxuryPhotosStage">
       <!-- Main Featured Room -->
@@ -116,6 +125,10 @@ $theme_uri = get_template_directory_uri();
         </div>
       </div>
     </div>
-  </div>
-</section>
 <!-- /wp:html -->
+
+</div>
+<!-- /wp:group -->
+
+</section>
+<!-- /wp:group -->

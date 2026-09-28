@@ -1261,3 +1261,279 @@
     gap: 28px;
   }
 }
+
+/* ==========================================================================
+   Gutenberg Core Block Resets & Utilities (FSE Refactor - Feature 06)
+   ========================================================================== */
+
+/* Gutenberg Block Resets cho Mix Theme */
+.mix-section .wp-block-group { margin-top: 0; margin-bottom: 0; padding: 0; }
+.mix-section .wp-block-heading { margin-top: 0; margin-bottom: 0; }
+.mix-section .wp-block-paragraph { margin-top: 0; margin-bottom: 0; }
+.mix-section .wp-block-columns { margin-bottom: 0; }
+.mix-section .wp-block-column { margin-bottom: 0; }
+
+/* Utility Classes thay thế inline styles */
+.mix-flex-between { display: flex; align-items: center; justify-content: space-between; }
+.mix-flex-col-gap-20 { display: flex; flex-direction: column; gap: 20px; }
+.mix-flex-col-gap-12 { display: flex; flex-direction: column; gap: 12px; }
+.mix-flex-wrap-gap-8 { display: flex; flex-wrap: wrap; gap: 8px; }
+.mix-flex-wrap-gap-12 { display: flex; flex-wrap: wrap; gap: 12px; }
+.mix-flex-wrap-gap-14 { display: flex; flex-wrap: wrap; gap: 14px; }
+.mix-grid-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.mix-grid-4col { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+.mix-mono-number {
+  font-family: monospace;
+  font-size: 28px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.15);
+}
+.mix-text-left { text-align: left; }
+.mix-w-full { width: 100%; }
+.mix-justify-center { justify-content: center; }
+
+/* Override Gutenberg wp:columns flex layout → grid layout */
+.mix-grid-4col.wp-block-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  flex-wrap: unset;
+}
+.mix-grid-4col.wp-block-columns > .wp-block-column {
+  flex-basis: unset;
+  margin-left: 0;
+}
+
+.mixLuxuryStepKicker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--wp--preset--color--text-muted, #a0a0a8);
+}
+
+.mixLuxuryStepsGrid.wp-block-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  flex-wrap: unset;
+}
+.mixLuxuryStepsGrid.wp-block-columns > .wp-block-column {
+  flex-basis: unset;
+  margin-left: 0;
+}
+@media (max-width: 991px) {
+  .mixLuxuryStepsGrid.wp-block-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mix-mt-14 {
+  margin-top: 14px;
+}
+
+.mixLuxuryPricingGrid.wp-block-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: stretch;
+  flex-wrap: unset;
+}
+.mixLuxuryPricingGrid.wp-block-columns > .wp-block-column {
+  flex-basis: unset;
+  margin-left: 0;
+}
+@media (max-width: 991px) {
+  .mixLuxuryPricingGrid.wp-block-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 404 Page Utilities */
+.mix-page-404 {
+  padding-top: 100px;
+  padding-bottom: 100px;
+  text-align: center;
+}
+.mix-404-number {
+  font-size: clamp(80px, 14vw, 160px);
+  font-weight: 900;
+  font-family: 'Philosopher', serif;
+  line-height: 1;
+  background: linear-gradient(135deg, #c88922 0%, #ffe2a0 50%, #d9a83a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 10px 25px rgba(200, 137, 34, 0.4));
+}
+.mix-404-title {
+  font-size: clamp(22px, 3.5vw, 36px);
+  font-weight: 700;
+  font-family: 'Philosopher', serif;
+  color: #fff8ec;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.mix-404-desc {
+  font-size: 16px;
+  color: #d4d4d8;
+  max-width: 580px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+.mix-404-btn-alt {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(200, 137, 34, 0.4);
+  color: #ffe2a0;
+  font-family: 'Philosopher', serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.mix-mb-80 {
+  margin-bottom: 80px;
+}
+
+/* Policy Pages Utilities */
+.mix-policy-main {
+  padding-top: 48px;
+  padding-bottom: 80px;
+}
+.mix-policy-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 12px;
+}
+.mix-policy-card-item {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(200, 137, 34, 0.2);
+}
+@media (max-width: 767px) {
+  .mix-policy-grid-2col,
+  .policyGridResponsive {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.mix-section-kicker-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--wp--preset--color--luxury-gold, #c5a880);
+  padding: 5px 16px;
+  border-radius: 20px;
+  background: rgba(197, 168, 128, 0.15);
+  border: 1px solid rgba(197, 168, 128, 0.3);
+  margin-bottom: 20px;
+}
+
+.mixLuxuryFinalCta.wp-block-cover {
+  padding: 100px 0;
+  min-height: auto;
+}
+
+/* Events Decoration Section */
+.mix-events-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  align-items: center;
+}
+.mix-events-photos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.mix-events-photo-main {
+  grid-column: span 2;
+  border-radius: 14px;
+  overflow: hidden;
+  height: 240px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.mix-events-photo-sub {
+  border-radius: 14px;
+  overflow: hidden;
+  height: 170px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.mix-events-photo-main img,
+.mix-events-photo-sub img,
+.mix-events-photo-main .wp-block-image,
+.mix-events-photo-sub .wp-block-image,
+.mix-events-photo-main .wp-block-image img,
+.mix-events-photo-sub .wp-block-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+}
+
+/* About Intro Section */
+.mix-about-intro-wrap {
+  padding-top: 48px;
+  padding-bottom: 24px;
+}
+.mixAboutBanner .wp-block-image,
+.mixAboutBanner .wp-block-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+}
+
+/* Site Logo Gutenberg Block Support */
+.mixPremiumLogoBox .wp-block-site-logo,
+.mixPremiumLogoBox .wp-block-site-logo a {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+.mixPremiumLogoBox .wp-block-site-logo img {
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+  margin: 0;
+}
+.menuTopPage .logoPart .wp-block-site-logo,
+.menuTopPage .logoPart .wp-block-site-logo a {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+.menuTopPage .logoPart .wp-block-site-logo img {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  margin: 0;
+}
+.footerColLogo .wp-block-site-logo,
+.footerColLogo .wp-block-site-logo a {
+  display: block;
+  margin: 0 0 16px;
+}
+.footerColLogo .wp-block-site-logo img {
+  width: 160px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin: 0;
+}
+
+
+
+
+
+

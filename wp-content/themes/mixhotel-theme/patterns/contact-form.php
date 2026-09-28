@@ -8,14 +8,24 @@
  * Post Types: page
  */
 ?>
-<!-- wp:html -->
-<div class="mixContactFormWrap" id="contact-form-section">
-  <div class="mixContactFormHeader">
-    <p class="mixSectionKicker">LIÊN HỆ</p>
-    <h2 class="mixContactFormTitle">GỬI TIN NHẮN CHO CHÚNG TÔI</h2>
-    <p class="mixContactFormSubtitle">Chúng tôi sẽ phản hồi trong thời gian sớm nhất</p>
-  </div>
+<!-- wp:group {"className":"mixContactFormWrap","anchor":"contact-form-section","lock":{"move":true,"remove":true},"metadata":{"name":"Liên Hệ - Form Liên Hệ"}} -->
+<div id="contact-form-section" class="wp-block-group mixContactFormWrap">
 
+<!-- wp:group {"className":"mixContactFormHeader"} -->
+<div class="wp-block-group mixContactFormHeader">
+<!-- wp:paragraph {"className":"mixSectionKicker"} -->
+<p class="mixSectionKicker">LIÊN HỆ</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"className":"mixContactFormTitle"} -->
+<h2 class="wp-block-heading mixContactFormTitle">GỬI TIN NHẮN CHO CHÚNG TÔI</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"mixContactFormSubtitle"} -->
+<p class="mixContactFormSubtitle">Chúng tôi sẽ phản hồi trong thời gian sớm nhất</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:html -->
   <!-- Thông báo kết quả (Ẩn mặc định, JS hiển thị) -->
   <div id="mixContactFormResult" class="mixContactFormResult" aria-live="polite" aria-atomic="true" hidden></div>
 
@@ -117,5 +127,7 @@
       * Dữ liệu được bảo mật tuyệt đối và chỉ dùng để liên lạc với bạn.
     </p>
   </form>
-</div>
 <!-- /wp:html -->
+
+</div>
+<!-- /wp:group -->

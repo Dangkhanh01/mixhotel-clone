@@ -8,76 +8,134 @@
  * Post Types: page
  */
 ?>
-<!-- wp:html -->
-<section id="why" class="mix-section mix-section--dark-2">
-  <div class="mix-container">
-    <!-- Head -->
-    <div class="mix-section-head">
-      <span class="mix-section-kicker">VÌ SAO CHỌN MIX</span>
-      <h2 class="mix-section-title">Tập trung vào điều khách lo trước khi đặt</h2>
-      <p class="mix-section-desc">
-        Sự tin cậy, không gian tinh tế và cảm xúc của bạn là ưu tiên hàng đầu tại Mix Boutique Hotel.
-      </p>
-    </div>
+<!-- wp:group {"tagName":"section","className":"mix-section mix-section--dark-2","anchor":"why","lock":{"move":true,"remove":true},"metadata":{"name":"Tại Sao Chọn Mix"}} -->
+<section id="why" class="wp-block-group mix-section mix-section--dark-2">
 
-    <!-- 4 Cards Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;">
-      <!-- Reason 1 -->
-      <div class="mixLuxuryWhyCard">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <div class="mixLuxuryWhyIconBox">
-            <span>1</span>
-          </div>
-          <span style="font-family: monospace; font-size: 28px; font-weight: 800; color: rgba(255, 255, 255, 0.15);">01</span>
-        </div>
-        <h3 class="mixLuxuryWhyTitle">Riêng tư tuyệt đối</h3>
-        <p class="mixLuxuryWhyDesc">
-          Tư vấn kín đáo, hỗ trợ khách chọn phòng phù hợp và tuyệt đối không làm phiền trải nghiệm riêng.
-        </p>
-      </div>
+<!-- wp:group {"className":"mix-container"} -->
+<div class="wp-block-group mix-container">
 
-      <!-- Reason 2 -->
-      <div class="mixLuxuryWhyCard">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <div class="mixLuxuryWhyIconBox">
-            <span>2</span>
-          </div>
-          <span style="font-family: monospace; font-size: 28px; font-weight: 800; color: rgba(255, 255, 255, 0.15);">02</span>
-        </div>
-        <h3 class="mixLuxuryWhyTitle">Ảnh & Video thật 100%</h3>
-        <p class="mixLuxuryWhyDesc">
-          Ưu tiên hình ảnh thực tế rõ nét, nhiều góc phòng và video để khách biết chính xác không gian trước khi đến.
-        </p>
-      </div>
+<!-- wp:group {"className":"mix-section-head"} -->
+<div class="wp-block-group mix-section-head">
+<!-- wp:paragraph {"className":"mix-section-kicker"} -->
+<p class="mix-section-kicker">VÌ SAO CHỌN MIX</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"className":"mix-section-title"} -->
+<h2 class="wp-block-heading mix-section-title">Tập trung vào điều khách lo trước khi đặt</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"mix-section-desc"} -->
+<p class="mix-section-desc">Sự tin cậy, không gian tinh tế và cảm xúc của bạn là ưu tiên hàng đầu tại Mix Boutique Hotel.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
 
-      <!-- Reason 3 -->
-      <div class="mixLuxuryWhyCard">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <div class="mixLuxuryWhyIconBox">
-            <span>3</span>
-          </div>
-          <span style="font-family: monospace; font-size: 28px; font-weight: 800; color: rgba(255, 255, 255, 0.15);">03</span>
-        </div>
-        <h3 class="mixLuxuryWhyTitle">Bảng giá minh bạch</h3>
-        <p class="mixLuxuryWhyDesc">
-          Công khai giá theo hạng phòng, nghỉ giờ, qua đêm và ngày đêm minh bạch để khách dễ dàng quyết định.
-        </p>
-      </div>
+<!-- wp:columns {"className":"mix-grid-4col"} -->
+<div class="wp-block-columns mix-grid-4col">
 
-      <!-- Reason 4 -->
-      <div class="mixLuxuryWhyCard">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <div class="mixLuxuryWhyIconBox">
-            <span>4</span>
-          </div>
-          <span style="font-family: monospace; font-size: 28px; font-weight: 800; color: rgba(255, 255, 255, 0.15);">04</span>
-        </div>
-        <h3 class="mixLuxuryWhyTitle">Setup sự kiện lãng mạn</h3>
-        <p class="mixLuxuryWhyDesc">
-          Cung cấp dịch vụ trang trí sinh nhật, kỷ niệm, cầu hôn với hoa tươi, nến, bánh kem và rượu vang lãng mạn.
-        </p>
-      </div>
-    </div>
-  </div>
+<!-- wp:column {"className":"mixLuxuryWhyCard"} -->
+<div class="wp-block-column mixLuxuryWhyCard">
+<!-- wp:group {"className":"mix-flex-between"} -->
+<div class="wp-block-group mix-flex-between">
+<!-- wp:group {"className":"mixLuxuryWhyIconBox"} -->
+<div class="wp-block-group mixLuxuryWhyIconBox">
+<!-- wp:paragraph -->
+<p>1</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"className":"mix-mono-number"} -->
+<p class="mix-mono-number">01</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"className":"mixLuxuryWhyTitle"} -->
+<h3 class="wp-block-heading mixLuxuryWhyTitle">Riêng tư tuyệt đối</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"mixLuxuryWhyDesc"} -->
+<p class="mixLuxuryWhyDesc">Tư vấn kín đáo, hỗ trợ khách chọn phòng phù hợp và tuyệt đối không làm phiền trải nghiệm riêng.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+
+<!-- wp:column {"className":"mixLuxuryWhyCard"} -->
+<div class="wp-block-column mixLuxuryWhyCard">
+<!-- wp:group {"className":"mix-flex-between"} -->
+<div class="wp-block-group mix-flex-between">
+<!-- wp:group {"className":"mixLuxuryWhyIconBox"} -->
+<div class="wp-block-group mixLuxuryWhyIconBox">
+<!-- wp:paragraph -->
+<p>2</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"className":"mix-mono-number"} -->
+<p class="mix-mono-number">02</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"className":"mixLuxuryWhyTitle"} -->
+<h3 class="wp-block-heading mixLuxuryWhyTitle">Ảnh &amp; Video thật 100%</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"mixLuxuryWhyDesc"} -->
+<p class="mixLuxuryWhyDesc">Ưu tiên hình ảnh thực tế rõ nét, nhiều góc phòng và video để khách biết chính xác không gian trước khi đến.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+
+<!-- wp:column {"className":"mixLuxuryWhyCard"} -->
+<div class="wp-block-column mixLuxuryWhyCard">
+<!-- wp:group {"className":"mix-flex-between"} -->
+<div class="wp-block-group mix-flex-between">
+<!-- wp:group {"className":"mixLuxuryWhyIconBox"} -->
+<div class="wp-block-group mixLuxuryWhyIconBox">
+<!-- wp:paragraph -->
+<p>3</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"className":"mix-mono-number"} -->
+<p class="mix-mono-number">03</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"className":"mixLuxuryWhyTitle"} -->
+<h3 class="wp-block-heading mixLuxuryWhyTitle">Bảng giá minh bạch</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"mixLuxuryWhyDesc"} -->
+<p class="mixLuxuryWhyDesc">Công khai giá theo hạng phòng, nghỉ giờ, qua đêm và ngày đêm minh bạch để khách dễ dàng quyết định.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+
+<!-- wp:column {"className":"mixLuxuryWhyCard"} -->
+<div class="wp-block-column mixLuxuryWhyCard">
+<!-- wp:group {"className":"mix-flex-between"} -->
+<div class="wp-block-group mix-flex-between">
+<!-- wp:group {"className":"mixLuxuryWhyIconBox"} -->
+<div class="wp-block-group mixLuxuryWhyIconBox">
+<!-- wp:paragraph -->
+<p>4</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"className":"mix-mono-number"} -->
+<p class="mix-mono-number">04</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"className":"mixLuxuryWhyTitle"} -->
+<h3 class="wp-block-heading mixLuxuryWhyTitle">Setup sự kiện lãng mạn</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"mixLuxuryWhyDesc"} -->
+<p class="mixLuxuryWhyDesc">Cung cấp dịch vụ trang trí sinh nhật, kỷ niệm, cầu hôn với hoa tươi, nến, bánh kem và rượu vang lãng mạn.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+
+</div>
+<!-- /wp:columns -->
+
+</div>
+<!-- /wp:group -->
+
 </section>
-<!-- /wp:html -->
+<!-- /wp:group -->

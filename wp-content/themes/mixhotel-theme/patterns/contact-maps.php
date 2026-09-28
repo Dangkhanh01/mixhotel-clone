@@ -29,14 +29,24 @@ $branches_data = [
     ],
 ];
 ?>
-<!-- wp:html -->
-<section class="mixLuxuryContainer" style="padding-bottom: 80px;" aria-label="Bản đồ vị trí các chi nhánh">
-  <div class="mixLuxuryHeading">
-    <span class="mixLuxuryKicker">VỊ TRÍ &amp; BẢN ĐỒ</span>
-    <h2 class="mixLuxuryTitle">BẢN ĐỒ HỆ THỐNG CHI NHÁNH</h2>
-    <div class="mixLuxuryTitleDivider"></div>
-  </div>
+<!-- wp:group {"tagName":"section","className":"mixLuxuryContainer","style":{"spacing":{"padding":{"bottom":"80px"}}},"lock":{"move":true,"remove":true},"metadata":{"name":"Liên Hệ - Bản Đồ 3 Chi Nhánh Dark Luxury"}} -->
+<section class="wp-block-group mixLuxuryContainer" style="padding-bottom:80px">
 
+<!-- wp:group {"className":"mixLuxuryHeading"} -->
+<div class="wp-block-group mixLuxuryHeading">
+<!-- wp:paragraph {"className":"mixLuxuryKicker"} -->
+<p class="mixLuxuryKicker">VỊ TRÍ &amp; BẢN ĐỒ</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"className":"mixLuxuryTitle"} -->
+<h2 class="wp-block-heading mixLuxuryTitle">BẢN ĐỒ HỆ THỐNG CHI NHÁNH</h2>
+<!-- /wp:heading -->
+<!-- wp:html -->
+<div class="mixLuxuryTitleDivider"></div>
+<!-- /wp:html -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:html -->
   <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;" class="mapsGridResponsive">
     <?php foreach ($branches_data as $b) : ?>
       <div style="padding: 24px; border-radius: 20px; background: #140e0a; border: 1px solid rgba(200, 137, 34, 0.25); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 15px 35px rgba(0,0,0,0.4);">
@@ -63,7 +73,6 @@ $branches_data = [
       </div>
     <?php endforeach; ?>
   </div>
-</section>
 
 <style>
 @media (max-width: 991px) {
@@ -73,3 +82,6 @@ $branches_data = [
 }
 </style>
 <!-- /wp:html -->
+
+</section>
+<!-- /wp:group -->

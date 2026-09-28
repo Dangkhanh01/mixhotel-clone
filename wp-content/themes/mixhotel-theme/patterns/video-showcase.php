@@ -9,10 +9,16 @@
  */
 $theme_uri = get_template_directory_uri();
 ?>
+<!-- wp:group {"tagName":"section","className":"mix-section mix-section--dark-1","anchor":"videos","lock":{"move":true,"remove":true},"metadata":{"name":"Video Phòng Thật (YouTube Showcase)"}} -->
+<section id="videos" class="wp-block-group mix-section mix-section--dark-1">
+
+<!-- wp:group {"className":"mix-container"} -->
+<div class="wp-block-group mix-container">
+
+<!-- wp:group {"className":"mixLuxuryVideosGrid"} -->
+<div class="wp-block-group mixLuxuryVideosGrid">
+
 <!-- wp:html -->
-<section id="videos" class="mix-section mix-section--dark-1">
-  <div class="mix-container">
-    <div class="mixLuxuryVideosGrid">
       <!-- Left Column: 2 Vertical Shorts -->
       <div class="mixLuxuryShortsCol">
         <!-- Short 1 -->
@@ -53,17 +59,26 @@ $theme_uri = get_template_directory_uri();
           </div>
         </div>
       </div>
+<!-- /wp:html -->
 
-      <!-- Right Column: Video Info & Channel Player -->
-      <div class="mixLuxuryVideoPanel">
-        <div>
-          <span class="mix-section-kicker">VIDEO TỪ KÊNH MIX</span>
-          <h2 class="mix-section-title" style="text-align: left;">Video phòng thật giúp bạn yên tâm đặt phòng</h2>
-          <p class="mix-section-desc" style="text-align: left; margin: 0 0 20px;">
-            Cảm nhận rõ không gian, ánh sáng, bồn tắm, giường ngủ và toàn bộ tiện nghi thực tế trước khi đến.
-          </p>
-        </div>
+<!-- wp:group {"className":"mixLuxuryVideoPanel"} -->
+<div class="wp-block-group mixLuxuryVideoPanel">
 
+<!-- wp:group -->
+<div class="wp-block-group">
+<!-- wp:paragraph {"className":"mix-section-kicker"} -->
+<p class="mix-section-kicker">VIDEO TỪ KÊNH MIX</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"className":"mix-section-title","style":{"typography":{"textAlign":"left"}}} -->
+<h2 class="wp-block-heading mix-section-title" style="text-align:left">Video phòng thật giúp bạn yên tâm đặt phòng</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"mix-section-desc","style":{"typography":{"textAlign":"left"},"spacing":{"margin":{"bottom":"20px"}}}} -->
+<p class="mix-section-desc" style="text-align:left;margin-bottom:20px">Cảm nhận rõ không gian, ánh sáng, bồn tắm, giường ngủ và toàn bộ tiện nghi thực tế trước khi đến.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:html -->
         <!-- Bullets -->
         <div class="mixLuxuryVideoBullets">
           <div class="mixLuxuryVideoBulletItem">
@@ -108,10 +123,18 @@ $theme_uri = get_template_directory_uri();
             <i class="fa fa-external-link">&#8599;</i>
           </a>
         </div>
-      </div>
-    </div>
-  </div>
+<!-- /wp:html -->
 
+</div>
+<!-- /wp:group -->
+
+</div>
+<!-- /wp:group -->
+
+</div>
+<!-- /wp:group -->
+
+<!-- wp:html -->
   <!-- Video Modal Lite Embed -->
   <div id="videoModalLite" class="mix-video-modal" role="dialog" aria-modal="true" aria-label="Video Player">
     <div class="mix-video-modal__container">
@@ -119,5 +142,7 @@ $theme_uri = get_template_directory_uri();
       <div id="videoModalIframeWrap" style="width: 100%; height: 100%;"></div>
     </div>
   </div>
-</section>
 <!-- /wp:html -->
+
+</section>
+<!-- /wp:group -->

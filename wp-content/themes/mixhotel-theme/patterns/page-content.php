@@ -10,8 +10,15 @@
 
 $post_id   = get_the_ID();
 $post_slug = get_post_field('post_name', $post_id);
+$content   = get_post_field('post_content', $post_id);
 
-// Tự động điều hướng các trang chính sách sang Dark Luxury patterns tương ứng
+// Nếu trang đã có nội dung trong Database (do Admin sửa trong wp-admin/post.php), ưu tiên hiển thị the_content()
+if (!empty(trim((string) $content))) {
+    the_content();
+    return;
+}
+
+// Fallback: Tự động điều hướng các trang chính sách sang Dark Luxury patterns tương ứng nếu nội dung rỗng
 if (in_array($post_slug, ['chinh-sach-thanh-toan', 'thanh-toan', 'chinh-sach-thanh-toan-mixhotel'])) {
     echo do_blocks('<!-- wp:pattern {"slug":"mixhotel/policy-payment"} /-->');
     return;
@@ -35,6 +42,7 @@ if (in_array($post_slug, ['chinh-sach-thanh-toan', 'thanh-toan', 'chinh-sach-tha
     echo do_blocks('<!-- wp:pattern {"slug":"mixhotel-theme/room-archive-content"} /-->');
     return;
 }
+
 ?>
 <!-- wp:html -->
 <div class="mixLuxuryBreadcrumbs">

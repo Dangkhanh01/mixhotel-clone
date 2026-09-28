@@ -8,15 +8,27 @@
  * Post Types: page
  */
 ?>
-<!-- wp:html -->
-<section class="mixAboutVideo" aria-label="Video giới thiệu khách sạn">
-  <div class="mix-container">
-    <div class="mixSectionHeader">
-      <p class="mixSectionKicker">KHÁM PHÁ</p>
-      <h2 class="mixSectionTitle">VIDEO GIỚI THIỆU</h2>
-      <p class="mixSectionSubtitle">Khám phá không gian Mix Boutique Hotel qua video giới thiệu ấn tượng</p>
-    </div>
+<!-- wp:group {"tagName":"section","className":"mixAboutVideo","lock":{"move":true,"remove":true},"metadata":{"name":"About - YouTube Embed"}} -->
+<section class="wp-block-group mixAboutVideo">
 
+<!-- wp:group {"className":"mix-container"} -->
+<div class="wp-block-group mix-container">
+
+<!-- wp:group {"className":"mixSectionHeader"} -->
+<div class="wp-block-group mixSectionHeader">
+<!-- wp:paragraph {"className":"mixSectionKicker"} -->
+<p class="mixSectionKicker">KHÁM PHÁ</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"className":"mixSectionTitle"} -->
+<h2 class="wp-block-heading mixSectionTitle">VIDEO GIỚI THIỆU</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"mixSectionSubtitle"} -->
+<p class="mixSectionSubtitle">Khám phá không gian Mix Boutique Hotel qua video giới thiệu ấn tượng</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:html -->
     <div class="mixAboutVideoWrapper">
       <!-- YouTube embed responsive 16:9 — No-code replaceable -->
       <div class="mixAboutVideoIframeWrap" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius: 16px; border: 1px solid rgba(197,168,128,0.2);">
@@ -36,6 +48,10 @@
         Nơi tình yêu được viết nên từng khoảnh khắc
       </p>
     </div>
-  </div>
-</section>
 <!-- /wp:html -->
+
+</div>
+<!-- /wp:group -->
+
+</section>
+<!-- /wp:group -->
