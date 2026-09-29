@@ -96,6 +96,45 @@ sequenceDiagram
     UI-->>Khach: Hiện modal popup: "Đã giữ phòng tạm thời 15 phút! Bấm Zalo để xác nhận ngay"
 ```
 
+### 3.1. Automated Booking Engine (Spec-08 — Nâng cấp)
+
+> **Spec Kit:** `specs/08-automated-booking/` (spec.md, contracts/, plan.md, tasks.md)
+
+Mở rộng Booking Lead Engine thành hệ thống **Auto-Confirm** có kiểm tra phòng trống theo khung giờ:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Khach as Khách hàng
+    participant UI as Giao diện Web
+    participant AJAX as AJAX Handler (mixhotel-core)
+    participant DB as WordPress DB
+    participant Cron as WP-Cron (5 phút/lần)
+    participant Tele as Telegram Lễ Tân
+
+    Khach->>UI: Chọn phòng + ngày/giờ + nhu cầu (2h/qua đêm/cả ngày)
+    UI->>AJAX: AJAX + Nonce fresh (inject từ MixHotelData.nonce)
+    AJAX->>AJAX: Tính check-out time tự động (2h/overnight/allday)
+    AJAX->>DB: SELECT overlap: cùng phòng + cùng khung giờ?
+    alt Phòng trống
+        AJAX->>DB: INSERT booking_lead (status = confirmed)
+        AJAX->>Tele: Thông báo "Có đơn mới, đã auto-confirm"
+        AJAX-->>UI: JSON success + mã đơn + check-in/out time
+        UI-->>Khach: Modal xác nhận xanh
+    else Phòng đã kín
+        AJAX-->>UI: JSON error "Phòng đã hết trong khung giờ này"
+        UI-->>Khach: Thông báo lỗi + gợi ý hotline
+    end
+
+    Note over Cron,DB: Chạy mỗi 5 phút
+    Cron->>DB: Quét đơn confirmed > 30 phút chưa check-in
+    Cron->>DB: UPDATE status → expired, nhả slot phòng
+```
+
+**Trạng thái đơn mới:** `confirmed` → `checked_in` → `completed` (hoặc `expired` / `no_show` / `cancelled`). Xem chi tiết tại [database-schema.md](file:///c:/Users/maida/Code/wordpress/docs/database-schema.md).
+
+**BUG-17 đi kèm:** Form đặt phòng hiện không gửi được do nonce bị "đóng băng" trong seeded content. Xem [booking-form-bug-report.md](file:///c:/Users/maida/Code/wordpress/docs/booking-form-bug-report.md).
+
 ---
 
 ## 4. HẠ TẦNG DOCKER & PORT MAPPING

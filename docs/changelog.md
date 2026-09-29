@@ -6,6 +6,22 @@ Tất cả các thay đổi kiến trúc, tính năng và sửa lỗi của dự
 
 ## [Unreleased]
 
+### Spec Drafted — 2026-09-29 (SPEC-08: Automated Booking Engine & BUG-17 Fix)
+- **Phát hiện BUG-17 (Critical):** Form đặt phòng không gửi được — `wp_nonce_field()` bị "đóng băng" trong seeded page content, nonce hết hạn 24h vĩnh viễn. JS ưu tiên nonce cũ từ HTML thay vì nonce fresh từ `MixHotelData`. Xem chi tiết: `docs/booking-form-bug-report.md`.
+- **Tạo Spec Kit `specs/08-automated-booking/`:** spec.md, contracts/api-contracts.md, plan.md, tasks.md (23 tasks, 6 phases).
+- **Scope Feature 08:**
+  - Auto-Confirm tức thì (không cần thanh toán): khách gửi form → hệ thống kiểm tra phòng trống time-range → tự chuyển `confirmed`.
+  - Availability Check: query overlap cùng phòng + cùng khung giờ (VD: 14:00–16:00).
+  - Duration Calculator: tự tính check-out time theo nhu cầu (2h, overnight 22h–12h, allday 14h–12h).
+  - WP-Cron TTL: quét đơn `confirmed` > 30 phút chưa check-in → tự huỷ `expired`, nhả slot.
+  - Vòng đời trạng thái mới: `confirmed`, `checked_in`, `expired`, `completed`, `no_show`.
+  - Admin Quick Actions: nút Check-in, Hoàn thành, Khách không đến, Huỷ đơn.
+  - Settings mới: Toggle Auto-Confirm, Hold Duration (phút).
+- **Cập nhật docs tổng thể:**
+  - `docs/database-schema.md`: bổ sung 5 meta key mới + bảng trạng thái đơn chi tiết.
+  - `docs/system-architecture.md`: thêm section 3.1 Automated Booking Engine (sequence diagram).
+  - `docs/roadmap.md`: thêm Tuần 7+ Feature 08 với Gate 7.
+  - `docs/booking-form-bug-report.md`: báo cáo bug BUG-17 mới.
 ### Added & Completed - 2026-09-28 (SPEC-07: Toàn Diện No-code WYSIWYG Figma-Style Cho Toàn Bộ Khối Phức Hợp)
 - **Feature 07 Hoàn Tất 100%: Chuyển đổi toàn bộ các khối nội dung phức hợp còn lại sang WordPress Native Core Blocks (`specs/07-wysiwyg-no-code-full-refactor/`):**
   - **Phase 1 — Auto Media Importer Thành Công:**

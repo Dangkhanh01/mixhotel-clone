@@ -35,7 +35,7 @@ erDiagram
     BOOKING_LEAD {
         bigint ID PK
         string post_title "Mã đơn (VD: #LEAD-20260912-001)"
-        string post_status "pending | confirmed | cancelled"
+        string post_status "pending | confirmed | checked_in | expired | completed | cancelled | no_show"
     }
 ```
 
@@ -89,13 +89,38 @@ erDiagram
 
 | Meta Key | Kiểu dữ liệu | Mục đích | Ví dụ dữ liệu |
 | :--- | :--- | :--- | :--- |
+| `_mixhotel_lead_code` | string | Mã đơn giữ phòng duy nhất | `#LEAD-20261005-001` |
 | `_mixhotel_lead_customer_name` | string | Họ tên khách hàng | `Nguyễn Văn A` |
 | `_mixhotel_lead_customer_phone` | string | Số điện thoại | `0912345678` |
-| `_mixhotel_lead_branch_id` | int | ID chi nhánh khách chọn | `105` |
-| `_mixhotel_lead_demand` | string | Nhu cầu (Nghỉ giờ / Qua đêm / Kỷ niệm) | `Nghỉ giờ` |
+| `_mixhotel_lead_branch_id` | int/string | ID hoặc slug chi nhánh khách chọn | `105` hoặc `branch-premium` |
+| `_mixhotel_lead_branch_name` | string | Tên chi nhánh đã resolve | `CS1: Mix Huỳnh Thúc Kháng` |
+| `_mixhotel_lead_room_id` | int | ID phòng (nếu đặt từ trang chi tiết) | `201` |
+| `_mixhotel_lead_room_name` | string | Tên phòng | `Karma` |
+| `_mixhotel_lead_demand` | string | Nhu cầu (Nghỉ giờ / Qua đêm / Kỷ niệm) | `Nghỉ giờ (2 giờ đầu)` |
+| `_mixhotel_lead_booking_date` | string | Ngày nhận phòng | `2026-10-05` |
+| `_mixhotel_lead_booking_time` | string | Giờ nhận phòng | `14:00` |
 | `_mixhotel_lead_note` | text | Ghi chú thêm từ khách | `Cần trang trí nến lãng mạn` |
-| `_mixhotel_lead_status` | string | Trạng thái tiếp nhận | `pending` (Chờ gọi) / `confirmed` (Đã nhận) |
+| `_mixhotel_lead_status` | string | Trạng thái đơn (xem bảng bên dưới) | `confirmed` |
 | `_mixhotel_lead_ip` | string | IP người gửi (chống spam) | `14.232.xxx.xxx` |
+| `_mixhotel_lead_is_demo` | int | Đơn demo sandbox (0/1) | `1` |
+| `_mixhotel_lead_check_in_datetime` | datetime | Thời gian nhận phòng (ngày+giờ) *(Spec-08)* | `2026-10-05 14:00:00` |
+| `_mixhotel_lead_check_out_datetime` | datetime | Thời gian trả phòng (tính tự động) *(Spec-08)* | `2026-10-05 16:00:00` |
+| `_mixhotel_lead_duration_type` | string | Loại thời lượng gốc *(Spec-08)* | `2h` / `overnight` / `allday` |
+| `_mixhotel_lead_confirmed_at` | datetime | Thời điểm auto-confirm *(Spec-08)* | `2026-10-05 13:45:00` |
+| `_mixhotel_lead_expired_at` | datetime | Thời điểm bị cron huỷ *(Spec-08)* | `2026-10-05 14:16:00` |
+
+**Bảng trạng thái đơn đặt phòng (`_mixhotel_lead_status`):**
+
+| Status | Label VN | Mô tả | Nguồn |
+| :--- | :--- | :--- | :--- |
+| `pending` | ⏳ Chờ xử lý | Đơn chờ lễ tân duyệt (flow cũ hoặc khi tắt auto-confirm) | Feature 04 |
+| `confirmed` | ✅ Đã xác nhận | Auto-Confirm thành công, đang giữ phòng | Spec-08 |
+| `checked_in` | 🏨 Đã nhận phòng | Lễ tân xác nhận khách đến, không bị Cron huỷ | Spec-08 |
+| `expired` | ⏰ Hết hạn giữ phòng | Quá TTL (30p) chưa check-in → WP-Cron tự huỷ | Spec-08 |
+| `completed` | ✔️ Hoàn thành | Khách đã trả phòng | Spec-08 |
+| `no_show` | 🚫 Khách không đến | Lễ tân đánh dấu | Spec-08 |
+| `cancelled` | ❌ Đã huỷ | Lễ tân hoặc khách huỷ tay | Feature 04 |
+| `contacted` | 📞 Đã liên hệ | Lễ tân đã gọi xác nhận | Feature 04 |
 
 ---
 

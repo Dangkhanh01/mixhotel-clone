@@ -16,7 +16,8 @@ specs/
 ├── 04-booking-engine-and-leads/     # TUẦN 3-4: AJAX Lead Processing, Nonce check, Telegram Bot Alert
 ├── 05-auxiliary-pages-and-polish/   # TUẦN 4: Gallery, Chi nhánh, Blog/Cẩm nang, SEO Schema, PageSpeed
 ├── 06-fse-gutenberg-refactor/      # TUẦN 5+: Chuyển wp:html → Native Core Blocks, No-code Admin UI
-└── 07-wysiwyg-no-code-full-refactor/ # TUẦN 6+: Chuyển toàn bộ khối phức hợp → Native Core Blocks, Auto Media Import
+├── 07-wysiwyg-no-code-full-refactor/ # TUẦN 6+: Chuyển toàn bộ khối phức hợp → Native Core Blocks, Auto Media Import
+└── 08-automated-booking/           # TUẦN 7+: Auto-Confirm đặt phòng, Availability Check, WP-Cron TTL, BUG-17 Fix
 ```
 
 ---
@@ -105,4 +106,28 @@ specs/
   * **Phase 5:** Xử lý `#booking` Event Delegation & Đồng bộ Seeder toàn trang.
   * **Phase 6:** Kiểm thử toàn diện E2E (Gutenberg Editor + Frontend + Debug log).
 * **Gate 6:** Admin nhấp vào bất kỳ ảnh/text/nút bấm nào trên toàn bộ hệ thống trang đều có thể sửa trực quan 100% — Nút "Thay thế" xuất hiện trên mọi ảnh, 0 lỗi invalid block, popup đặt phòng hoạt động bình thường.
+
+---
+
+### TUẦN 7+: AUTOMATED BOOKING ENGINE — AUTO-CONFIRM & AVAILABILITY CHECK (Ngày 45+)
+* **Gói tính năng:** `specs/08-automated-booking/`
+* **Bug Fix đi kèm:** BUG-17 — Nonce đóng băng trong seeded content (form đặt phòng không gửi được). Xem `docs/booking-form-bug-report.md`.
+* **Bối cảnh:**
+  * Feature 04 xây dựng Booking Lead Engine ở chế độ "duyệt thủ công": khách gửi form → lưu `pending` → lễ tân gọi xác nhận.
+  * Feature 08 nâng cấp thành **Auto-Confirm tức thì** có kiểm tra phòng trống (Availability Check) theo time-range, tự động huỷ đơn hết hạn qua WP-Cron, và mở rộng vòng đời trạng thái đơn.
+* **Mục tiêu:**
+  * Sửa BUG-17 cho form hoạt động lại (nonce inject từ JS thay vì bake trong HTML).
+  * Kiểm tra phòng trống theo khung giờ cụ thể (overlap detection): cùng phòng + cùng ngày + trùng time-range → từ chối.
+  * Tính check-out time tự động theo nhu cầu: 2h, qua đêm (22h–12h), cả ngày (14h–12h).
+  * WP-Cron job chạy mỗi 5 phút quét đơn `confirmed` quá 30 phút chưa check-in → tự chuyển `expired` và nhả slot.
+  * Mở rộng Admin: nút Check-in, Hoàn thành, Khách không đến, Huỷ đơn + filter theo trạng thái.
+  * Settings mới: Toggle Auto-Confirm, Thời gian giữ phòng (phút).
+* **Chiến lược:** 6 Phases tuần tự:
+  * **Phase 0 (Critical):** Sửa BUG-17 Nonce đóng băng.
+  * **Phase 1:** Availability Check + Auto-Confirm logic.
+  * **Phase 2:** WP-Cron TTL + Status Lifecycle.
+  * **Phase 3:** Admin — Mở rộng quản lý đơn.
+  * **Phase 4:** Frontend — Cập nhật form & UI.
+  * **Phase 5:** Verification & Documentation.
+* **Gate 7:** Form đặt phòng gửi thành công, auto-confirm hoạt động, đặt phòng trùng slot bị từ chối, đơn hết hạn tự huỷ qua cron, lễ tân check-in/check-out trên WP Admin.
 
