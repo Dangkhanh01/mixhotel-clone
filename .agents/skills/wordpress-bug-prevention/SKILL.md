@@ -486,3 +486,23 @@ while ($query->have_posts()) : $query->the_post();
   * Chỉ dùng các thuộc tính được Core Block schema hỗ trợ. Không nhồi nhét `aria-label` trực tiếp vào thẻ wrapper của `wp:group` trừ khi nằm trong `wp:html`.
   * Mọi phân đoạn chứa mã HTML tùy biến (như SVG icon, badge, overlay phức tạp) phải được đóng gói gọn gàng bên trong `<!-- wp:html -->...<!-- /wp:html -->`.
 
+---
+
+## 12. PHÂN HỆ: WORDPRESS NONCES & SEEDED CONTENT
+
+### BUG-17: Nonce đóng băng trong Seeded Page Content (FSE + Seed Script)
+* **Triệu chứng:** Khi khách hàng gửi form đặt phòng (Hero trang chủ hoặc Chi tiết phòng), hệ thống luôn báo lỗi *"Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại."* Tải lại trang (F5) nhiều lần vẫn không thể gửi được form.
+* **Root cause:** 
+  1. Script seed nội dung (`seed-pages.php`) dùng `ob_start()` và `include` pattern file chứa `wp_nonce_field('action', 'nonce')`. Tại thời điểm chạy seed, PHP sinh ra một chuỗi nonce và chuỗi này bị ghi chết (hardcode/bake) vĩnh viễn vào `post_content` trong database `wp_posts`.
+  2. WordPress Nonce có thời hạn tối đa 24 giờ. Sau 24h kể từ khi seed, nonce tĩnh trong DB hết hạn vĩnh viễn.
+  3. Phía client, JavaScript kiểm tra `if (!formData.get('mixhotel_booking_nonce'))` thấy đã có nonce trong HTML form nên bỏ qua không ghi đè nonce tươi mới từ `MixHotelData.nonce`. Kết quả là client luôn gửi nonce đã hết hạn lên server và bị chặn.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Tuyệt đối KHÔNG** gọi `wp_nonce_field()` trong các file pattern hoặc template part được seed hoặc lưu trực tiếp vào cơ sở dữ liệu (`wp_posts.post_content`).
+  * Trong form HTML lưu DB, chỉ đặt input nonce rỗng làm placeholder:
+    ```html
+    <input type="hidden" id="hero-booking-nonce" name="mixhotel_booking_nonce" value="" />
+    ```
+  * Frontend JavaScript BẮT BUỘC dùng `formData.set('mixhotel_booking_nonce', window.MixHotelData.nonce)` để luôn ghi đè nonce tươi mới được sinh theo từng request từ `wp_localize_script()`.
+  * Thống nhất một nonce action name duy nhất trong toàn bộ hệ thống plugin và theme (ví dụ: `mixhotel_booking_nonce`).
+
+

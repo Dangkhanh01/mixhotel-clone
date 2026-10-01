@@ -6,22 +6,25 @@ Tất cả các thay đổi kiến trúc, tính năng và sửa lỗi của dự
 
 ## [Unreleased]
 
-### Spec Drafted — 2026-09-29 (SPEC-08: Automated Booking Engine & BUG-17 Fix)
-- **Phát hiện BUG-17 (Critical):** Form đặt phòng không gửi được — `wp_nonce_field()` bị "đóng băng" trong seeded page content, nonce hết hạn 24h vĩnh viễn. JS ưu tiên nonce cũ từ HTML thay vì nonce fresh từ `MixHotelData`. Xem chi tiết: `docs/booking-form-bug-report.md`.
-- **Tạo Spec Kit `specs/08-automated-booking/`:** spec.md, contracts/api-contracts.md, plan.md, tasks.md (23 tasks, 6 phases).
-- **Scope Feature 08:**
-  - Auto-Confirm tức thì (không cần thanh toán): khách gửi form → hệ thống kiểm tra phòng trống time-range → tự chuyển `confirmed`.
-  - Availability Check: query overlap cùng phòng + cùng khung giờ (VD: 14:00–16:00).
-  - Duration Calculator: tự tính check-out time theo nhu cầu (2h, overnight 22h–12h, allday 14h–12h).
-  - WP-Cron TTL: quét đơn `confirmed` > 30 phút chưa check-in → tự huỷ `expired`, nhả slot.
-  - Vòng đời trạng thái mới: `confirmed`, `checked_in`, `expired`, `completed`, `no_show`.
-  - Admin Quick Actions: nút Check-in, Hoàn thành, Khách không đến, Huỷ đơn.
-  - Settings mới: Toggle Auto-Confirm, Hold Duration (phút).
-- **Cập nhật docs tổng thể:**
-  - `docs/database-schema.md`: bổ sung 5 meta key mới + bảng trạng thái đơn chi tiết.
-  - `docs/system-architecture.md`: thêm section 3.1 Automated Booking Engine (sequence diagram).
-  - `docs/roadmap.md`: thêm Tuần 7+ Feature 08 với Gate 7.
-  - `docs/booking-form-bug-report.md`: báo cáo bug BUG-17 mới.
+## [Unreleased]
+
+### Added & Completed — 2026-09-30 (SPEC-08: Automated Booking Engine & BUG-17 Fix)
+- **Hoàn thành sửa BUG-17 (Critical):**
+  - Khắc phục triệt để lỗi "Phiên làm việc đã hết hạn" trên form Hero trang chủ và trang chi tiết phòng.
+  - Loại bỏ hoàn toàn `wp_nonce_field()` tĩnh bị bake vào cơ sở dữ liệu `wp_posts.post_content` tại seed-time.
+  - Frontend `booking-engine.js` luôn dùng `formData.set('mixhotel_booking_nonce', window.MixHotelData.nonce)` để ép nạp nonce tươi mới cho mọi request AJAX.
+  - Thống nhất một nonce action name `mixhotel_booking_nonce` trong toàn bộ hệ sinh thái plugin và theme.
+  - Ghi nhận bài học kinh nghiệm BUG-17 vào `.agents/skills/wordpress-bug-prevention/SKILL.md`.
+- **Hệ thống Đặt phòng Tự Động (Automated Booking Engine) — Feature 08:**
+  - **Auto-Confirm tức thì:** Tiếp nhận đơn giữ phòng, tự động kiểm tra phòng trống theo khung giờ cụ thể và xác nhận tức thì (status `confirmed`) nếu còn slot.
+  - **Bộ tính thời lượng (Duration Calculator):** `calculate_checkout_time()` và `resolve_booking_datetimes()` tự động xác định check-out cho `2h` (+2h), `overnight` (22:00 -> 12:00 hôm sau), `allday` (14:00 -> 12:00 hôm sau).
+  - **Chống trùng phòng (Overbooking Prevention):** `check_room_availability()` kiểm tra overlap `(checkin < new_checkout AND checkout > new_checkin)` với Transient lock chống race condition.
+  - **Tự động huỷ đơn hết hạn (WP-Cron TTL):** Đăng ký interval `mixhotel_five_minutes` và cron task `mixhotel_check_expired_bookings` tự động chuyển trạng thái `expired` sau 30 phút (configurable) nếu chưa check-in.
+  - **Vòng đời trạng thái đơn mở rộng:** `confirmed` (✅), `checked_in` (🏨), `completed` (✔️), `expired` (⏰), `no_show` (🚫), `cancelled` (❌), `pending` (⏳).
+  - **Quản lý đơn trong WP Admin (`class-admin-leads.php`):** Bổ sung cột Check-in/Check-out, badges màu sắc, bộ lọc dropdown theo trạng thái, Quick Action buttons trong Meta Box thực hiện Check-in / Trả phòng / Khách không đến / Hủy đơn qua AJAX tức thì.
+  - **Cấu hình Booking Engine (`class-settings.php`):** Thêm toggle Bật/Tắt Auto-Confirm và cấu hình Thời gian giữ phòng (Hold duration minutes).
+  - **Giao diện Frontend (`booking-engine.js` & `booking-modal.html`):** Hiển thị khung giờ lưu trú và thời gian giữ phòng trong modal xác nhận, badge kiểm tra phòng trống real-time khi chọn ngày/giờ, xử lý cảnh báo `room_unavailable` thân thiện.
+  - **Kiểm thử E2E & Backward Compatibility:** 100% test suites tự động đạt PASS (Happy path, Overlap rejection, Non-overlap allowance, Cron TTL expiration, Admin status transitions, Backward compat với auto-confirm tắt).
 ### Added & Completed - 2026-09-28 (SPEC-07: Toàn Diện No-code WYSIWYG Figma-Style Cho Toàn Bộ Khối Phức Hợp)
 - **Feature 07 Hoàn Tất 100%: Chuyển đổi toàn bộ các khối nội dung phức hợp còn lại sang WordPress Native Core Blocks (`specs/07-wysiwyg-no-code-full-refactor/`):**
   - **Phase 1 — Auto Media Importer Thành Công:**

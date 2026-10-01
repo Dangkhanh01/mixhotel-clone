@@ -305,7 +305,7 @@ $active_image_alt = $thumbnail_alt;
 
         <div class="mixDetailBookingWrap">
             <form class="mixDetailBookingForm" id="mixhotel-booking-form" method="post">
-                <?php wp_nonce_field( 'mixhotel_booking_nonce', 'mixhotel_booking_security' ); ?>
+                <input type="hidden" id="mixhotel-room-booking-nonce" name="mixhotel_booking_nonce" value="<?php echo esc_attr( wp_create_nonce( 'mixhotel_booking_nonce' ) ); ?>">
                 <input type="hidden" name="action" value="mixhotel_submit_booking">
                 <input type="hidden" name="room_id" value="<?php echo esc_attr( $room_id ); ?>">
                 <input type="hidden" name="room_name" value="<?php echo esc_attr( $room_title ); ?>">

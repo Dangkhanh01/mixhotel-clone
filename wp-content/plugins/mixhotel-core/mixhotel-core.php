@@ -47,17 +47,26 @@ function mixhotel_core_init() {
 add_action('plugins_loaded', 'mixhotel_core_init');
 
 /**
- * Activation Hook: Flush Rewrite Rules an toàn (Tuân thủ BUG-02 trong wordpress-bug-prevention/SKILL.md)
+ * Activation Hook: Flush Rewrite Rules an toàn & Đăng ký Cron Job (T010)
  */
 register_activation_hook(__FILE__, function() {
     MixHotel_Taxonomies::register_all_taxonomies();
     MixHotel_CPT::register_all_cpts();
     flush_rewrite_rules();
+
+    if (!wp_next_scheduled('mixhotel_check_expired_bookings')) {
+        wp_schedule_event(time(), 'mixhotel_five_minutes', 'mixhotel_check_expired_bookings');
+    }
 });
 
 /**
- * Deactivation Hook: Dọn dẹp Rewrite Rules
+ * Deactivation Hook: Dọn dẹp Cron Job & Rewrite Rules (T012)
  */
 register_deactivation_hook(__FILE__, function() {
+    $timestamp = wp_next_scheduled('mixhotel_check_expired_bookings');
+    if ($timestamp) {
+        wp_unschedule_event($timestamp, 'mixhotel_check_expired_bookings');
+    }
+    wp_clear_scheduled_hook('mixhotel_check_expired_bookings');
     flush_rewrite_rules();
 });

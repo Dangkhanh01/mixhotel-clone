@@ -23,6 +23,7 @@
     }
     if (roomForm) {
       setupFormHandler(roomForm, 'detail');
+      setupRealtimeAvailability(roomForm);
     }
 
     setupModalCloseHandlers();
@@ -72,16 +73,13 @@
       var formData = new FormData(form);
 
       // Đảm bảo action đúng
-      if (!formData.get('action')) {
-        formData.append('action', 'mixhotel_submit_booking');
-      }
+      formData.set('action', 'mixhotel_submit_booking');
 
-      // Bổ sung nonce từ MixHotelData nếu form chưa có
+      // Luôn ghi đè nonce fresh từ MixHotelData (Fix BUG-17)
       if (window.MixHotelData && window.MixHotelData.nonce) {
-        if (!formData.get('mixhotel_booking_nonce') && !formData.get('mixhotel_booking_security')) {
-          formData.append('mixhotel_booking_nonce', window.MixHotelData.nonce);
-        }
+        formData.set('mixhotel_booking_nonce', window.MixHotelData.nonce);
       }
+      formData.delete('mixhotel_booking_security');
 
       // Endpoint AJAX của WordPress
       var ajaxUrl = (window.MixHotelData && window.MixHotelData.ajaxUrl)
@@ -112,7 +110,8 @@
             var errMsg = (res && res.data && res.data.message)
               ? res.data.message
               : 'Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại hoặc gọi Hotline!';
-            showError(form, errMsg);
+            var errCode = (res && res.data && res.data.code) ? res.data.code : '';
+            showError(form, errMsg, errCode);
           }
         })
         .catch(function (err) {
@@ -127,7 +126,91 @@
   }
 
   /**
-   * Xử lý sau khi gửi đơn thành công
+   * Thiết lập kiểm tra phòng trống thời gian thực cho trang chi tiết phòng (T019)
+   */
+  function setupRealtimeAvailability(form) {
+    var dateInput = form.querySelector('input[name="booking_date"]');
+    var timeInput = form.querySelector('input[name="booking_time"]');
+    var demandSelect = form.querySelector('select[name="booking_demand"]');
+    var roomIdInput = form.querySelector('input[name="room_id"]');
+
+    if (!roomIdInput || !roomIdInput.value) return;
+
+    var badge = document.createElement('div');
+    badge.className = 'mix-room-avail-badge';
+    badge.style.display = 'none';
+    badge.style.margin = '10px 0';
+    badge.style.padding = '8px 12px';
+    badge.style.borderRadius = '4px';
+    badge.style.fontSize = '13px';
+    badge.style.fontWeight = '500';
+
+    var submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn && submitBtn.parentNode) {
+      submitBtn.parentNode.insertBefore(badge, submitBtn);
+    }
+
+    var debounceTimer = null;
+    function checkAvail() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function() {
+        var date = dateInput ? dateInput.value : '';
+        var time = timeInput ? timeInput.value : '';
+        var demand = demandSelect ? demandSelect.value : '';
+        var roomId = roomIdInput.value;
+
+        if (!date) return;
+
+        badge.style.display = 'block';
+        badge.style.background = '#edf2f7';
+        badge.style.color = '#4a5568';
+        badge.style.border = '1px solid #cbd5e0';
+        badge.innerHTML = '⏳ Đang kiểm tra phòng trống...';
+
+        var ajaxUrl = (window.MixHotelData && window.MixHotelData.ajaxUrl)
+          ? window.MixHotelData.ajaxUrl
+          : '/wp-admin/admin-ajax.php';
+
+        var url = ajaxUrl + '?action=mixhotel_check_availability&room_id=' + encodeURIComponent(roomId) +
+                  '&booking_date=' + encodeURIComponent(date) +
+                  '&booking_time=' + encodeURIComponent(time) +
+                  '&booking_demand=' + encodeURIComponent(demand);
+
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+          .then(function(r) { return r.json(); })
+          .then(function(res) {
+            if (res && res.success && res.data) {
+              if (res.data.available) {
+                badge.style.background = '#f0fff4';
+                badge.style.color = '#276749';
+                badge.style.border = '1px solid #9ae6b4';
+                badge.innerHTML = '✅ <strong>Còn trống:</strong> Khung giờ ' + (res.data.check_in || '') + ' &rarr; ' + (res.data.check_out || '') + ' sẵn sàng!';
+                if (submitBtn) submitBtn.disabled = false;
+              } else {
+                badge.style.background = '#fff5f5';
+                badge.style.color = '#c53030';
+                badge.style.border = '1px solid #feb2b2';
+                badge.innerHTML = '🔴 <strong>Đã kín:</strong> ' + (res.data.message || 'Khung giờ này đã có khách giữ phòng. Vui lòng chọn giờ khác!');
+              }
+            }
+          })
+          .catch(function() {
+            badge.style.display = 'none';
+          });
+      }, 350);
+    }
+
+    if (dateInput) dateInput.addEventListener('change', checkAvail);
+    if (timeInput) timeInput.addEventListener('change', checkAvail);
+    if (demandSelect) demandSelect.addEventListener('change', checkAvail);
+
+    if (dateInput && dateInput.value) {
+      checkAvail();
+    }
+  }
+
+  /**
+   * Xử lý sau khi gửi đơn thành công (T017)
    */
   function handleBookingSuccess(data, form, formType) {
     // 1. Reset form
@@ -148,6 +231,11 @@
       var zaloBtn = modal.querySelector('[data-booking-zalo-btn]');
       var callBtn = modal.querySelector('[data-booking-call-btn]');
       var sandboxNotice = modal.querySelector('[data-booking-sandbox-notice]');
+      var timeRow = modal.querySelector('[data-booking-time-row]');
+      var checkinEl = modal.querySelector('[data-booking-checkin]');
+      var checkoutEl = modal.querySelector('[data-booking-checkout]');
+      var holdTimeEl = modal.querySelector('[data-booking-hold-time]');
+      var descEl = modal.querySelector('#mix-booking-modal-desc');
 
       if (codeEl && data.lead_code) {
         codeEl.textContent = data.lead_code;
@@ -157,6 +245,17 @@
       }
       if (hotlineEl && data.branch_hotline) {
         hotlineEl.textContent = data.branch_hotline;
+      }
+      if (holdTimeEl && data.hold_minutes) {
+        holdTimeEl.textContent = data.hold_minutes + ' phút';
+      }
+      if (timeRow && (data.check_in || data.check_out)) {
+        timeRow.style.display = 'flex';
+        if (checkinEl && data.check_in) checkinEl.textContent = data.check_in;
+        if (checkoutEl && data.check_out) checkoutEl.textContent = data.check_out;
+      }
+      if (descEl && data.message) {
+        descEl.textContent = data.message;
       }
       if (zaloBtn && data.branch_zalo) {
         zaloBtn.href = data.branch_zalo;
@@ -171,10 +270,12 @@
       openBookingModal(modal);
     } else {
       // Fallback nếu modal chưa được render trong template
+      var holdText = data.hold_minutes ? ('\nThời gian giữ phòng: ' + data.hold_minutes + ' phút.') : '';
+      var timeText = (data.check_in && data.check_out) ? ('\nKhung giờ: ' + data.check_in + ' - ' + data.check_out) : '';
       alert(
         'Yêu cầu giữ phòng thành công!\nMã đơn: ' + (data.lead_code || '') +
-        '\nChi nhánh: ' + (data.branch_name || '') +
-        '\nPhòng của bạn được giữ tạm thời trong 15 phút. Nhân viên sẽ liên hệ lại ngay!'
+        '\nChi nhánh: ' + (data.branch_name || '') + timeText + holdText +
+        '\nNhân viên sẽ liên hệ lại ngay!'
       );
     }
   }
@@ -234,12 +335,24 @@
   /**
    * Hiển thị thông báo lỗi thân thiện trên form
    */
-  function showError(form, message) {
+  function showError(form, message, errorCode) {
     clearError(form);
 
     var errEl = document.createElement('div');
     errEl.className = 'mix-form-error-alert';
-    errEl.innerHTML = '<span class="dashicons dashicons-warning" style="margin-right:6px;"></span>' + escapeHtml(message);
+    if (errorCode === 'room_unavailable') {
+      errEl.style.background = '#fff5f5';
+      errEl.style.borderLeft = '4px solid #e53e3e';
+      errEl.style.color = '#c53030';
+      errEl.style.padding = '12px 14px';
+      errEl.style.borderRadius = '4px';
+      errEl.style.marginBottom = '14px';
+      errEl.innerHTML = '<strong style="display:block;margin-bottom:4px;">⚠️ Phòng đã kín lịch!</strong>' +
+        '<span>' + escapeHtml(message) + '</span>' +
+        '<div style="margin-top:8px;"><a href="tel:0383104010" style="color:#c5a880;font-weight:bold;text-decoration:underline;">Gọi Hotline 038 310 4010</a> để nhân viên hỗ trợ xếp phòng nhanh.</div>';
+    } else {
+      errEl.innerHTML = '<span class="dashicons dashicons-warning" style="margin-right:6px;"></span>' + escapeHtml(message);
+    }
 
     var submitBtn = form.querySelector('button[type="submit"]');
     if (submitBtn && submitBtn.parentNode) {

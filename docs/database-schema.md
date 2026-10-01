@@ -124,6 +124,19 @@ erDiagram
 
 ---
 
+### 2.4. WordPress Options (`wp_options`)
+
+| Option Key | Kiểu | Mặc định | Mục đích | Nguồn |
+| :--- | :--- | :--- | :--- | :--- |
+| `mixhotel_auto_confirm_enabled` | string | `1` | Bật/tắt Auto-Confirm tức thì | Spec-08 |
+| `mixhotel_hold_duration_minutes` | int | `30` | Thời gian giữ phòng trước khi WP-Cron huỷ (phút) | Spec-08 |
+| `mixhotel_demo_sandbox_mode` | string | `1` | Chế độ Demo Sandbox mô phỏng | Feature 04 |
+| `mixhotel_default_hotline` | string | `038 310 4010` | Hotline mặc định | Feature 04 |
+| `mixhotel_telegram_bot_token` | string | `""` | Telegram Bot Token | Feature 04 |
+| `mixhotel_telegram_chat_id` | string | `""` | Telegram Chat ID | Feature 04 |
+
+---
+
 ## 3. CHI TIẾT CUSTOM TAXONOMIES
 
 ### 3.1. Taxonomy `room_amenity` (Tiện Nghi Phòng)

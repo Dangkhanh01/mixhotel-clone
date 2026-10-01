@@ -83,6 +83,18 @@ class MixHotel_Settings {
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '038 310 4010',
         ]);
+
+        register_setting('mixhotel_settings_group', 'mixhotel_auto_confirm_enabled', [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '1',
+        ]);
+
+        register_setting('mixhotel_settings_group', 'mixhotel_hold_duration_minutes', [
+            'type'              => 'integer',
+            'sanitize_callback' => 'absint',
+            'default'           => 30,
+        ]);
     }
 
     /**
@@ -112,7 +124,12 @@ class MixHotel_Settings {
         $demo_mode = get_option('mixhotel_demo_sandbox_mode', '1');
         $bot_token = get_option('mixhotel_telegram_bot_token', '');
         $chat_id   = get_option('mixhotel_telegram_chat_id', '');
-        $hotline   = get_option('mixhotel_default_hotline', '038 310 4010');
+        $hotline      = get_option('mixhotel_default_hotline', '038 310 4010');
+        $auto_confirm = get_option('mixhotel_auto_confirm_enabled', '1');
+        $hold_minutes = (int) get_option('mixhotel_hold_duration_minutes', 30);
+        if ($hold_minutes <= 0) {
+            $hold_minutes = 30;
+        }
         ?>
         <div class="wrap">
             <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
@@ -140,6 +157,8 @@ class MixHotel_Settings {
                 do_settings_sections('mixhotel_settings_group');
                 ?>
 
+                <!-- Section Thông Tin Chung & Telegram -->
+                <h2 class="title" style="margin-top: 20px;"><?php esc_html_e('Cấu Hình Liên Hệ & Thông Báo', 'mixhotel-core'); ?></h2>
                 <table class="form-table" role="presentation">
                     <tr>
                         <th scope="row">
@@ -183,6 +202,38 @@ class MixHotel_Settings {
                         <td>
                             <input type="text" id="mixhotel_telegram_chat_id" name="mixhotel_telegram_chat_id" value="<?php echo esc_attr($chat_id); ?>" class="regular-text" placeholder="-1001234567890 hoặc ID cá nhân" />
                             <p class="description"><?php esc_html_e('ID của nhóm lễ tân hoặc người nhận thông báo trên Telegram.', 'mixhotel-core'); ?></p>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Section Booking Engine (T016, Contract 6) -->
+                <h2 class="title" style="margin-top: 30px;"><?php esc_html_e('Booking Engine (Tự Động Giữ Phòng)', 'mixhotel-core'); ?></h2>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row">
+                            <label for="mixhotel_auto_confirm_enabled"><?php esc_html_e('Auto-Confirm Tức Thì', 'mixhotel-core'); ?></label>
+                        </th>
+                        <td>
+                            <label>
+                                <input type="checkbox" id="mixhotel_auto_confirm_enabled" name="mixhotel_auto_confirm_enabled" value="1" <?php checked('1', $auto_confirm); ?> />
+                                <strong><?php esc_html_e('Bật Auto-Confirm tức thì khi phòng còn trống', 'mixhotel-core'); ?></strong>
+                            </label>
+                            <p class="description">
+                                <?php esc_html_e('Khi bật, khách gửi form sẽ được tự động xác nhận giữ phòng (trạng thái Confirmed) nếu khung giờ còn trống. Nếu tắt, đơn sẽ lưu ở trạng thái Chờ xác nhận (Pending).', 'mixhotel-core'); ?>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">
+                            <label for="mixhotel_hold_duration_minutes"><?php esc_html_e('Thời Gian Giữ Phòng (Phút)', 'mixhotel-core'); ?></label>
+                        </th>
+                        <td>
+                            <input type="number" id="mixhotel_hold_duration_minutes" name="mixhotel_hold_duration_minutes" value="<?php echo esc_attr($hold_minutes); ?>" min="5" max="180" step="5" class="small-text" />
+                            <span><?php esc_html_e('phút', 'mixhotel-core'); ?></span>
+                            <p class="description">
+                                <?php esc_html_e('Thời gian giữ slot phòng trước khi WP-Cron tự động chuyển đơn sang Hết hạn (Expired) nếu lễ tân chưa Check-in (Mặc định: 30 phút).', 'mixhotel-core'); ?>
+                            </p>
                         </td>
                     </tr>
                 </table>

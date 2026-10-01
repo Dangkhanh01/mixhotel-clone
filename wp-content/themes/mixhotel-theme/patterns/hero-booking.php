@@ -98,7 +98,8 @@ $theme_uri = get_template_directory_uri();
         </p>
 
         <form id="hero-booking-form" method="POST" action="" class="mixLuxuryReserveForm">
-          <?php wp_nonce_field('mixhotel_submit_booking', 'mixhotel_booking_nonce'); ?>
+          <input type="hidden" name="action" value="mixhotel_submit_booking" />
+          <input type="hidden" id="hero-booking-nonce" name="mixhotel_booking_nonce" value="" />
           <input type="text" name="mixhotel_hp_email" style="display:none;position:absolute;left:-9999px;" tabindex="-1" autocomplete="off" />
 
           <input
