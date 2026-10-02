@@ -249,6 +249,9 @@ class MixHotel_Admin_Leads {
                     <button type="button" class="button mix-lead-action-btn" data-action="mixhotel_noshow_booking" data-lead-id="<?php echo esc_attr($post->ID); ?>" style="color: #c53030;">
                         🚫 <?php esc_html_e('Khách Không Đến', 'mixhotel-core'); ?>
                     </button>
+                    <button type="button" class="button mix-lead-action-btn" data-action="mixhotel_cancel_booking" data-lead-id="<?php echo esc_attr($post->ID); ?>" style="color: #e53e3e;">
+                        ❌ <?php esc_html_e('Hủy Giữ Phòng', 'mixhotel-core'); ?>
+                    </button>
                 <?php endif; ?>
 
                 <?php if ($status === 'checked_in') : ?>
@@ -257,10 +260,14 @@ class MixHotel_Admin_Leads {
                     </button>
                 <?php endif; ?>
 
-                <?php if (in_array($status, ['confirmed', 'checked_in', 'pending', 'contacted'], true)) : ?>
-                    <button type="button" class="button mix-lead-action-btn" data-action="mixhotel_cancel_booking" data-lead-id="<?php echo esc_attr($post->ID); ?>" style="color: #e53e3e;">
-                        ❌ <?php esc_html_e('Hủy Giữ Phòng', 'mixhotel-core'); ?>
-                    </button>
+                <?php if ($status === 'completed') : ?>
+                    <span class="mix-badge mix-badge--completed" style="font-size: 13px; padding: 6px 12px;">✔️ <?php esc_html_e('Đơn đã hoàn thành (Khách đã trả phòng)', 'mixhotel-core'); ?></span>
+                <?php elseif ($status === 'cancelled') : ?>
+                    <span class="mix-badge mix-badge--cancelled" style="font-size: 13px; padding: 6px 12px;">❌ <?php esc_html_e('Đơn đã được hủy', 'mixhotel-core'); ?></span>
+                <?php elseif ($status === 'no_show') : ?>
+                    <span class="mix-badge mix-badge--noshow" style="font-size: 13px; padding: 6px 12px;">🚫 <?php esc_html_e('Khách không đến nhận phòng (No-show)', 'mixhotel-core'); ?></span>
+                <?php elseif ($status === 'expired') : ?>
+                    <span class="mix-badge mix-badge--expired" style="font-size: 13px; padding: 6px 12px;">⏰ <?php esc_html_e('Đơn đã hết hạn giữ phòng (Expired)', 'mixhotel-core'); ?></span>
                 <?php endif; ?>
 
                 <span class="mix-action-feedback" style="margin-left: 10px; font-weight: bold; color: #276749;"></span>
@@ -275,12 +282,18 @@ class MixHotel_Admin_Leads {
                         <strong><?php esc_html_e('Số điện thoại:', 'mixhotel-core'); ?></strong> 
                         <a href="<?php echo esc_url('tel:' . $phone); ?>" style="font-size:15px; font-weight:bold; color:#0073aa;"><?php echo esc_html($phone); ?></a>
                     </p>
-                    <div style="margin-top: 10px;">
-                        <a href="<?php echo esc_url('tel:' . $phone); ?>" class="button button-primary">
-                            <span class="dashicons dashicons-phone" style="vertical-align:text-bottom;"></span> <?php esc_html_e('Bấm Gọi Ngay', 'mixhotel-core'); ?>
+                    <div style="margin-top: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <a href="<?php echo esc_url('tel:' . $phone); ?>" class="button button-primary" style="display:inline-flex; align-items:center; gap:6px; font-weight:600; padding:0 12px; height:32px;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span><?php esc_html_e('Bấm Gọi Ngay', 'mixhotel-core'); ?></span>
                         </a>
-                        <a href="<?php echo esc_url('https://zalo.me/' . $phone); ?>" target="_blank" class="button" style="color:#0068ff;">
-                            <?php esc_html_e('Nhắn Zalo', 'mixhotel-core'); ?>
+                        <a href="<?php echo esc_url('https://zalo.me/' . $phone); ?>" target="_blank" class="button" style="display:inline-flex; align-items:center; gap:6px; font-weight:600; color:#0068ff; border-color:#0068ff; padding:0 12px; height:32px;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;">
+                                <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.5 5.42 3.84 7.08L5 22l4.24-1.41C10.13 20.84 11.04 21 12 21c5.52 0 10-4.03 10-9s-4.48-10-10-10zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
+                            </svg>
+                            <span><?php esc_html_e('Nhắn Zalo', 'mixhotel-core'); ?></span>
                         </a>
                     </div>
                 </div>
@@ -594,9 +607,12 @@ class MixHotel_Admin_Leads {
                             $btn.prop('disabled', false);
                             if (res && res.success) {
                                 $feedback.text('✓ ' + (res.data.message || 'Thành công!')).css('color', '#276749');
+                                if (res.data && res.data.status) {
+                                    $('#mixhotel_lead_status').val(res.data.status);
+                                }
                                 setTimeout(function() {
                                     window.location.reload();
-                                }, 600);
+                                }, 500);
                             } else {
                                 var msg = (res && res.data && res.data.message) ? res.data.message : 'Có lỗi xảy ra.';
                                 $feedback.text('✕ ' + msg).css('color', '#c53030');

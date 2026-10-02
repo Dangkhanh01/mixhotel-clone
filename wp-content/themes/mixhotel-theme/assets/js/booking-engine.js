@@ -200,9 +200,34 @@
       }, 350);
     }
 
-    if (dateInput) dateInput.addEventListener('change', checkAvail);
-    if (timeInput) timeInput.addEventListener('change', checkAvail);
-    if (demandSelect) demandSelect.addEventListener('change', checkAvail);
+    if (dateInput) {
+      dateInput.addEventListener('change', checkAvail);
+    }
+
+    if (demandSelect) {
+      demandSelect.addEventListener('change', function() {
+        if (this.value === 'overnight') {
+          if (timeInput) timeInput.value = '22:00';
+        } else if (this.value === 'allday') {
+          if (timeInput) timeInput.value = '14:00';
+        }
+        checkAvail();
+      });
+    }
+
+    if (timeInput) {
+      timeInput.addEventListener('change', function() {
+        var timeVal = this.value || '';
+        var hour = parseInt(timeVal.split(':')[0], 10);
+        if (demandSelect && demandSelect.value === 'overnight') {
+          // Nếu khách chọn giờ ban ngày (từ 06:00 đến 20:59) -> Tự động chuyển nhu cầu sang Nghỉ giờ (2h)
+          if (!isNaN(hour) && hour >= 6 && hour < 21) {
+            demandSelect.value = '2h';
+          }
+        }
+        checkAvail();
+      });
+    }
 
     if (dateInput && dateInput.value) {
       checkAvail();

@@ -122,6 +122,30 @@ $theme_uri = get_template_directory_uri();
             class="mixLuxuryInput mix-input"
           />
 
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label style="display:block; font-size:11px; color:#c5a880; margin-bottom:4px; font-weight:600; text-transform:uppercase;">Ngày nhận phòng *</label>
+              <input
+                type="date"
+                name="booking_date"
+                min="<?php echo esc_attr( date( 'Y-m-d' ) ); ?>"
+                value="<?php echo esc_attr( date( 'Y-m-d' ) ); ?>"
+                required
+                class="mixLuxuryInput mix-input"
+              />
+            </div>
+            <div>
+              <label style="display:block; font-size:11px; color:#c5a880; margin-bottom:4px; font-weight:600; text-transform:uppercase;">Giờ nhận phòng *</label>
+              <input
+                type="time"
+                name="booking_time"
+                value="14:00"
+                required
+                class="mixLuxuryInput mix-input"
+              />
+            </div>
+          </div>
+
           <select name="branch_id" required class="mixLuxuryInput mix-input">
             <option value="branch-premium">CS1: Huỳnh Thúc Kháng (Mix Premium)</option>
             <option value="branch-dangtiendong">CS2: 256B Đặng Tiến Đông, Đống Đa</option>
@@ -129,8 +153,9 @@ $theme_uri = get_template_directory_uri();
           </select>
 
           <select name="booking_demand" class="mixLuxuryInput mix-input">
-            <option value="rest-hourly">Nghỉ giờ (từ 2h)</option>
-            <option value="overnight">Nghỉ qua đêm</option>
+            <option value="2h">Nghỉ giờ (2 giờ đầu)</option>
+            <option value="overnight">Qua đêm (22h – 12h)</option>
+            <option value="allday">Cả ngày đêm (14h – 12h)</option>
             <option value="event-decoration">Trang trí sinh nhật / kỷ niệm</option>
             <option value="consult-concept">Tư vấn concept phù hợp</option>
           </select>

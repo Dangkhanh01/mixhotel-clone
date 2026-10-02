@@ -25,6 +25,12 @@ Tất cả các thay đổi kiến trúc, tính năng và sửa lỗi của dự
   - **Cấu hình Booking Engine (`class-settings.php`):** Thêm toggle Bật/Tắt Auto-Confirm và cấu hình Thời gian giữ phòng (Hold duration minutes).
   - **Giao diện Frontend (`booking-engine.js` & `booking-modal.html`):** Hiển thị khung giờ lưu trú và thời gian giữ phòng trong modal xác nhận, badge kiểm tra phòng trống real-time khi chọn ngày/giờ, xử lý cảnh báo `room_unavailable` thân thiện.
   - **Kiểm thử E2E & Backward Compatibility:** 100% test suites tự động đạt PASS (Happy path, Overlap rejection, Non-overlap allowance, Cron TTL expiration, Admin status transitions, Backward compat với auto-confirm tắt).
+  - **Sửa 3 vấn đề phát hiện từ kiểm thử thủ công (Hotfix 2026-10-02):**
+    - *Vấn đề 1 (Hero Booking):* Bổ sung trường chọn Ngày (`booking_date`) và Giờ (`booking_time`) trực tiếp trên form Hero trang chủ, không còn bị ép mặc định 14:00.
+    - *Vấn đề 2 (Trùng phòng 8am & Qua đêm):* `resolve_booking_datetimes()` tôn trọng chính xác giờ nhận phòng khách nhập (không tự ý đổi sang 22:00); `calculate_checkout_time()` tính toán chuẩn xác cho các mốc rạng sáng/buổi sáng, đảm bảo phát hiện 100% trường hợp overlap khi khách đặt 8am sáng hôm sau sau đêm đã kín phòng; `booking-engine.js` tự động đồng bộ giờ 22:00 khi chọn qua đêm và tự động chuyển sang 2h khi chọn giờ ban ngày.
+    - *Vấn đề 3 (WP-Cron Status Guard):* Bổ sung double-guard trong `cron_expire_bookings()` chỉ cho phép đơn `confirmed` hết hạn và chỉ hết hạn khi `hiện tại >= check_in_datetime + hold_minutes`; tuyệt đối không bao giờ can thiệp vào các đơn đã `completed`, `checked_in`, `cancelled`, `no_show`.
+    - *Vấn đề 4 (Quick Actions & UI Icon):* Khi đơn đã ở trạng thái `checked_in`, loại bỏ nút "Hủy Giữ Phòng" (chỉ giữ lại nút "Trả Phòng / Hoàn Thành"); thay thế icon Dashicon điện thoại bị lệch/vỡ bằng SVG vector sắc nét, căn giữa thẳng hàng hoàn hảo với nút "Bấm Gọi Ngay".
+
 ### Added & Completed - 2026-09-28 (SPEC-07: Toàn Diện No-code WYSIWYG Figma-Style Cho Toàn Bộ Khối Phức Hợp)
 - **Feature 07 Hoàn Tất 100%: Chuyển đổi toàn bộ các khối nội dung phức hợp còn lại sang WordPress Native Core Blocks (`specs/07-wysiwyg-no-code-full-refactor/`):**
   - **Phase 1 — Auto Media Importer Thành Công:**

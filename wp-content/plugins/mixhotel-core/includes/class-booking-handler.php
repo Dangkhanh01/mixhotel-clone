@@ -458,12 +458,14 @@ class MixHotel_Booking_Handler {
         }
 
         $check_out = clone $check_in_dt;
+        $hour = (int) $check_in_dt->format('H');
 
         switch ($demand_type) {
             case 'overnight':
-                // Check-out cố định 12:00 hôm sau (hoặc cùng ngày nếu check-in lúc rạng sáng trước 06:00)
-                $hour = (int) $check_in_dt->format('H');
-                if ($hour < 6) {
+                // Check-out cố định 12:00 trưa
+                // Nếu khách nhận phòng buổi sáng (trước 12h trưa) -> Trả phòng 12:00 cùng ngày
+                // Nếu khách nhận phòng chiều/tối/đêm (từ 12h trở đi) -> Trả phòng 12:00 trưa hôm sau
+                if ($hour < 12) {
                     $check_out->setTime(12, 0, 0);
                 } else {
                     $check_out->modify('+1 day');
@@ -498,7 +500,17 @@ class MixHotel_Booking_Handler {
      */
     public static function resolve_booking_datetimes($booking_date, $booking_time, $demand_type) {
         $booking_date = !empty($booking_date) ? $booking_date : current_time('Y-m-d');
-        $booking_time = !empty($booking_time) ? $booking_time : '14:00';
+
+        // Nếu booking_time rỗng thì gán mặc định theo loại nhu cầu
+        if (empty($booking_time)) {
+            if ($demand_type === 'overnight') {
+                $booking_time = '22:00';
+            } elseif ($demand_type === 'allday') {
+                $booking_time = '14:00';
+            } else {
+                $booking_time = '14:00';
+            }
+        }
 
         // Đảm bảo định dạng giờ có cả phút
         if (preg_match('/^\d{1,2}$/', $booking_time)) {
@@ -511,21 +523,7 @@ class MixHotel_Booking_Handler {
             $check_in = new DateTime(current_time('mysql'));
         }
 
-        // Điều chỉnh check-in theo quy định loại nhu cầu
-        if ($demand_type === 'overnight') {
-            $hour = (int) $check_in->format('H');
-            if ($hour >= 6 && $hour < 22) {
-                // Khách chọn qua đêm nhưng nhập giờ trước 22:00 -> set check-in = 22:00 cùng ngày
-                $check_in->setTime(22, 0, 0);
-            }
-        } elseif ($demand_type === 'allday') {
-            $hour = (int) $check_in->format('H');
-            if ($hour < 14) {
-                // Khách chọn cả ngày đêm -> set check-in = 14:00 cùng ngày
-                $check_in->setTime(14, 0, 0);
-            }
-        }
-
+        // Tôn trọng chính xác giờ nhận phòng do khách chọn để phát hiện trùng lịch (Overbooking)
         $check_out = self::calculate_checkout_time($check_in, $demand_type);
 
         return [
@@ -612,31 +610,54 @@ class MixHotel_Booking_Handler {
             $hold_minutes = 30;
         }
 
-        // Ngưỡng thời gian: hiện tại trừ đi số phút giữ phòng
-        $threshold = date('Y-m-d H:i:s', current_time('timestamp') - ($hold_minutes * MINUTE_IN_SECONDS));
-
+        // Lấy danh sách các đơn CPT booking_lead đang ở trạng thái 'confirmed'
+        // Chỉ đơn 'confirmed' mới có thể hết hạn giữ phòng!
         $sql = "SELECT p.ID FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm_status ON p.ID = pm_status.post_id 
                 AND pm_status.meta_key = '_mixhotel_lead_status'
-            INNER JOIN {$wpdb->postmeta} pm_confirmed ON p.ID = pm_confirmed.post_id 
-                AND pm_confirmed.meta_key = '_mixhotel_lead_confirmed_at'
             WHERE p.post_type = 'booking_lead'
               AND p.post_status = 'publish'
               AND pm_status.meta_value = 'confirmed'
-              AND pm_confirmed.meta_value < %s
-            LIMIT 50";
+            LIMIT 100";
 
-        $expired_ids = $wpdb->get_col($wpdb->prepare($sql, $threshold));
+        $lead_ids = $wpdb->get_col($sql);
 
-        if (empty($expired_ids)) {
+        if (empty($lead_ids)) {
             return 0;
         }
 
         $now = current_time('mysql');
+        $now_timestamp = current_time('timestamp');
         $count = 0;
 
-        foreach ($expired_ids as $lead_id) {
+        foreach ($lead_ids as $lead_id) {
             $lead_id = (int) $lead_id;
+
+            // KIỂM TRA BẢO VỆ CHẶT CHẼ 1:
+            // Chỉ DUY NHẤT đơn có status chính xác là 'confirmed' mới được phép chuyển sang 'expired'!
+            // TUYỆT ĐỐI không bao giờ chuyển các đơn đã 'checked_in', 'completed', 'cancelled', 'no_show', 'contacted'!
+            $current_status = get_post_meta($lead_id, '_mixhotel_lead_status', true);
+            if ($current_status !== 'confirmed') {
+                continue;
+            }
+
+            // KIỂM TRA BẢO VỆ CHẶT CHẼ 2:
+            // Thời điểm hết hạn giữ phòng:
+            // Khách có giờ check-in hẹn trước -> Đơn chỉ hết hạn khi: hiện tại >= (check_in_datetime + hold_minutes).
+            // Nếu không có check_in_datetime -> Đơn hết hạn khi: hiện tại >= (confirmed_at + hold_minutes).
+            $cin_str = get_post_meta($lead_id, '_mixhotel_lead_check_in_datetime', true);
+            $confirmed_str = get_post_meta($lead_id, '_mixhotel_lead_confirmed_at', true);
+
+            $base_time_str = !empty($cin_str) ? $cin_str : $confirmed_str;
+            if (!empty($base_time_str)) {
+                $base_timestamp = strtotime($base_time_str);
+                $expire_timestamp = $base_timestamp + ($hold_minutes * MINUTE_IN_SECONDS);
+                if ($now_timestamp < $expire_timestamp) {
+                    // Chưa đến thời điểm hết hạn giữ phòng -> Bỏ qua
+                    continue;
+                }
+            }
+
             update_post_meta($lead_id, '_mixhotel_lead_status', 'expired');
             update_post_meta($lead_id, '_mixhotel_lead_expired_at', $now);
             $count++;
