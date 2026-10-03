@@ -380,3 +380,15 @@
     flex-shrink: 0;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Booking Consultation Form Selects
+   -------------------------------------------------------------------------- */
+.cateConsultFormSelectWrap select {
+  color-scheme: dark;
+}
+
+.cateConsultFormSelectWrap select option {
+  background-color: var(--wp--preset--color--dark-secondary, #17171c);
+  color: var(--wp--preset--color--text-bright, #ffffff);
+}

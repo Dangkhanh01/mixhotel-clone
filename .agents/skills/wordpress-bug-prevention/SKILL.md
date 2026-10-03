@@ -505,4 +505,32 @@ while ($query->have_posts()) : $query->the_post();
   * Frontend JavaScript BẮT BUỘC dùng `formData.set('mixhotel_booking_nonce', window.MixHotelData.nonce)` để luôn ghi đè nonce tươi mới được sinh theo từng request từ `wp_localize_script()`.
   * Thống nhất một nonce action name duy nhất trong toàn bộ hệ thống plugin và theme (ví dụ: `mixhotel_booking_nonce`).
 
+---
+
+## 13. PHÂN HỆ: FORM CONTROLS, SELECT POPUPS & DARK MODE
+
+### BUG-18: Lỗi chữ trắng trên nền trắng trong thẻ HTML `<select>` & `<option>` ở Dark Mode
+* **Triệu chứng:** Khi mở dropdown chọn mục (ví dụ "Nhu cầu nghỉ" trong Form Giữ Phòng Online hoặc chọn Chi nhánh/Phòng), danh sách các thẻ `<option>` hiển thị chữ màu trắng trên nền màu trắng, khiến người dùng hoàn toàn không nhìn thấy nội dung để chọn.
+* **Root cause:** 
+  1. Trong theme nền tối (Dark Theme), CSS thường gán `color: #ffffff` (hoặc biến `var(--wp--preset--color--text-bright)`) lên thẻ `<select>`.
+  2. Các phần tử con `<option>` kế thừa thuộc tính `color: #ffffff` từ thẻ cha `<select>`.
+  3. Tuy nhiên, menu popover danh sách lựa chọn của thẻ `<select>` được render bởi hệ thống native của hệ điều hành/trình duyệt (Windows Chromium/Edge/Firefox). Theo mặc định trên Windows, menu native này sử dụng nền màu trắng hoặc sáng (`#ffffff`).
+  4. Do không có `color-scheme: dark` và không khai báo `background-color` cho thẻ `option`, trình duyệt vẽ text trắng (`#fff`) đè lên popup trắng (`#fff`), dẫn đến chữ tàng hình.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Khai báo `color-scheme: dark;` toàn cục và trên mọi input/select:**
+    ```css
+    select {
+      color-scheme: dark;
+    }
+    ```
+  * **Đặt tường minh `background-color` và `color` cho thẻ `option`:**
+    ```css
+    select option {
+      background-color: var(--wp--preset--color--dark-secondary, #17171c);
+      color: var(--wp--preset--color--text-bright, #ffffff);
+    }
+    ```
+  * **Custom Dropdown Arrow nhất quán:** Dùng `appearance: none;` kèm icon SVG mũi tên màu vàng gold (`fill='%23c5a880'`) để giao diện dropdown sang trọng và đồng bộ trên mọi trình duyệt.
+
+
 

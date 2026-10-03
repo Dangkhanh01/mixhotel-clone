@@ -436,7 +436,7 @@ if (empty($rooms)) {
 
           <div style="margin-bottom: 16px;">
             <label>Phòng muốn đặt</label>
-            <select name="room_title" id="mixBookingRoomSelect" style="width: 100%; padding: 12px 16px; border-radius: 12px; background: #0c0806; border: 1px solid rgba(200, 137, 34, 0.3); color: #ffffff; font-size: 14px;">
+            <select name="room_title" id="mixBookingRoomSelect" style="width: 100%; padding: 12px 16px; border-radius: 12px; background: #0c0806; border: 1px solid rgba(200, 137, 34, 0.3); color: #ffffff; font-size: 14px; color-scheme: dark;">
               <option value="">-- Chọn phòng concept --</option>
               <?php foreach ($rooms as $r) : ?>
                 <option value="<?php echo esc_attr($r['title']); ?>"><?php echo esc_html($r['title']); ?></option>
