@@ -28,27 +28,17 @@
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-    <div class="mixAboutVideoWrapper">
-      <!-- YouTube embed responsive 16:9 — No-code replaceable -->
-      <div class="mixAboutVideoIframeWrap" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius: 16px; border: 1px solid rgba(197,168,128,0.2);">
-        <iframe
-          class="mixAboutVideoIframe"
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
-          title="Mix Boutique Hotel — Video Giới Thiệu"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          loading="lazy"
-          style="position:absolute; top:0; left:0; width:100%; height:100%; border-radius: 16px;"
-        ></iframe>
-      </div>
-      <p class="mixAboutVideoCaption">
-        🎬 Khám phá không gian lãng mạn, riêng tư tại Mix Boutique Hotel Hà Nội — 
-        Nơi tình yêu được viết nên từng khoảnh khắc
-      </p>
-    </div>
-<!-- /wp:html -->
+<!-- wp:group {"className":"mixAboutVideoWrapper"} -->
+<div class="wp-block-group mixAboutVideoWrapper">
+
+<!-- wp:embed {"url":"https://www.youtube.com/watch?v=Ts4seBpirOA","type":"video","providerNameSlug":"youtube","responsive":true,"className":"mixAboutVideoIframeWrap"} -->
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio mixAboutVideoIframeWrap"><div class="wp-block-embed__wrapper">
+https://www.youtube.com/watch?v=Ts4seBpirOA
+</div><figcaption class="wp-element-caption mixAboutVideoCaption">🎬 Khám phá không gian lãng mạn, riêng tư tại Mix Boutique Hotel Hà Nội — Nơi tình yêu được viết nên từng khoảnh khắc</figcaption></figure>
+<!-- /wp:embed -->
+
+</div>
+<!-- /wp:group -->
 
 </div>
 <!-- /wp:group -->

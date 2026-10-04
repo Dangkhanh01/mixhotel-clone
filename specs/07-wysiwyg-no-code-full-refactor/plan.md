@@ -39,3 +39,12 @@ Chuyển đổi toàn diện các khối HTML thô trên toàn bộ hệ thống
   - Xác nhận có thể gõ sửa trực tiếp tên phòng, giá tiền, câu hỏi FAQ.
   - Xác nhận 0 lỗi invalid block error.
 * Kiểm tra ngoài frontend: Giao diện dark luxury không đổi, popup đặt phòng hoạt động bình thường.
+
+### Phase 7: Hoàn Thiện Visual Parity & Gutenberg Validation Grammar (Khớp 100% Giao Diện Thật & Sạch Lỗi Block)
+* Chuẩn hóa block schema: Loại bỏ 100% các thuộc tính không hợp lệ (`data-contact-action`, `data-room-title`, `data-branch-id`) và các inline `style="..."` bất hợp lệ trên các Core Block (`core/heading`, `core/paragraph`, `core/group`, `core/button`) trong `patterns/concept-rooms.php`, `patterns/real-photos-grid.php`, `patterns/branches-list.php`, v.v.
+* Chuyển toàn bộ định dạng typography, margin, khoảng cách vào CSS classes và khai báo trong `assets/css/editor-custom.css`, `assets/css/pages-luxury.css` và `assets/css/pages.css`.
+* Cập nhật CSS cho Hero Section bên trong `.editor-styles-wrapper` để hiển thị đầy đủ hình nền `hero-bg.webp`, lớp phủ mờ veil và hiệu ứng sàn vàng floor glow.
+* Ẩn `.editor-post-title` trên trang chủ và landing page để loại bỏ tiêu đề thừa gây lệch khung hình.
+* Cấu hình full-width canvas bleed cho `.editor-styles-wrapper .is-root-container` để giao diện editor dàn đều toàn màn hình giống hệt frontend.
+* Chạy cập nhật lại toàn bộ nội dung trang vào database thông qua seeder `mixhotel_restore_all_pages_content()`.
+* Dùng `browser_subagent` chụp ảnh đối chiếu kiểm chứng: 0 lỗi block validation ("Khối chứa nội dung không hợp lệ"), giao diện editor hiển thị sắc nét khớp 100% với frontend.

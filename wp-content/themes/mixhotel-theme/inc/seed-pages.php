@@ -260,7 +260,6 @@ function mixhotel_restore_all_pages_content() {
     }
 
     // 9. 3 CHI NHÁNH
-    $branch_content = $get_pattern_content('branch-detail');
     foreach ([
         'mix-boutique-premium-hotel',
         'mix-boutique-hotel-256b-dang-tien-dong',
@@ -268,10 +267,14 @@ function mixhotel_restore_all_pages_content() {
     ] as $b_slug) {
         $b_page = get_page_by_path($b_slug);
         if ($b_page) {
+            $GLOBALS['post'] = $b_page;
+            setup_postdata($b_page);
+            $branch_content = $get_pattern_content('branch-detail');
             $wpdb->update($wpdb->posts, ['post_content' => $branch_content], ['ID' => $b_page->ID]);
             clean_post_cache($b_page->ID);
         }
     }
+    wp_reset_postdata();
 
     // 10. TIN TỨC
     $blog_content = $get_pattern_content('blog-archive-content');

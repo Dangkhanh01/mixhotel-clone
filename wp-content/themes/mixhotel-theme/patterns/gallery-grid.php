@@ -47,29 +47,37 @@ if ($wp_rooms_query->have_posts()) {
     wp_reset_postdata();
 }
 ?>
-<!-- wp:html -->
-<div class="mixLuxuryBreadcrumbs">
+<!-- wp:group {"className":"mixLuxuryBreadcrumbs"} -->
+<div class="wp-block-group mixLuxuryBreadcrumbs">
   <div class="inner">
     <a href="<?php echo esc_url(home_url('/')); ?>">Trang chủ</a>
     <span>/</span>
     <span class="current">Gallery</span>
   </div>
 </div>
+<!-- /wp:group -->
 
-<main class="galerryMix mixLuxuryContainer" style="padding-top: 40px; padding-bottom: 60px;">
+<!-- wp:group {"tagName":"main","className":"galerryMix mixLuxuryContainer","style":{"spacing":{"padding":{"top":"40px","bottom":"60px"}}}} -->
+<main class="wp-block-group galerryMix mixLuxuryContainer" style="padding-top:40px;padding-bottom:60px">
+  
   <!-- Title Block -->
-  <div style="text-align: center; margin-bottom: 24px;">
+  <!-- wp:group {"style":{"spacing":{"margin":{"bottom":"24px"}}}} -->
+  <div class="wp-block-group" style="text-align:center;margin-bottom:24px">
     <div class="titleBlock_1">
       <a>
         <p class="titleText">GALLERY</p>
       </a>
     </div>
-    <p style="color: #c5b8a5; max-width: 672px; margin: -8px auto 32px; font-size: 15px; line-height: 1.6; text-align: center;">
+    <!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","lineHeight":"1.6"}}} -->
+    <p style="color:#c5b8a5;max-width:672px;margin:-8px auto 32px;font-size:15px;line-height:1.6;text-align:center">
       Khám phá bộ sưu tập 32+ phòng concept lãng mạn, tinh tế với hình ảnh chụp thực tế 100% tại 3 cơ sở Mix Boutique Hotel.
     </p>
+    <!-- /wp:paragraph -->
   </div>
+  <!-- /wp:group -->
 
-  <!-- Subcategory Branch Filters -->
+  <!-- Subcategory Branch Filters & Gallery Grid -->
+  <!-- wp:html -->
   <div class="wrapSubcateBlock_1">
     <div class="subcateBlock_1" id="mixGalleryBranchTabs">
       <button type="button" class="subcateName active" data-branch="all">Tất cả cơ sở</button>
@@ -79,7 +87,6 @@ if ($wp_rooms_query->have_posts()) {
     </div>
   </div>
 
-  <!-- Gallery Grid -->
   <div class="galleryMixGrid" id="mixGalleryGridContainer">
     <?php foreach ($gallery_items as $item) : ?>
       <div class="galleryItemCol" data-branch="<?php echo esc_attr($item['branchId']); ?>">
@@ -106,127 +113,42 @@ if ($wp_rooms_query->have_posts()) {
     <?php endforeach; ?>
   </div>
 
-  <!-- Pagination Container -->
   <div class="galleryPagination" id="mixGalleryPagination"></div>
+  <!-- /wp:html -->
 
   <!-- Bottom Content Frame / SEO Article -->
-  <article style="margin-top: 48px; margin-bottom: 32px;">
-    <section style="padding: 32px; border-radius: 16px; border: 1px solid rgba(200, 137, 34, 0.25); background: #140e0a; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-      <header style="margin-bottom: 24px;">
-        <h2 style="font-size: 24px; font-weight: 700; color: #ffe2a0; font-family: 'Philosopher', serif; margin: 0 0 8px;">
-          Bộ Sưu Tập Hình Ảnh Khách Sạn Tình Yêu Mix Boutique Hotel
-        </h2>
-        <div style="width: 80px; height: 2px; background: #c88922; margin-bottom: 16px;"></div>
-      </header>
-      <div style="color: #eee4d3; line-height: 1.8; font-size: 15px; font-weight: 300;">
-        <p style="margin-bottom: 16px;">
-          Chào mừng bạn đến với bộ sưu tập hình ảnh thực tế của <strong>Mix Boutique Hotel</strong>. Tất cả hình ảnh trong Gallery được chụp trực tiếp tại 3 cơ sở của chúng tôi tại Hà Nội: <em>Mix Boutique Premium (186 Hoàng Ngân / Huỳnh Thúc Kháng)</em>, <em>Cơ sở 256B Đặng Tiến Đông</em>, và <em>Cơ sở 20 Phúc La - Hà Đông</em>.
-        </p>
-        <p style="margin-bottom: 16px;">
-          Mỗi căn phòng tại Mix Hotel là một thế giới cảm xúc riêng biệt với hơn 32 concept độc bản: từ lãng mạn huyền ảo với trần ngàn sao <strong>Galaxy</strong>, bồng bềnh tiên cảnh tại <strong>Cloud Nine</strong>, nồng nhiệt thăng hoa cùng <strong>Inferno</strong>, đến những trải nghiệm kịch tính mới lạ tại <strong>Master &apos;n&apos; Slave</strong> hay sự dịu dàng của <strong>Eden</strong>.
-        </p>
-        <p>
-          Toàn bộ phòng đều được trang bị đầy đủ tiện nghi cao cấp: bồn tắm sục Jacuzzi đôi ngập tràn bọt tuyết, ghế tình yêu Tantra uốn lượn quyến rũ, màn chiếu phim Full HD / 4K siêu nét cùng dịch vụ cho mượn trang phục Cosplay và Board Game tình yêu hoàn toàn miễn phí. Hãy bấm vào từng thẻ phòng để xem chi tiết không gian, bảng giá và đặt phòng kín đáo, riêng tư 100%!
-        </p>
-      </div>
+  <!-- wp:group {"tagName":"article","style":{"spacing":{"margin":{"top":"48px","bottom":"32px"}}}} -->
+  <article class="wp-block-group" style="margin-top:48px;margin-bottom:32px">
+    <!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"32px","bottom":"32px","left":"32px","right":"32px"}}}} -->
+    <section class="wp-block-group" style="padding:32px;border-radius:16px;border:1px solid rgba(200, 137, 34, 0.25);background:#140e0a;box-shadow:0 20px 40px rgba(0,0,0,0.5)">
+      <!-- wp:heading {"level":2,"style":{"typography":{"fontSize":"24px"}}} -->
+      <h2 class="wp-block-heading" style="font-size:24px;font-weight:700;color:#ffe2a0;font-family:'Philosopher',serif;margin:0 0 8px">
+        Bộ Sưu Tập Hình Ảnh Khách Sạn Tình Yêu Mix Boutique Hotel
+      </h2>
+      <!-- /wp:heading -->
+      <div style="width:80px;height:2px;background:#c88922;margin-bottom:16px"></div>
+      
+      <!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","lineHeight":"1.8"}}} -->
+      <p style="color:#eee4d3;line-height:1.8;font-size:15px;font-weight:300;margin-bottom:16px">
+        Chào mừng bạn đến với bộ sưu tập hình ảnh thực tế của <strong>Mix Boutique Hotel</strong>. Tất cả hình ảnh trong Gallery được chụp trực tiếp tại 3 cơ sở của chúng tôi tại Hà Nội: <em>Mix Boutique Premium (186 Hoàng Ngân / Huỳnh Thúc Kháng)</em>, <em>Cơ sở 256B Đặng Tiến Đông</em>, và <em>Cơ sở 20 Phúc La - Hà Đông</em>.
+      </p>
+      <!-- /wp:paragraph -->
+      
+      <!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","lineHeight":"1.8"}}} -->
+      <p style="color:#eee4d3;line-height:1.8;font-size:15px;font-weight:300;margin-bottom:16px">
+        Mỗi căn phòng tại Mix Hotel là một thế giới cảm xúc riêng biệt với hơn 32 concept độc bản: từ lãng mạn huyền ảo với trần ngàn sao <strong>Galaxy</strong>, bồng bềnh tiên cảnh tại <strong>Cloud Nine</strong>, nồng nhiệt thăng hoa cùng <strong>Inferno</strong>, đến những trải nghiệm kịch tính mới lạ tại <strong>Master &apos;n&apos; Slave</strong> hay sự dịu dàng của <strong>Eden</strong>.
+      </p>
+      <!-- /wp:paragraph -->
+      
+      <!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","lineHeight":"1.8"}}} -->
+      <p style="color:#eee4d3;line-height:1.8;font-size:15px;font-weight:300">
+        Toàn bộ phòng đều được trang bị đầy đủ tiện nghi cao cấp: bồn tắm sục Jacuzzi đôi ngập tràn bọt tuyết, ghế tình yêu Tantra uốn lượn quyến rũ, màn chiếu phim Full HD / 4K siêu nét cùng dịch vụ cho mượn trang phục Cosplay và Board Game tình yêu hoàn toàn miễn phí. Hãy bấm vào từng thẻ phòng để xem chi tiết không gian, bảng giá và đặt phòng kín đáo, riêng tư 100%!
+      </p>
+      <!-- /wp:paragraph -->
     </section>
+    <!-- /wp:group -->
   </article>
+  <!-- /wp:group -->
+
 </main>
-
-<script>
-(function() {
-  const ITEMS_PER_PAGE = 12;
-  let currentBranch = 'all';
-  let currentPage = 1;
-
-  function initGallery() {
-    const tabs = document.querySelectorAll('#mixGalleryBranchTabs .subcateName');
-    const container = document.getElementById('mixGalleryGridContainer');
-    const pagContainer = document.getElementById('mixGalleryPagination');
-    if (!container || !tabs.length) return;
-
-    const allCards = Array.from(container.querySelectorAll('.galleryItemCol'));
-
-    function render() {
-      // Filter cards
-      const matched = allCards.filter(card => {
-        const b = card.getAttribute('data-branch') || '';
-        return currentBranch === 'all' || b === currentBranch || b.includes(currentBranch);
-      });
-
-      const totalPages = Math.ceil(matched.length / ITEMS_PER_PAGE) || 1;
-      if (currentPage > totalPages) currentPage = 1;
-
-      // Show/hide cards
-      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-      const endIndex = startIndex + ITEMS_PER_PAGE;
-
-      allCards.forEach(c => {
-        c.style.setProperty('display', 'none', 'important');
-      });
-      matched.forEach((c, idx) => {
-        if (idx >= startIndex && idx < endIndex) {
-          c.style.setProperty('display', 'flex', 'important');
-        }
-      });
-
-      // Render pagination
-      if (totalPages <= 1) {
-        pagContainer.innerHTML = '';
-        return;
-      }
-
-      let pagHtml = '';
-      if (currentPage > 1) {
-        pagHtml += '<button type="button" class="pageBtn prevBtn">&lsaquo;</button>';
-      }
-
-      for (let p = 1; p <= totalPages; p++) {
-        pagHtml += '<button type="button" class="pageBtn ' + (p === currentPage ? 'active' : '') + '" data-page="' + p + '">' + p + '</button>';
-      }
-
-      if (currentPage < totalPages) {
-        pagHtml += '<button type="button" class="pageBtn nextBtn">&rsaquo;</button>';
-      }
-
-      pagContainer.innerHTML = pagHtml;
-
-      // Attach pagination events
-      pagContainer.querySelectorAll('.pageBtn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          if (this.classList.contains('prevBtn')) {
-            currentPage--;
-          } else if (this.classList.contains('nextBtn')) {
-            currentPage++;
-          } else {
-            currentPage = parseInt(this.getAttribute('data-page'), 10) || 1;
-          }
-          render();
-          container.scrollIntoView({ behavior: 'smooth' });
-        });
-      });
-    }
-
-    // Tab click events
-    tabs.forEach(tab => {
-      tab.addEventListener('click', function(e) {
-        e.preventDefault();
-        tabs.forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        currentBranch = this.getAttribute('data-branch') || 'all';
-        currentPage = 1;
-        render();
-      });
-    });
-
-    render();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGallery);
-  } else {
-    initGallery();
-  }
-})();
-</script>
-<!-- /wp:html -->
+<!-- /wp:group -->

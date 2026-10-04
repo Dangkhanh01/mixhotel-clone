@@ -23,20 +23,16 @@
 <p class="mix-404-desc">Đường dẫn bạn truy cập có thể đã hết hạn, bị thay đổi hoặc không tồn tại. Đừng để cảm xúc bị gián đoạn, hãy khám phá các phòng concept lãng mạn của Mix Hotel ngay!</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:html -->
-<div class="btnBlock" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-bottom: 40px;">
-  <div style="margin: 0; padding: 0; background: transparent;">
-    <a href="<?php echo esc_url(home_url('/')); ?>" class="mixCtaBtn" style="display: inline-block; padding: 12px 32px; font-size: 14px;">
-      Về Trang Chủ
-    </a>
-  </div>
-  <div style="margin: 0; padding: 0; background: transparent;">
-    <a href="<?php echo esc_url(home_url('/khach-san-tinh-yeu/')); ?>" class="mix-404-btn-alt">
-      Xem Danh Sách Phòng
-    </a>
-  </div>
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"bottom":"40px"}}}} -->
+<div class="wp-block-buttons" style="margin-bottom:40px">
+<!-- wp:button {"className":"mixCtaBtn"} -->
+<div class="wp-block-button mixCtaBtn"><a class="wp-block-button__link wp-element-button" href="<?php echo esc_url(home_url('/')); ?>">Về Trang Chủ</a></div>
+<!-- /wp:button -->
+<!-- wp:button {"className":"mix-404-btn-alt"} -->
+<div class="wp-block-button mix-404-btn-alt"><a class="wp-block-button__link wp-element-button" href="<?php echo esc_url(home_url('/khach-san-tinh-yeu/')); ?>">Xem Danh Sách Phòng</a></div>
+<!-- /wp:button -->
 </div>
-<!-- /wp:html -->
+<!-- /wp:buttons -->
 
 <!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-muted"} -->
 <p class="has-text-muted-color has-text-color" style="font-size:14px">Cần hỗ trợ giữ phòng gấp? Hotline 24/7: <a href="tel:0383104010" style="color: #ffe2a0; font-weight: 700; text-decoration: none;">038 310 4010</a></p>

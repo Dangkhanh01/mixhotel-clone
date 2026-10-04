@@ -25,7 +25,7 @@ $bg_img = function_exists('mixhotel_get_theme_image_attachment') ? mixhotel_get_
     <p class="mixLuxuryFinalCtaDesc">Tư vấn nhanh chóng, kín đáo, ưu tiên ảnh thật và concept phù hợp nhất cho buổi hẹn của hai người.</p>
     <!-- /wp:paragraph -->
     <!-- wp:buttons {"className":"mixLuxuryFinalCtaActions","layout":{"type":"flex","justifyContent":"center"}} -->
-    <div class="wp-block-buttons mixLuxuryFinalCtaActions">
+    <div class="wp-block-buttons is-content-justification-center mixLuxuryFinalCtaActions">
       <!-- wp:button {"className":"mixLuxuryBtn mixLuxuryBtnPrimary"} -->
       <div class="wp-block-button mixLuxuryBtn mixLuxuryBtnPrimary"><a class="wp-block-button__link wp-element-button" href="https://zalo.me/0383104010" target="_blank" rel="noopener noreferrer">✉ Nhắn Zalo Tư Vấn</a></div>
       <!-- /wp:button -->

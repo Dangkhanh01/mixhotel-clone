@@ -54,11 +54,9 @@
 <!-- wp:paragraph {"className":"mixContactInfoBranchAddr"} -->
 <p class="mixContactInfoBranchAddr">Ngách 29, Ngõ 49 Huỳnh Thúc Kháng, Láng, Đống Đa, Hà Nội</p>
 <!-- /wp:paragraph -->
-<!-- wp:html -->
-<a href="tel:+84383104010" class="mixContactInfoHotline">
-  <span aria-hidden="true">📞</span> 038 310 4010
-</a>
-<!-- /wp:html -->
+<!-- wp:paragraph {"className":"mixContactInfoHotline"} -->
+<p class="mixContactInfoHotline"><a href="tel:+84383104010"><span aria-hidden="true">📞</span> 038 310 4010</a></p>
+<!-- /wp:paragraph -->
 </div>
 <!-- /wp:group -->
 
@@ -70,11 +68,9 @@
 <!-- wp:paragraph {"className":"mixContactInfoBranchAddr"} -->
 <p class="mixContactInfoBranchAddr">256B Đặng Tiến Đông, Trung Liệt, Đống Đa, Hà Nội</p>
 <!-- /wp:paragraph -->
-<!-- wp:html -->
-<a href="tel:+84393307030" class="mixContactInfoHotline">
-  <span aria-hidden="true">📞</span> 039 330 7030
-</a>
-<!-- /wp:html -->
+<!-- wp:paragraph {"className":"mixContactInfoHotline"} -->
+<p class="mixContactInfoHotline"><a href="tel:+84393307030"><span aria-hidden="true">📞</span> 039 330 7030</a></p>
+<!-- /wp:paragraph -->
 </div>
 <!-- /wp:group -->
 
@@ -86,57 +82,46 @@
 <!-- wp:paragraph {"className":"mixContactInfoBranchAddr"} -->
 <p class="mixContactInfoBranchAddr">20 Phúc La, Phúc La, Hà Đông, Hà Nội</p>
 <!-- /wp:paragraph -->
-<!-- wp:html -->
-<a href="tel:+84383104010" class="mixContactInfoHotline">
-  <span aria-hidden="true">📞</span> 038 310 4010
-</a>
-<!-- /wp:html -->
+<!-- wp:paragraph {"className":"mixContactInfoHotline"} -->
+<p class="mixContactInfoHotline"><a href="tel:+84383104010"><span aria-hidden="true">📞</span> 038 310 4010</a></p>
+<!-- /wp:paragraph -->
 </div>
 <!-- /wp:group -->
 
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div class="mixContactInfoExtra">
-  <div class="mixContactInfoExtraItem">
-    <span class="mixContactInfoExtraIcon" aria-hidden="true">✉️</span>
-    <div>
-      <span class="mixContactInfoLabel">Email:</span>
-      <a href="mailto:Mixboutique.marketing@gmail.com" class="mixContactInfoEmailLink">
-        Mixboutique.marketing@gmail.com
-      </a>
-    </div>
-  </div>
-  <div class="mixContactInfoExtraItem">
-    <span class="mixContactInfoExtraIcon" aria-hidden="true">🌐</span>
-    <div>
-      <span class="mixContactInfoLabel">Website:</span>
-      <a href="https://mixhotel.vn/" target="_blank" rel="noopener" class="mixContactInfoWebLink">
-        mixhotel.vn
-      </a>
-    </div>
-  </div>
+<!-- wp:group {"className":"mixContactInfoExtra"} -->
+<div class="wp-block-group mixContactInfoExtra">
+<!-- wp:paragraph {"className":"mixContactInfoExtraItem"} -->
+<p class="mixContactInfoExtraItem"><span class="mixContactInfoExtraIcon" aria-hidden="true">✉️</span> <span class="mixContactInfoLabel">Email:</span> <a href="mailto:Mixboutique.marketing@gmail.com" class="mixContactInfoEmailLink">Mixboutique.marketing@gmail.com</a></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mixContactInfoExtraItem"} -->
+<p class="mixContactInfoExtraItem"><span class="mixContactInfoExtraIcon" aria-hidden="true">🌐</span> <span class="mixContactInfoLabel">Website:</span> <a href="https://mixhotel.vn/" target="_blank" rel="noopener" class="mixContactInfoWebLink">mixhotel.vn</a></p>
+<!-- /wp:paragraph -->
 </div>
+<!-- /wp:group -->
 
-<div class="mixContactInfoSocial">
-  <h3 class="mixContactInfoSocialTitle">KẾT NỐI VỚI CHÚNG TÔI</h3>
-  <div class="mixContactInfoSocialLinks">
-    <a href="https://www.facebook.com/mixhotel.vn/" target="_blank" rel="noopener noreferrer" class="mixContactInfoSocialLink mixContactInfoSocialFb" aria-label="Facebook Mix Boutique Hotel">
-      <span aria-hidden="true">f</span>
-      <span>Facebook</span>
-    </a>
-    <a href="https://www.youtube.com/@hotelmixboutique1110" target="_blank" rel="noopener noreferrer" class="mixContactInfoSocialLink mixContactInfoSocialYt" aria-label="YouTube Mix Boutique Hotel">
-      <span aria-hidden="true">▶</span>
-      <span>YouTube</span>
-    </a>
-    <a href="https://www.instagram.com/mixboutiquehotel/" target="_blank" rel="noopener noreferrer" class="mixContactInfoSocialLink mixContactInfoSocialIg" aria-label="Instagram Mix Boutique Hotel">
-      <span aria-hidden="true">📷</span>
-      <span>Instagram</span>
-    </a>
-  </div>
+<!-- wp:group {"className":"mixContactInfoSocial"} -->
+<div class="wp-block-group mixContactInfoSocial">
+<!-- wp:heading {"level":3,"className":"mixContactInfoSocialTitle"} -->
+<h3 class="wp-block-heading mixContactInfoSocialTitle">KẾT NỐI VỚI CHÚNG TÔI</h3>
+<!-- /wp:heading -->
+<!-- wp:buttons {"className":"mixContactInfoSocialLinks"} -->
+<div class="wp-block-buttons mixContactInfoSocialLinks">
+<!-- wp:button {"className":"mixContactInfoSocialLink mixContactInfoSocialFb"} -->
+<div class="wp-block-button mixContactInfoSocialLink mixContactInfoSocialFb"><a class="wp-block-button__link wp-element-button" href="https://www.facebook.com/mixhotel.vn/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">f</span> <span>Facebook</span></a></div>
+<!-- /wp:button -->
+<!-- wp:button {"className":"mixContactInfoSocialLink mixContactInfoSocialYt"} -->
+<div class="wp-block-button mixContactInfoSocialLink mixContactInfoSocialYt"><a class="wp-block-button__link wp-element-button" href="https://www.youtube.com/@hotelmixboutique1110" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span> <span>YouTube</span></a></div>
+<!-- /wp:button -->
+<!-- wp:button {"className":"mixContactInfoSocialLink mixContactInfoSocialIg"} -->
+<div class="wp-block-button mixContactInfoSocialLink mixContactInfoSocialIg"><a class="wp-block-button__link wp-element-button" href="https://www.instagram.com/mixboutiquehotel/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📷</span> <span>Instagram</span></a></div>
+<!-- /wp:button -->
 </div>
-<!-- /wp:html -->
+<!-- /wp:buttons -->
+</div>
+<!-- /wp:group -->
 
 </div>
 <!-- /wp:group -->

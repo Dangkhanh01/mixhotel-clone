@@ -173,6 +173,51 @@ function mixhotel_enqueue_assets() {
         array('in_footer' => true, 'strategy' => 'defer')
     );
 
+    // room-archive-landing.js — Xử lý tabs, form, toc trang /khach-san-tinh-yeu/
+    wp_enqueue_script(
+        'mixhotel-room-archive-landing',
+        $theme_uri . '/assets/js/room-archive-landing.js',
+        array(),
+        $theme_version,
+        array('in_footer' => true, 'strategy' => 'defer')
+    );
+
+    // branch-booking.js — Xử lý form giữ phòng chi nhánh
+    wp_enqueue_script(
+        'mixhotel-branch-booking',
+        $theme_uri . '/assets/js/branch-booking.js',
+        array(),
+        $theme_version,
+        array('in_footer' => true, 'strategy' => 'defer')
+    );
+
+    // gallery-filter.js — Xử lý filter và phân trang gallery
+    wp_enqueue_script(
+        'mixhotel-gallery-filter',
+        $theme_uri . '/assets/js/gallery-filter.js',
+        array(),
+        $theme_version,
+        array('in_footer' => true, 'strategy' => 'defer')
+    );
+
+    // blog-archive.js — Xử lý tabs category và phân trang tin tức
+    wp_enqueue_script(
+        'mixhotel-blog-archive',
+        $theme_uri . '/assets/js/blog-archive.js',
+        array(),
+        $theme_version,
+        array('in_footer' => true, 'strategy' => 'defer')
+    );
+
+    // blog-single.js — Tự động tạo mục lục TOC bài viết chi tiết
+    wp_enqueue_script(
+        'mixhotel-blog-single',
+        $theme_uri . '/assets/js/blog-single.js',
+        array(),
+        $theme_version,
+        array('in_footer' => true, 'strategy' => 'defer')
+    );
+
     // Localize data for scripts — bao gồm contactNonce cho form liên hệ (T026)
     $is_demo = get_option('mixhotel_demo_sandbox_mode', '1') === '1';
     $localize_data = array(
@@ -191,6 +236,7 @@ function mixhotel_enqueue_assets() {
     wp_localize_script('mixhotel-contact-modal', 'MixHotelData', $localize_data);
     wp_localize_script('mixhotel-booking-engine', 'MixHotelData', $localize_data);
     wp_localize_script('mixhotel-contact-form', 'MixHotelData', $localize_data);
+    wp_localize_script('mixhotel-branch-booking', 'MixHotelData', $localize_data);
 
     // 4. Conditional CSS/JS for Room Pages
     if ( is_singular('hotel_room') ) {

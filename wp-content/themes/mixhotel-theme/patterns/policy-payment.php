@@ -8,17 +8,9 @@
  * Post Types: page
  */
 ?>
-<!-- wp:html -->
-<div class="mixLuxuryBreadcrumbs">
-  <div class="inner">
-    <a href="<?php echo esc_url(home_url('/')); ?>">Trang chủ</a>
-    <span>/</span>
-    <span>Chính sách</span>
-    <span>/</span>
-    <span class="current">Chính sách thanh toán</span>
-  </div>
-</div>
-<!-- /wp:html -->
+<!-- wp:group {"className":"mixLuxuryBreadcrumbs"} -->
+<div class="wp-block-group mixLuxuryBreadcrumbs"><div class="inner"><a href="<?php echo esc_url(home_url('/')); ?>">Trang chủ</a> <span>/</span> <span>Chính sách</span> <span>/</span> <span class="current">Chính sách thanh toán</span></div></div>
+<!-- /wp:group -->
 
 <!-- wp:group {"tagName":"main","className":"mixLuxuryContainerNarrow mix-policy-main","lock":{"move":true,"remove":true},"metadata":{"name":"Chính Sách Thanh Toán"}} -->
 <main class="wp-block-group mixLuxuryContainerNarrow mix-policy-main">
@@ -31,9 +23,9 @@
 <!-- wp:heading {"level":1,"className":"mixLuxuryTitle"} -->
 <h1 class="wp-block-heading mixLuxuryTitle">CHÍNH SÁCH THANH TOÁN</h1>
 <!-- /wp:heading -->
-<!-- wp:html -->
-<div class="mixLuxuryTitleDivider"></div>
-<!-- /wp:html -->
+<!-- wp:group {"className":"mixLuxuryTitleDivider"} -->
+<div class="wp-block-group mixLuxuryTitleDivider"></div>
+<!-- /wp:group -->
 </div>
 <!-- /wp:group -->
 
@@ -48,25 +40,29 @@
 <div class="wp-block-group mixPolicyBox">
 <!-- wp:heading {"level":2,"className":"mixPolicyBoxTitle"} -->
 <h2 class="wp-block-heading mixPolicyBoxTitle">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c88922" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect width="20" height="12" x="2" y="6" rx="2"/>
-    <circle cx="12" cy="12" r="2"/>
-    <path d="M6 12h.01M18 12h.01"/>
-  </svg>
+  <span>💵</span>
   <span>1. Thanh toán tiền mặt trực tiếp tại quầy lễ tân</span>
 </h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}}} -->
 <p style="font-size:14px;margin-bottom:12px">Khách hàng có thể thanh toán bằng tiền mặt trực tiếp tại bộ phận lễ tân tại các cơ sở sau khi kết thúc thời gian nghỉ hoặc thanh toán trước:</p>
 <!-- /wp:paragraph -->
-<!-- wp:html -->
-<ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #d4d4d8; line-height: 1.8;">
+<!-- wp:list {"style":{"spacing":{"padding":{"left":"20px"}}},"fontSize":"small"} -->
+<ul class="has-small-font-size" style="padding-left:20px;line-height:1.8">
+  <!-- wp:list-item -->
   <li><strong>CS1:</strong> Mix Premium - Số 8 ngách 29 ngõ 49 Huỳnh Thúc Kháng, Đống Đa, Hà Nội.</li>
+  <!-- /wp:list-item -->
+  <!-- wp:list-item -->
   <li><strong>CS2:</strong> Mix Boutique Hotel - 256B Đặng Tiến Đông, Chợ Dừa, Đống Đa, Hà Nội.</li>
+  <!-- /wp:list-item -->
+  <!-- wp:list-item -->
   <li><strong>CS3:</strong> Mix Boutique Hotel - 186 Hoàng Ngân, Trung Hòa, Cầu Giấy, Hà Nội.</li>
+  <!-- /wp:list-item -->
+  <!-- wp:list-item -->
   <li><strong>CS4:</strong> Mix Boutique Hotel - 20 Phúc La, Hà Đông, Hà Nội.</li>
+  <!-- /wp:list-item -->
 </ul>
-<!-- /wp:html -->
+<!-- /wp:list -->
 </div>
 <!-- /wp:group -->
 
@@ -74,10 +70,7 @@
 <div class="wp-block-group mixPolicyBox">
 <!-- wp:heading {"level":2,"className":"mixPolicyBoxTitle"} -->
 <h2 class="wp-block-heading mixPolicyBoxTitle">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c88922" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect width="20" height="14" x="2" y="5" rx="2"/>
-    <line x1="2" x2="22" y1="10" y2="10"/>
-  </svg>
+  <span>💳</span>
   <span>2. Thanh toán qua thẻ ngân hàng &amp; chuyển khoản QR</span>
 </h2>
 <!-- /wp:heading -->
@@ -87,18 +80,16 @@
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div class="mixPolicyNotice">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffe2a0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
-    <path d="m9 12 2 2 4-4"/>
-  </svg>
-  <div>
-    <strong style="color: #ffe2a0; display: block; margin-bottom: 4px;">Cam kết bảo mật giao dịch:</strong>
-    Mọi sao kê hóa đơn, nội dung chuyển khoản tại quầy đều được che tên nhạy cảm, chỉ hiển thị dịch vụ lưu trú nhằm tôn trọng và bảo mật quyền riêng tư cá nhân tuyệt đối của quý khách.
-  </div>
+<!-- wp:group {"className":"mixPolicyNotice"} -->
+<div class="wp-block-group mixPolicyNotice">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px"}}} -->
+<p style="font-size:24px;margin:0">🛡️</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}}} -->
+<p style="font-size:14px;margin:0"><strong style="color: #ffe2a0; display: block; margin-bottom: 4px;">Cam kết bảo mật giao dịch:</strong>Mọi sao kê hóa đơn, nội dung chuyển khoản tại quầy đều được che tên nhạy cảm, chỉ hiển thị dịch vụ lưu trú nhằm tôn trọng và bảo mật quyền riêng tư cá nhân tuyệt đối của quý khách.</p>
+<!-- /wp:paragraph -->
 </div>
-<!-- /wp:html -->
+<!-- /wp:group -->
 
 </div>
 <!-- /wp:group -->

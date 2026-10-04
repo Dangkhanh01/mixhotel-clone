@@ -37,8 +37,8 @@ $img_branch3 = function_exists('mixhotel_get_theme_image_attachment') ? mixhotel
 
   <!-- wp:column -->
   <div class="wp-block-column">
-  <!-- wp:group {"tagName":"article","className":"mixLuxuryBranchCard","lock":{"move":true,"remove":true},"metadata":{"name":"Chi nhánh Huỳnh Thúc Kháng"}} -->
-  <article class="wp-block-group mixLuxuryBranchCard">
+  <!-- wp:group {"tagName":"article","className":"mixLuxuryBranchCard mixLuxuryBranchCard--premium","lock":{"move":true,"remove":true},"metadata":{"name":"Chi nhánh Huỳnh Thúc Kháng"}} -->
+  <article class="wp-block-group mixLuxuryBranchCard mixLuxuryBranchCard--premium">
     <!-- wp:group {"className":"mixLuxuryBranchThumb"} -->
     <div class="wp-block-group mixLuxuryBranchThumb">
       <!-- wp:image {"id":<?php echo (int) $img_branch1['id']; ?>,"sizeSlug":"full","linkDestination":"none"} -->
@@ -83,7 +83,7 @@ $img_branch3 = function_exists('mixhotel_get_theme_image_attachment') ? mixhotel
       <!-- wp:buttons {"className":"mixLuxuryBranchActions"} -->
       <div class="wp-block-buttons mixLuxuryBranchActions">
         <!-- wp:button {"className":"mixLuxuryBranchBtn mixLuxuryBranchBtnZalo mix-btn-booking"} -->
-        <div class="wp-block-button mixLuxuryBranchBtn mixLuxuryBranchBtnZalo mix-btn-booking"><a class="wp-block-button__link wp-element-button" href="#booking" data-contact-action="booking" data-branch-id="branch-premium">✉ Hỏi phòng</a></div>
+        <div class="wp-block-button mixLuxuryBranchBtn mixLuxuryBranchBtnZalo mix-btn-booking"><a class="wp-block-button__link wp-element-button" href="#booking">✉ Hỏi phòng</a></div>
         <!-- /wp:button -->
         <!-- wp:button {"className":"mixLuxuryBranchBtn mixLuxuryBranchBtnPhone"} -->
         <div class="wp-block-button mixLuxuryBranchBtn mixLuxuryBranchBtnPhone"><a class="wp-block-button__link wp-element-button" href="tel:0383104010">📞 Gọi ngay</a></div>
@@ -99,8 +99,8 @@ $img_branch3 = function_exists('mixhotel_get_theme_image_attachment') ? mixhotel
 
   <!-- wp:column -->
   <div class="wp-block-column">
-  <!-- wp:group {"tagName":"article","className":"mixLuxuryBranchCard","lock":{"move":true,"remove":true},"metadata":{"name":"Chi nhánh Đặng Tiến Đông"}} -->
-  <article class="wp-block-group mixLuxuryBranchCard">
+  <!-- wp:group {"tagName":"article","className":"mixLuxuryBranchCard mixLuxuryBranchCard--dangtiendong","lock":{"move":true,"remove":true},"metadata":{"name":"Chi nhánh Đặng Tiến Đông"}} -->
+  <article class="wp-block-group mixLuxuryBranchCard mixLuxuryBranchCard--dangtiendong">
     <!-- wp:group {"className":"mixLuxuryBranchThumb"} -->
     <div class="wp-block-group mixLuxuryBranchThumb">
       <!-- wp:image {"id":<?php echo (int) $img_branch2['id']; ?>,"sizeSlug":"full","linkDestination":"none"} -->
@@ -145,7 +145,7 @@ $img_branch3 = function_exists('mixhotel_get_theme_image_attachment') ? mixhotel
       <!-- wp:buttons {"className":"mixLuxuryBranchActions"} -->
       <div class="wp-block-buttons mixLuxuryBranchActions">
         <!-- wp:button {"className":"mixLuxuryBranchBtn mixLuxuryBranchBtnZalo mix-btn-booking"} -->
-        <div class="wp-block-button mixLuxuryBranchBtn mixLuxuryBranchBtnZalo mix-btn-booking"><a class="wp-block-button__link wp-element-button" href="#booking" data-contact-action="booking" data-branch-id="branch-dangtiendong">✉ Hỏi phòng</a></div>
+        <div class="wp-block-button mixLuxuryBranchBtn mixLuxuryBranchBtnZalo mix-btn-booking"><a class="wp-block-button__link wp-element-button" href="#booking">✉ Hỏi phòng</a></div>
         <!-- /wp:button -->
         <!-- wp:button {"className":"mixLuxuryBranchBtn mixLuxuryBranchBtnPhone"} -->
         <div class="wp-block-button mixLuxuryBranchBtn mixLuxuryBranchBtnPhone"><a class="wp-block-button__link wp-element-button" href="tel:0393307030">📞 Gọi ngay</a></div>
@@ -161,8 +161,8 @@ $img_branch3 = function_exists('mixhotel_get_theme_image_attachment') ? mixhotel
 
   <!-- wp:column -->
   <div class="wp-block-column">
-  <!-- wp:group {"tagName":"article","className":"mixLuxuryBranchCard","lock":{"move":true,"remove":true},"metadata":{"name":"Chi nhánh Phúc La Hà Đông"}} -->
-  <article class="wp-block-group mixLuxuryBranchCard">
+  <!-- wp:group {"tagName":"article","className":"mixLuxuryBranchCard mixLuxuryBranchCard--phucla","lock":{"move":true,"remove":true},"metadata":{"name":"Chi nhánh Phúc La Hà Đông"}} -->
+  <article class="wp-block-group mixLuxuryBranchCard mixLuxuryBranchCard--phucla">
     <!-- wp:group {"className":"mixLuxuryBranchThumb"} -->
     <div class="wp-block-group mixLuxuryBranchThumb">
       <!-- wp:image {"id":<?php echo (int) $img_branch3['id']; ?>,"sizeSlug":"full","linkDestination":"none"} -->
@@ -207,7 +207,7 @@ $img_branch3 = function_exists('mixhotel_get_theme_image_attachment') ? mixhotel
       <!-- wp:buttons {"className":"mixLuxuryBranchActions"} -->
       <div class="wp-block-buttons mixLuxuryBranchActions">
         <!-- wp:button {"className":"mixLuxuryBranchBtn mixLuxuryBranchBtnZalo mix-btn-booking"} -->
-        <div class="wp-block-button mixLuxuryBranchBtn mixLuxuryBranchBtnZalo mix-btn-booking"><a class="wp-block-button__link wp-element-button" href="#booking" data-contact-action="booking" data-branch-id="branch-phucla">✉ Hỏi phòng</a></div>
+        <div class="wp-block-button mixLuxuryBranchBtn mixLuxuryBranchBtnZalo mix-btn-booking"><a class="wp-block-button__link wp-element-button" href="#booking">✉ Hỏi phòng</a></div>
         <!-- /wp:button -->
         <!-- wp:button {"className":"mixLuxuryBranchBtn mixLuxuryBranchBtnPhone"} -->
         <div class="wp-block-button mixLuxuryBranchBtn mixLuxuryBranchBtnPhone"><a class="wp-block-button__link wp-element-button" href="tel:0353660966">📞 Gọi ngay</a></div>

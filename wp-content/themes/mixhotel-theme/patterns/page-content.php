@@ -39,28 +39,37 @@ if (in_array($post_slug, ['chinh-sach-thanh-toan', 'thanh-toan', 'chinh-sach-tha
     echo do_blocks('<!-- wp:pattern {"slug":"mixhotel/branch-detail"} /-->');
     return;
 } elseif ($post_slug === 'khach-san-tinh-yeu') {
-    echo do_blocks('<!-- wp:pattern {"slug":"mixhotel-theme/room-archive-content"} /-->');
+    echo do_blocks('<!-- wp:pattern {"slug":"mixhotel/room-archive-content"} /-->');
     return;
 }
 
 ?>
-<!-- wp:html -->
-<div class="mixLuxuryBreadcrumbs">
+<!-- wp:group {"className":"mixLuxuryBreadcrumbs"} -->
+<div class="wp-block-group mixLuxuryBreadcrumbs">
   <div class="inner">
     <a href="<?php echo esc_url(home_url('/')); ?>">Trang chủ</a>
     <span>/</span>
     <span class="current"><?php the_title(); ?></span>
   </div>
 </div>
+<!-- /wp:group -->
 
-<main class="mixLuxuryContainerNarrow" style="padding-top: 48px; padding-bottom: 80px;">
-  <div class="mixLuxuryHeading">
-    <h1 class="mixLuxuryTitle"><?php the_title(); ?></h1>
+<!-- wp:group {"tagName":"main","className":"mixLuxuryContainerNarrow","style":{"spacing":{"padding":{"top":"48px","bottom":"80px"}}}} -->
+<main class="wp-block-group mixLuxuryContainerNarrow" style="padding-top:48px;padding-bottom:80px">
+  <!-- wp:group {"className":"mixLuxuryHeading"} -->
+  <div class="wp-block-group mixLuxuryHeading">
+    <!-- wp:heading {"level":1,"className":"mixLuxuryTitle"} -->
+    <h1 class="wp-block-heading mixLuxuryTitle"><?php the_title(); ?></h1>
+    <!-- /wp:heading -->
     <div class="mixLuxuryTitleDivider"></div>
   </div>
+  <!-- /wp:group -->
 
-  <article class="mixPolicyCard" style="font-size: 16px; line-height: 1.8;">
+  <!-- wp:group {"tagName":"article","className":"mixPolicyCard","style":{"typography":{"fontSize":"16px","lineHeight":"1.8"}}} -->
+  <article class="wp-block-group mixPolicyCard" style="font-size:16px;line-height:1.8">
     <?php the_content(); ?>
   </article>
+  <!-- /wp:group -->
 </main>
-<!-- /wp:html -->
+<!-- /wp:group -->
+

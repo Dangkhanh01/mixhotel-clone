@@ -8,10 +8,11 @@
  * Post Types: post
  */
 ?>
-<!-- wp:html -->
-<aside class="mixBlogSidebar" aria-label="Sidebar blog">
+<!-- wp:group {"tagName":"aside","className":"mixBlogSidebar"} -->
+<aside class="wp-block-group mixBlogSidebar" aria-label="Sidebar blog">
 
   <!-- Widget: Danh mục bài viết -->
+  <!-- wp:html -->
   <div class="mixBlogSidebarWidget">
     <h3 class="mixBlogSidebarTitle">
       <span class="mixBlogSidebarIcon" aria-hidden="true">📂</span>
@@ -86,17 +87,30 @@
     <p class="mixBlogRecentEmpty">Chưa có bài viết nào.</p>
     <?php endif; ?>
   </div>
+  <!-- /wp:html -->
 
   <!-- Widget: CTA đặt phòng -->
-  <div class="mixBlogSidebarWidget mixBlogSidebarCTA">
-    <div class="mixBlogSidebarCTABox">
+  <!-- wp:group {"className":"mixBlogSidebarWidget mixBlogSidebarCTA"} -->
+  <div class="wp-block-group mixBlogSidebarWidget mixBlogSidebarCTA">
+    <!-- wp:group {"className":"mixBlogSidebarCTABox"} -->
+    <div class="wp-block-group mixBlogSidebarCTABox">
+      <!-- wp:paragraph {"className":"mixBlogSidebarCTATitle"} -->
       <p class="mixBlogSidebarCTATitle">🛎️ Đặt Phòng Ngay</p>
+      <!-- /wp:paragraph -->
+      <!-- wp:paragraph {"className":"mixBlogSidebarCTADesc"} -->
       <p class="mixBlogSidebarCTADesc">Trải nghiệm không gian lãng mạn tại Mix Boutique Hotel</p>
-      <button type="button" class="mixBlogSidebarCTABtn" data-contact-action="booking">
-        ĐẶT PHÒNG NGAY
-      </button>
+      <!-- /wp:paragraph -->
+      <!-- wp:buttons -->
+      <div class="wp-block-buttons">
+        <!-- wp:button {"className":"mixBlogSidebarCTABtn"} -->
+        <div class="wp-block-button mixBlogSidebarCTABtn"><a class="wp-block-button__link wp-element-button" href="#booking">ĐẶT PHÒNG NGAY</a></div>
+        <!-- /wp:button -->
+      </div>
+      <!-- /wp:buttons -->
     </div>
+    <!-- /wp:group -->
   </div>
+  <!-- /wp:group -->
 
 </aside>
-<!-- /wp:html -->
+<!-- /wp:group -->

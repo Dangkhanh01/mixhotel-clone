@@ -36,43 +36,38 @@ $theme_uri = get_template_directory_uri();
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div style="background-color: var(--wp--preset--color--dark-secondary, #17171c); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 24px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);">
-  <h3 style="font-family: var(--wp--preset--font-family--questrial, sans-serif); font-size: 16px; font-weight: 700; color: #ffffff; margin: 0 0 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 10px;">
-    Bảng giá trang trí mẫu (tham khảo)
-  </h3>
+<!-- wp:group {"className":"mix-events-pricing-card"} -->
+<div class="wp-block-group mix-events-pricing-card">
+<!-- wp:heading {"level":3,"className":"mix-events-pricing-title"} -->
+<h3 class="wp-block-heading mix-events-pricing-title">Bảng giá trang trí mẫu (tham khảo)</h3>
+<!-- /wp:heading -->
 
-  <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; font-size: 13.5px;">
-    <div style="display: flex; justify-content: space-between; gap: 10px; color: #a0a0a8;">
-      <span>&#11088; Nến - hoa - bóng bay, tặng 1 chai vang</span>
-      <strong style="color: var(--wp--preset--color--luxury-gold, #c5a880); white-space: nowrap;">1.490k - 1.990k</strong>
-    </div>
-    <div style="display: flex; justify-content: space-between; gap: 10px; color: #a0a0a8;">
-      <span>&#11088; Set rượu vang - hoa hồng - nến lung linh</span>
-      <strong style="color: var(--wp--preset--color--luxury-gold, #c5a880); white-space: nowrap;">590k</strong>
-    </div>
-    <div style="display: flex; justify-content: space-between; gap: 10px; color: #a0a0a8;">
-      <span>&#11088; Set nến nghệ thuật + hoa tươi + bánh kem</span>
-      <strong style="color: var(--wp--preset--color--luxury-gold, #c5a880); white-space: nowrap;">650k</strong>
-    </div>
-    <div style="display: flex; justify-content: space-between; gap: 10px; color: #a0a0a8;">
-      <span>&#11088; Set bánh kem sinh nhật / khay trái cây</span>
-      <strong style="color: var(--wp--preset--color--luxury-gold, #c5a880); white-space: nowrap;">350k / 300k</strong>
-    </div>
-  </div>
-
-  <button
-    type="button"
-    class="mixLuxuryBtn mixLuxuryBtnPrimary"
-    style="width: 100%; justify-content: center;"
-    data-contact-action="zalo"
-    data-room-title="Tư vấn set trang trí sự kiện"
-  >
-    <i class="fa fa-commenting">&#9993;</i>
-    <span>Tư Vấn Set Trang Trí Riêng</span>
-  </button>
+<!-- wp:group {"className":"mix-events-pricing-list"} -->
+<div class="wp-block-group mix-events-pricing-list">
+<!-- wp:paragraph {"className":"mix-events-pricing-row"} -->
+<p class="mix-events-pricing-row"><span>⭐ Nến - hoa - bóng bay, tặng 1 chai vang</span> <strong>1.490k - 1.990k</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mix-events-pricing-row"} -->
+<p class="mix-events-pricing-row"><span>⭐ Set rượu vang - hoa hồng - nến lung linh</span> <strong>590k</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mix-events-pricing-row"} -->
+<p class="mix-events-pricing-row"><span>⭐ Set nến nghệ thuật + hoa tươi + bánh kem</span> <strong>650k</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"mix-events-pricing-row"} -->
+<p class="mix-events-pricing-row"><span>⭐ Set bánh kem sinh nhật / khay trái cây</span> <strong>350k / 300k</strong></p>
+<!-- /wp:paragraph -->
 </div>
-<!-- /wp:html -->
+<!-- /wp:group -->
+
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+<div class="wp-block-buttons">
+<!-- wp:button {"className":"mixLuxuryBtn mixLuxuryBtnPrimary w-full","width":100} -->
+<div class="wp-block-button has-custom-width wp-block-button__width-100 mixLuxuryBtn mixLuxuryBtnPrimary w-full"><a class="wp-block-button__link wp-element-button" href="https://zalo.me/0383104010" target="_blank" rel="noopener noreferrer"><i class="fa fa-commenting" aria-hidden="true">&#9993;</i> <span>Tư Vấn Set Trang Trí Riêng</span></a></div>
+<!-- /wp:button -->
+</div>
+<!-- /wp:buttons -->
+</div>
+<!-- /wp:group -->
 
 </div>
 <!-- /wp:group -->
@@ -82,20 +77,20 @@ $theme_uri = get_template_directory_uri();
 <div class="wp-block-group mix-events-photos">
 
 <div class="mix-events-photo-main">
-  <!-- wp:image {"url":"<?php echo esc_url( $theme_uri . '/assets/images/event-1.jpg' ); ?>","alt":"Trang trí sự kiện 1"} -->
-  <figure class="wp-block-image"><img src="<?php echo esc_url( $theme_uri . '/assets/images/event-1.jpg' ); ?>" alt="Trang trí sự kiện 1" loading="lazy" /></figure>
+  <!-- wp:image {"sizeSlug":"large","linkDestination":"none"} -->
+  <figure class="wp-block-image size-large"><img src="<?php echo esc_url( $theme_uri . '/assets/images/event-1.jpg' ); ?>" alt="Trang trí sự kiện 1" loading="lazy" /></figure>
   <!-- /wp:image -->
 </div>
 
 <div class="mix-events-photo-sub">
-  <!-- wp:image {"url":"<?php echo esc_url( $theme_uri . '/assets/images/event-2.jpg' ); ?>","alt":"Trang trí sự kiện 2"} -->
-  <figure class="wp-block-image"><img src="<?php echo esc_url( $theme_uri . '/assets/images/event-2.jpg' ); ?>" alt="Trang trí sự kiện 2" loading="lazy" /></figure>
+  <!-- wp:image {"sizeSlug":"large","linkDestination":"none"} -->
+  <figure class="wp-block-image size-large"><img src="<?php echo esc_url( $theme_uri . '/assets/images/event-2.jpg' ); ?>" alt="Trang trí sự kiện 2" loading="lazy" /></figure>
   <!-- /wp:image -->
 </div>
 
 <div class="mix-events-photo-sub">
-  <!-- wp:image {"url":"<?php echo esc_url( $theme_uri . '/assets/images/event-3.jpg' ); ?>","alt":"Trang trí sự kiện 3"} -->
-  <figure class="wp-block-image"><img src="<?php echo esc_url( $theme_uri . '/assets/images/event-3.jpg' ); ?>" alt="Trang trí sự kiện 3" loading="lazy" /></figure>
+  <!-- wp:image {"sizeSlug":"large","linkDestination":"none"} -->
+  <figure class="wp-block-image size-large"><img src="<?php echo esc_url( $theme_uri . '/assets/images/event-3.jpg' ); ?>" alt="Trang trí sự kiện 3" loading="lazy" /></figure>
   <!-- /wp:image -->
 </div>
 

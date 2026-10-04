@@ -29,3 +29,21 @@
 - [x] T016: Dùng `browser_subagent` kiểm tra tính năng khôi phục trong `wp-admin/tools.php?page=mixhotel-restore-pages`
 - [x] T017: Dùng `browser_subagent` kiểm tra frontend toàn bộ trang: Xác nhận popup đặt phòng mở khi bấm nút `#booking`, giao diện Dark Luxury không bị regression
 - [x] T018: Kiểm tra `wp-content/debug.log` đảm bảo 0 Warning/Error, hoàn tất cập nhật tài liệu và báo cáo kết quả
+
+## Phase 7: Hoàn Thiện Visual Parity & Gutenberg Validation Grammar (Khớp 100% Giao Diện Thật & Sạch Lỗi Block)
+- [x] T019: Chuẩn hóa toàn bộ Core Block trong `patterns/concept-rooms.php`: loại bỏ inline `style="..."` trên heading/paragraph, chuyển vào class `.mixLuxuryRoomTitle`, `.mixLuxuryRoomDesc`, `.mixLuxuryRoomBadgeKicker`
+- [x] T020: Chuẩn hóa `patterns/real-photos-grid.php`: loại bỏ thuộc tính `data-contact-action` và `data-room-title` trên thẻ `wp:group`, thay bằng semantic classes `.mix-photo-main`, `.mix-photo-tile`
+- [x] T021: Chuẩn hóa `patterns/branches-list.php`: loại bỏ thuộc tính `data-*` trên nút `core/button`, sử dụng class `.mix-branch-btn-booking` và class container
+- [x] T022: Cập nhật CSS trong `editor-custom.css` và `pages-luxury.css`: định dạng Hero background atmosphere trong editor, ẩn post title trên landing, và thiết lập full-width canvas bleed
+- [x] T023: Cập nhật event delegation trong `assets/js/booking-modal.js` và `branch-booking.js` để bắt click theo semantic class thay vì phụ thuộc `data-*`
+- [x] T024: Chạy `mixhotel_restore_all_pages_content()` để đồng bộ hóa lại 100% nội dung trang vào database
+- [x] T025: Kiểm tra cú pháp PHP `php -l` cho toàn bộ các file
+- [x] T026: Dùng `browser_subagent` mở Gutenberg editor Trang Chủ trong `wp-admin`, chụp ảnh xác nhận 0 lỗi Block Validation ("Khối chứa nội dung không hợp lệ"), xác nhận Hero background hiển thị chuẩn và giao diện khớp với frontend
+
+## Phase 8: Refactor WYSIWYG No-Code Trang Khách Sạn Tình Yêu (Post ID 49)
+- [x] T027: Chuyển đổi toàn bộ pattern `patterns/room-archive-content.php` (Hero, 3 Branches, 33 Concept Rooms, Bảng giá, Quy trình, Tiện ích, Booking CTA) thành native Gutenberg blocks (`wp:group`, `wp:heading`, `wp:paragraph`, `wp:image`, `wp:buttons`, `wp:button`, `wp:html`).
+- [x] T028: Bọc tất cả layout wrappers (`container`, inner wrappers) bằng `wp:group` hợp lệ và chuyển các custom widgets (form, FAQ accordion, tab navigation, decor glow) sang `wp:html` tuân thủ BUG-16 & BUG-20.
+- [x] T029: Bổ sung CSS Dark Luxury visual parity cho editor canvas trong `assets/css/editor-custom.css` (`.cateMixHero`, `.cateBranchCard`, `.cateBranchRooms`, `.mixCatePriceGrid`, v.v.).
+- [x] T030: Đồng bộ database cho Post ID 49 thông qua `mixhotel_restore_all_pages_content()`.
+- [x] T031: Kiểm thử tự động qua CDP: Xác nhận `warningCount: 0` (0 lỗi "Khối chứa nội dung không hợp lệ"), xác nhận click-to-edit và render thực tế đạt 100% Dark Luxury fidelity trên cả Editor và Frontend.
+

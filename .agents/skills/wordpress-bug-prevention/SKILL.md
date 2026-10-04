@@ -532,5 +532,50 @@ while ($query->have_posts()) : $query->the_post();
     ```
   * **Custom Dropdown Arrow nhất quán:** Dùng `appearance: none;` kèm icon SVG mũi tên màu vàng gold (`fill='%23c5a880'`) để giao diện dropdown sang trọng và đồng bộ trên mọi trình duyệt.
 
+---
 
+## 14. PHÂN HỆ: GUTENBERG BLOCK VALIDATION & WYSIWYG INTEGRITY
+
+### BUG-19: Gutenberg Block Validation Error do tiêm thuộc tính HTML tùy tiện (`data-*`, inline `style`) vào Core Blocks
+* **Triệu chứng:** Khi mở trang trong Gutenberg Block Editor (ví dụ Trang Chủ `post.php?post=118&action=edit`), màn hình xuất hiện một hoặc nhiều khối lỗi viền xám cảnh báo: *"Khối chứa nội dung không hợp lệ hoặc không mong đợi. [Thử khôi phục]"* (This block contains unexpected or invalid content). Bấm vào "Thử khôi phục" có thể làm hỏng layout hoặc vỡ cấu trúc block.
+* **Root cause:** 
+  1. Gutenberg thực hiện cơ chế xác thực cú pháp nghiêm ngặt (`validateBlock`). Gutenberg lấy comment JSON (ví dụ: `<!-- wp:paragraph -->` hoặc `<!-- wp:button -->`), chạy hàm `save()` nội bộ của WordPress để sinh HTML mong đợi, rồi so sánh character-by-character với thẻ HTML được lưu trữ trong `post_content`.
+  2. Nếu lập trình viên tự ý thêm các thuộc tính HTML tùy ý như `data-contact-action="zalo"`, `data-room-title="..."`, `data-branch-id="..."` trực tiếp vào thẻ con của Core Block (như `<a class="wp-block-button__link" ...>`), hoặc viết inline `style="font-size:26px;margin:..."` vào thẻ `<h2 class="wp-block-heading">` mà KHÔNG có cấu trúc JSON attribute tương ứng (hoặc khai báo sai schema), Gutenberg sẽ phát hiện HTML thực tế không khớp với output của block parser và lập tức đánh dấu khối là **Invalid**.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **TUYỆT ĐỐI KHÔNG** chèn thuộc tính `data-*` tùy tiện vào các Core Block của WordPress (`core/group`, `core/button`, `core/heading`, `core/paragraph`, `core/image`).
+  * **TUYỆT ĐỐI KHÔNG** dùng inline `style="..."` trên Core Blocks để override font size hoặc margin nếu không định nghĩa qua block attributes chuẩn. Thay vào đó, hãy sử dụng các semantic CSS classes (ví dụ: `.mixLuxuryRoomTitle`, `.mixLuxuryRoomDesc`, `.mixLuxuryBranchBtnZalo`).
+  * **Sử dụng JavaScript Event Delegation & DOM Tree Traversal:** Mọi logic tương tác người dùng (click mở modal, lấy mã chi nhánh, lấy tên phòng) phải bắt sự kiện theo class của nút hoặc duyệt tìm từ phần tử cha (`e.target.closest('.mixLuxuryRoomCard').querySelector('h3')`) thay vì phụ thuộc vào thuộc tính `data-*` trên Core Block.
+
+### BUG-20: Gutenberg Block Validation Error do chứa thẻ HTML thô (raw `<div>`, `<p>`, `<span>`) làm con trực tiếp của `core/group`
+* **Triệu chứng:** Khối `core/group` (Section hoặc Container) bị báo lỗi *"Khối chứa nội dung không hợp lệ hoặc không mong đợi. [Thử khôi phục]"* trong Gutenberg editor.
+* **Root cause:** 
+  1. Trong Gutenberg, `core/group` là một khối chứa (container block). Trình parser của Gutenberg kỳ vọng các phần tử bên trong `wp:group` phải là các khối con hợp lệ (`innerBlocks` có comment `<!-- wp:... -->`).
+  2. Nếu lập trình viên đặt thẻ HTML trực tiếp như `<div class="container">`, `<div class="inner-wrap">`, hoặc `<div class="info-item"><span>01</span><p>...</p></div>` nằm giữa thẻ mở `<div class="wp-block-group">` và các block con mà không khai báo comment block cho container đó, hàm validation của Gutenberg (`validateBlock`) sẽ phát hiện cấu trúc DOM thực tế không khớp với mảng block con đã phân tích cú pháp và kích hoạt cờ `isValid = false`.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Wrapper DIVs phải là `wp:group` con:** Mọi wrapper phân cấp layout (ví dụ `.container`, `.content-frame`, `.grid-wrap`) bên trong một Section `wp:group` BẮT BUỘC phải được định nghĩa bằng comment `<!-- wp:group {"className":"container"} --><div class="wp-block-group container">...</div><!-- /wp:group -->`.
+  * **Custom Raw HTML Widgets phải bọc trong `<!-- wp:html -->`:** Đối với các thành phần trang trí tĩnh hoặc markup HTML phức tạp không cần biên tập inline từng từ (như danh sách badge số thứ tự, TOC Header toggle icon, nền decor SVG/glow), BẮT BUỘC phải bọc toàn bộ khối trong `<!-- wp:html -->...<!-- /wp:html -->`. Tuyệt đối không để thẻ HTML thô nằm trực tiếp bên trong `wp:group` mà không có block delimiter.
+
+### BUG-21: Bố cục chữ bị bóp hẹp hiển thị dọc 1 từ/dòng do thiếu phần tử con trong CSS Grid 2 cột
+* **Triệu chứng:** Đoạn văn bản (ví dụ các mục lợi ích hoặc quyền lợi trong Form Tư Vấn, Booking Card) bị co rút lại thành dải hẹp 30-40px, khiến mỗi từ bị rớt xuống một dòng, kéo dài chiều cao section lên hàng nghìn pixel.
+* **Root cause:** 
+  1. Trong CSS kế thừa, phần tử cha (ví dụ `.cateConsultFormBenefit`) được định nghĩa bằng CSS Grid có 2 cột cố định: `display: grid; grid-template-columns: 34px 1fr; gap: 16px;`. Cột đầu (34px) dành cho icon/badge (`.cateConsultFormBenefitIcon`), cột sau (`1fr`) dành cho đoạn text (`.cateConsultFormBenefitText`).
+  2. Khi refactor sang Gutenberg Block, nếu vô tình gom icon vào chung đoạn text hoặc xóa thẻ icon con, thẻ chứa text trở thành phần tử con ĐẦU TIÊN (first child) của CSS Grid, do đó bị gán vào Cột 1 (rộng đúng 34px).
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Tách riêng khối Icon và Text:** Trong pattern Gutenberg, luôn giữ đúng 2 khối con riêng biệt: 1 khối `wp:paragraph` cho Icon (`.cateConsultFormBenefitIcon`) và 1 khối `wp:paragraph` cho Text (`.cateConsultFormBenefitText`).
+  * **Defensive CSS (Sử dụng Flexbox thay vì Grid cứng):** Trong CSS bổ sung của theme, luôn override các hàng icon-text bằng Flexbox đàn hồi:
+    ```css
+    .cateConsultFormBenefit {
+      display: flex !important;
+      align-items: flex-start !important;
+      gap: 16px !important;
+    }
+    .cateConsultFormBenefitIcon {
+      flex: 0 0 34px !important;
+    }
+    .cateConsultFormBenefitText {
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+    }
+    ```
+    Flexbox đảm bảo ngay cả khi thẻ icon bị ẩn hay cấu trúc con thay đổi, đoạn văn bản vẫn tự động co dãn chiếm trọn 100% không gian khả dụng mà không bao giờ bị bóp hẹp 34px.
 

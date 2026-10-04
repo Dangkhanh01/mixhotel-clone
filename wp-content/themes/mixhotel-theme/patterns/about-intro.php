@@ -9,15 +9,9 @@
  */
 $theme_uri = get_template_directory_uri();
 ?>
-<!-- wp:html -->
-<div class="mixLuxuryBreadcrumbs">
-  <div class="inner">
-    <a href="<?php echo esc_url(home_url('/')); ?>">Trang chủ</a>
-    <span>/</span>
-    <span class="current">Giới thiệu</span>
-  </div>
-</div>
-<!-- /wp:html -->
+<!-- wp:group {"className":"mixLuxuryBreadcrumbs"} -->
+<div class="wp-block-group mixLuxuryBreadcrumbs"><div class="inner"><a href="<?php echo esc_url(home_url('/')); ?>">Trang chủ</a> <span>/</span> <span class="current">Giới thiệu</span></div></div>
+<!-- /wp:group -->
 
 <!-- wp:group {"tagName":"section","className":"mixLuxuryContainer mix-about-intro-wrap","lock":{"move":true,"remove":true},"metadata":{"name":"About Intro"}} -->
 <section class="wp-block-group mixLuxuryContainer mix-about-intro-wrap">
@@ -30,9 +24,9 @@ $theme_uri = get_template_directory_uri();
 <!-- wp:heading {"level":1,"className":"mixLuxuryTitle"} -->
 <h1 class="wp-block-heading mixLuxuryTitle">VỀ KHÁCH SẠN TÌNH YÊU MIX BOUTIQUE</h1>
 <!-- /wp:heading -->
-<!-- wp:html -->
-<div class="mixLuxuryTitleDivider"></div>
-<!-- /wp:html -->
+<!-- wp:group {"className":"mixLuxuryTitleDivider"} -->
+<div class="wp-block-group mixLuxuryTitleDivider"></div>
+<!-- /wp:group -->
 
 <!-- wp:paragraph {"className":"mixAboutQuote"} -->
 <p class="mixAboutQuote">&ldquo;ĐỪNG ĐỂ TÌNH YÊU CỦA BẠN CHỈ CÓ MỘT MÀU!&rdquo;</p>

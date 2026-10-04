@@ -201,10 +201,56 @@
         var branchCard = bookingTrigger.closest('.mixLuxuryBranchCard, [data-branch-id]');
         if (branchCard) {
           branchId = branchCard.getAttribute('data-branch-id') || '';
+          if (!branchId) {
+            if (branchCard.classList.contains('mixLuxuryBranchCard--premium')) {
+              branchId = 'branch-premium';
+            } else if (branchCard.classList.contains('mixLuxuryBranchCard--dangtiendong')) {
+              branchId = 'branch-dangtiendong';
+            } else if (branchCard.classList.contains('mixLuxuryBranchCard--phucla')) {
+              branchId = 'branch-phucla';
+            } else {
+              var branchTitle = branchCard.querySelector('.mixLuxuryBranchName, h3');
+              var txt = branchTitle ? branchTitle.textContent : '';
+              if (txt.indexOf('Huỳnh Thúc Kháng') !== -1 || txt.indexOf('Premium') !== -1) {
+                branchId = 'branch-premium';
+              } else if (txt.indexOf('Đặng Tiến Đông') !== -1) {
+                branchId = 'branch-dangtiendong';
+              } else if (txt.indexOf('Phúc La') !== -1 || txt.indexOf('Hà Đông') !== -1) {
+                branchId = 'branch-phucla';
+              }
+            }
+          }
         }
       }
 
       openModal('zalo', roomTitle, null, branchId);
+    });
+
+    // 3c. Delegate Photo Stage tiles to open contact modal with room/concept title
+    document.addEventListener('click', function (e) {
+      var photoTile = e.target.closest('.mixLuxuryPhotoTile, .mixLuxuryPhotoMain');
+      if (!photoTile) return;
+
+      // Don't trigger if clicked on an actual link or button inside the tile (if any)
+      if (e.target.closest('a, button')) return;
+
+      var roomTitle = '';
+      var titleEl = photoTile.querySelector('.mixLuxuryPhotoTileTitle');
+      if (titleEl) {
+        roomTitle = titleEl.textContent.trim();
+      } else {
+        var kickerEl = photoTile.querySelector('.mixLuxuryPhotoTileKicker');
+        if (kickerEl) {
+          roomTitle = kickerEl.textContent.trim();
+        } else {
+          var img = photoTile.querySelector('img');
+          if (img && img.alt) {
+            roomTitle = img.alt;
+          }
+        }
+      }
+
+      openModal('zalo', roomTitle, null, '');
     });
 
     // Expose openModal to window for external callers

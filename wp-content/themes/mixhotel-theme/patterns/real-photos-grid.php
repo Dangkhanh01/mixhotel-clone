@@ -39,7 +39,7 @@ $img_netflix  = function_exists('mixhotel_get_theme_image_attachment') ? mixhote
 <div class="wp-block-group mixLuxuryPhotosStage">
 
   <!-- wp:group {"className":"mixLuxuryPhotoMain","lock":{"move":true,"remove":true},"metadata":{"name":"Featured Room"}} -->
-  <div class="wp-block-group mixLuxuryPhotoMain" data-contact-action="zalo" data-room-title="Featured Room Mix Boutique">
+  <div class="wp-block-group mixLuxuryPhotoMain">
     <!-- wp:image {"id":<?php echo (int) $img_featured['id']; ?>,"sizeSlug":"full","linkDestination":"none"} -->
     <figure class="wp-block-image size-full"><img src="<?php echo esc_url($img_featured['url']); ?>" alt="Ảnh thật phòng VIP Mix Boutique Hotel" class="wp-image-<?php echo (int) $img_featured['id']; ?>"/></figure>
     <!-- /wp:image -->
@@ -61,7 +61,7 @@ $img_netflix  = function_exists('mixhotel_get_theme_image_attachment') ? mixhote
       <p class="mixLuxuryPhotoTileKicker">ẢNH NỔI BẬT</p>
       <!-- /wp:paragraph -->
       <!-- wp:heading {"level":3,"className":"mixLuxuryPhotoTileTitle"} -->
-      <h3 class="wp-block-heading mixLuxuryPhotoTileTitle" style="font-size:20px">Không gian boutique riêng tư, ánh sáng rõ và có gu</h3>
+      <h3 class="wp-block-heading mixLuxuryPhotoTileTitle">Không gian boutique riêng tư, ánh sáng rõ và có gu</h3>
       <!-- /wp:heading -->
     </div>
     <!-- /wp:group -->
@@ -72,7 +72,7 @@ $img_netflix  = function_exists('mixhotel_get_theme_image_attachment') ? mixhote
   <div class="wp-block-group mixLuxuryPhotoGrid">
 
     <!-- wp:group {"className":"mixLuxuryPhotoTile mixLuxuryPhotoTileLarge","lock":{"move":true,"remove":true},"metadata":{"name":"Tile BDSM"}} -->
-    <div class="wp-block-group mixLuxuryPhotoTile mixLuxuryPhotoTileLarge" data-contact-action="zalo" data-room-title="Hot Concept Dụng Cụ BDSM">
+    <div class="wp-block-group mixLuxuryPhotoTile mixLuxuryPhotoTileLarge">
       <!-- wp:image {"id":<?php echo (int) $img_bdsm['id']; ?>,"sizeSlug":"full","linkDestination":"none"} -->
       <figure class="wp-block-image size-full"><img src="<?php echo esc_url($img_bdsm['url']); ?>" alt="Dụng cụ BDSM" class="wp-image-<?php echo (int) $img_bdsm['id']; ?>"/></figure>
       <!-- /wp:image -->
@@ -90,7 +90,7 @@ $img_netflix  = function_exists('mixhotel_get_theme_image_attachment') ? mixhote
     <!-- /wp:group -->
 
     <!-- wp:group {"className":"mixLuxuryPhotoTile","lock":{"move":true,"remove":true},"metadata":{"name":"Tile Bathtub"}} -->
-    <div class="wp-block-group mixLuxuryPhotoTile" data-contact-action="zalo" data-room-title="Phòng Bồn Tắm Jacuzzi">
+    <div class="wp-block-group mixLuxuryPhotoTile">
       <!-- wp:image {"id":<?php echo (int) $img_bathtub['id']; ?>,"sizeSlug":"full","linkDestination":"none"} -->
       <figure class="wp-block-image size-full"><img src="<?php echo esc_url($img_bathtub['url']); ?>" alt="Bồn tắm Jacuzzi" class="wp-image-<?php echo (int) $img_bathtub['id']; ?>"/></figure>
       <!-- /wp:image -->
@@ -108,7 +108,7 @@ $img_netflix  = function_exists('mixhotel_get_theme_image_attachment') ? mixhote
     <!-- /wp:group -->
 
     <!-- wp:group {"className":"mixLuxuryPhotoTile","lock":{"move":true,"remove":true},"metadata":{"name":"Tile Cosplay"}} -->
-    <div class="wp-block-group mixLuxuryPhotoTile" data-contact-action="zalo" data-room-title="Phòng Cosplay Lãng Mạn">
+    <div class="wp-block-group mixLuxuryPhotoTile">
       <!-- wp:image {"id":<?php echo (int) $img_cosplay['id']; ?>,"sizeSlug":"full","linkDestination":"none"} -->
       <figure class="wp-block-image size-full"><img src="<?php echo esc_url($img_cosplay['url']); ?>" alt="Cosplay" class="wp-image-<?php echo (int) $img_cosplay['id']; ?>"/></figure>
       <!-- /wp:image -->
@@ -126,7 +126,7 @@ $img_netflix  = function_exists('mixhotel_get_theme_image_attachment') ? mixhote
     <!-- /wp:group -->
 
     <!-- wp:group {"className":"mixLuxuryPhotoTile","lock":{"move":true,"remove":true},"metadata":{"name":"Tile Tantra"}} -->
-    <div class="wp-block-group mixLuxuryPhotoTile" data-contact-action="zalo" data-room-title="Phòng Ghế Tình Yêu Tantra">
+    <div class="wp-block-group mixLuxuryPhotoTile">
       <!-- wp:image {"id":<?php echo (int) $img_tantra['id']; ?>,"sizeSlug":"full","linkDestination":"none"} -->
       <figure class="wp-block-image size-full"><img src="<?php echo esc_url($img_tantra['url']); ?>" alt="Ghế tình yêu" class="wp-image-<?php echo (int) $img_tantra['id']; ?>"/></figure>
       <!-- /wp:image -->
@@ -144,7 +144,7 @@ $img_netflix  = function_exists('mixhotel_get_theme_image_attachment') ? mixhote
     <!-- /wp:group -->
 
     <!-- wp:group {"className":"mixLuxuryPhotoTile","lock":{"move":true,"remove":true},"metadata":{"name":"Tile Netflix"}} -->
-    <div class="wp-block-group mixLuxuryPhotoTile" data-contact-action="zalo" data-room-title="Phòng Smart Tivi Có Netflix">
+    <div class="wp-block-group mixLuxuryPhotoTile">
       <!-- wp:image {"id":<?php echo (int) $img_netflix['id']; ?>,"sizeSlug":"full","linkDestination":"none"} -->
       <figure class="wp-block-image size-full"><img src="<?php echo esc_url($img_netflix['url']); ?>" alt="Smart Tivi có Netflix" class="wp-image-<?php echo (int) $img_netflix['id']; ?>"/></figure>
       <!-- /wp:image -->

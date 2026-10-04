@@ -312,6 +312,512 @@
   line-height: 1.65 !important;
 }
 
+/* ==========================================================================
+   Phase 7: Visual Parity Mirroring & Canvas Bleed (SPEC-07 v2.0)
+   ========================================================================== */
+
+/* 1. Suppress page title displacement on Gutenberg canvas for landing templates */
+.editor-styles-wrapper .editor-visual-editor__post-title-wrapper,
+.editor-styles-wrapper .editor-post-title,
+.editor-styles-wrapper .wp-block-post-title {
+  display: none !important;
+}
+
+/* 2. Full-bleed canvas width without clipping dark themes */
+.editor-styles-wrapper .is-root-container {
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.editor-styles-wrapper .is-root-container > .wp-block {
+  max-width: 100% !important;
+}
+
+/* 3. Hero Atmosphere Mirroring inside Gutenberg */
+.editor-styles-wrapper .mixLuxuryHero {
+  position: relative !important;
+  min-height: 820px !important;
+  overflow: hidden !important;
+  background-color: #0f0f12 !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 100px 0 60px !important;
+}
+
+.editor-styles-wrapper .mixLuxuryHero > .wp-block[data-type="core/html"]:first-child,
+.editor-styles-wrapper .mixLuxuryHero > .block-editor-block-list__block:first-child {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.editor-styles-wrapper .mixLuxuryReserve [data-type="core/html"],
+.editor-styles-wrapper .mixLuxuryReserve .block-editor-block-list__block[data-type="core/html"],
+.editor-styles-wrapper .mixLuxuryReserveForm {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  pointer-events: auto !important;
+  z-index: 2 !important;
+  margin-top: 12px !important;
+}
+
+.editor-styles-wrapper .mixLuxuryHeroBg,
+.editor-styles-wrapper .mixLuxuryHeroBg img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  z-index: 0 !important;
+  display: block !important;
+}
+
+.editor-styles-wrapper .mixLuxuryHeroVeil {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  background: linear-gradient(180deg, rgba(15, 15, 18, 0.4) 0%, rgba(15, 15, 18, 0.78) 60%, rgba(15, 15, 18, 0.98) 100%),
+              linear-gradient(90deg, rgba(15, 15, 18, 0.88) 0%, rgba(15, 15, 18, 0.5) 50%, rgba(15, 15, 18, 0.82) 100%) !important;
+  pointer-events: none !important;
+}
+
+.editor-styles-wrapper .mixLuxuryHeroFloor {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 150px !important;
+  z-index: 1 !important;
+  background: linear-gradient(to top, #0f0f12, transparent) !important;
+  pointer-events: none !important;
+}
+
+.editor-styles-wrapper .mixLuxuryHeroGlow {
+  position: absolute !important;
+  top: 25% !important;
+  left: 15% !important;
+  width: 500px !important;
+  height: 500px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, rgba(197, 168, 128, 0.12) 0%, transparent 70%) !important;
+  filter: blur(50px) !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+.editor-styles-wrapper .mixLuxuryHero .mixLuxuryContainer,
+.editor-styles-wrapper .mixLuxuryHero .wp-block-group {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* 4. Semantic Typography & Element Parity in Editor */
+.editor-styles-wrapper .mixLuxuryRoomSubtitle {
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: #9d9da8 !important;
+  margin: 0 0 8px !important;
+}
+
+.editor-styles-wrapper .mixLuxuryGoldText {
+  color: #c5a880 !important;
+  font-weight: 700 !important;
+}
+
+.editor-styles-wrapper .mixLuxuryRoomTitle {
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  margin: 0 0 14px !important;
+  font-family: var(--wp--preset--font-family--philosopher, 'Philosopher', serif) !important;
+}
+
+.editor-styles-wrapper .mixLuxuryRoomDesc {
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: #b5b5be !important;
+  margin-bottom: 22px !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoTileTitle {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoMainCaption .mixLuxuryPhotoTileTitle {
+  font-size: 24px !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoTileKicker {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: #c5a880 !important;
+  margin-bottom: 4px !important;
+  font-weight: 700 !important;
+}
+
+.editor-styles-wrapper .mixLuxuryPhotoTileKicker.hot {
+  color: #ff5252 !important;
+}
+
+.editor-styles-wrapper .mixLuxuryVideoPanel .mix-section-title,
+.editor-styles-wrapper .mixLuxuryVideoPanel .mix-section-desc {
+  text-align: left !important;
+}
+
+.editor-styles-wrapper .mixLuxuryVideoPanel .mix-section-desc {
+  margin-bottom: 20px !important;
+}
+
+/* ==========================================================================
+   Khách Sạn Tình Yêu (Post 49 / room-archive) - Visual Parity Editor Styles
+   ========================================================================== */
+
+/* 1. Hero Section */
+.editor-styles-wrapper .cateMixHero {
+  position: relative !important;
+  min-height: 820px !important;
+  background: #090604 !important;
+  color: #ffffff !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  margin-bottom: 40px !important;
+}
+
+.editor-styles-wrapper .cateMixHeroBg {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  z-index: 1 !important;
+}
+
+.editor-styles-wrapper .cateMixHeroWrap {
+  position: relative !important;
+  z-index: 10 !important;
+  padding: 60px 40px !important;
+}
+
+.editor-styles-wrapper .cateMixHeroNumbers {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px !important;
+  margin-top: 30px !important;
+}
+
+.editor-styles-wrapper .cateMixHeroNumber {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  text-align: center !important;
+}
+
+.editor-styles-wrapper .cateMixHeroNumber strong {
+  display: block !important;
+  font-size: 28px !important;
+  color: #ffe2a0 !important;
+}
+
+.editor-styles-wrapper .cateMixHeroNumber span {
+  font-size: 13px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* 2. Branch & Room Cards */
+.editor-styles-wrapper .cateBranchCard {
+  background: #140e0a !important;
+  border: 1px solid rgba(200, 137, 34, 0.25) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  margin-bottom: 40px !important;
+}
+
+.editor-styles-wrapper .cateBranchImageWrap {
+  position: relative !important;
+  height: 320px !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.editor-styles-wrapper .cateBranchImageWrap .wp-block-image {
+  margin: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.editor-styles-wrapper .cateBranchImageWrap .wp-block-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.editor-styles-wrapper .cateBranchInfo {
+  padding: 30px !important;
+}
+
+.editor-styles-wrapper .cateBranchRooms {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin-top: 20px !important;
+}
+
+.editor-styles-wrapper .cateBranchRoom {
+  display: flex !important;
+  flex-direction: column !important;
+  background: #0f0b08 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+.editor-styles-wrapper .cateBranchRoom .wp-block-image.cateBranchRoomImageLink {
+  margin: 0 !important;
+  height: 190px !important;
+  width: 100% !important;
+}
+
+.editor-styles-wrapper .cateBranchRoom .wp-block-image.cateBranchRoomImageLink img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.editor-styles-wrapper .cateBranchRoomText {
+  padding: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.editor-styles-wrapper .cateBranchRoomNameLink {
+  margin: 0 !important;
+  font-size: 16px !important;
+  color: #ffe2a0 !important;
+}
+
+.editor-styles-wrapper .cateBranchRoomPrice {
+  margin: 0 !important;
+  font-size: 14px !important;
+  color: #c88922 !important;
+  font-weight: 700 !important;
+}
+
+.editor-styles-wrapper .cateBranchRoomDesc {
+  margin: 0 !important;
+  font-size: 12px !important;
+  color: #a0a0a8 !important;
+  line-height: 1.5 !important;
+}
+
+/* 3. Pricing Grid */
+.editor-styles-wrapper .wp-block-columns.mixCatePriceGrid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 20px !important;
+  margin-top: 30px !important;
+}
+
+.editor-styles-wrapper .wp-block-columns.mixCatePriceGrid > .wp-block-column {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+}
+
+.editor-styles-wrapper .mixCatePriceCard {
+  background: #140e0a !important;
+  border: 1px solid rgba(200, 137, 34, 0.25) !important;
+  border-radius: 18px !important;
+  padding: 28px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.editor-styles-wrapper .mixCatePriceCardHot {
+  border-color: #c88922 !important;
+  box-shadow: 0 0 25px rgba(200, 137, 34, 0.15) !important;
+}
+
+/* 4. Steps & Free Perks Columns */
+.editor-styles-wrapper .wp-block-columns.mixCateBranchSteps,
+.editor-styles-wrapper .wp-block-columns.mixFreePerksGrid,
+.editor-styles-wrapper .wp-block-columns.cateBookingStepsList {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 20px !important;
+  margin-top: 30px !important;
+}
+
+.editor-styles-wrapper .wp-block-columns.mixCateBranchSteps > .wp-block-column,
+.editor-styles-wrapper .wp-block-columns.mixFreePerksGrid > .wp-block-column,
+.editor-styles-wrapper .wp-block-columns.cateBookingStepsList > .wp-block-column {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+  background: #140e0a !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+}
+
+/* 5. Video Showcase in Editor */
+.editor-styles-wrapper .mixCateVideoList {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 20px !important;
+  margin-top: 24px !important;
+}
+
+.editor-styles-wrapper .mixCateVideoCard {
+  background: #140e0a !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+/* 6. Event Decor in Editor */
+.editor-styles-wrapper .cateEventDecorList {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 16px !important;
+  margin-top: 20px !important;
+}
+
+.editor-styles-wrapper .cateEventDecorItem {
+  background: #140e0a !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+}
+
+/* 7. CTA Section in Editor */
+.editor-styles-wrapper .catePremiumCtaWrap {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+  padding: 60px 40px !important;
+  background: #090604 !important;
+}
+
+.editor-styles-wrapper .catePremiumCtaBg {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* 8. Consultation Form Section in Editor */
+.editor-styles-wrapper .cateConsultForm .container {
+  max-width: 1260px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+  box-sizing: border-box !important;
+}
+
+.editor-styles-wrapper .cateConsultFormWrap {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) !important;
+  gap: 56px !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+
+.editor-styles-wrapper .cateConsultFormContent {
+  width: 100% !important;
+  max-width: 540px !important;
+}
+
+.editor-styles-wrapper .cateConsultFormTitle {
+  font-size: 46px !important;
+  line-height: 1.15 !important;
+  letter-spacing: -1px !important;
+  color: #fff8ea !important;
+  margin: 0 0 16px 0 !important;
+  font-family: 'Philosopher', serif !important;
+}
+
+.editor-styles-wrapper .cateConsultFormDesc {
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+  color: rgba(255, 248, 234, 0.76) !important;
+  margin: 0 0 28px 0 !important;
+}
+
+.editor-styles-wrapper .cateConsultFormBenefits {
+  max-width: 100% !important;
+  margin-top: 0 !important;
+  border: 1px solid rgba(242, 226, 73, 0.22) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+}
+
+.editor-styles-wrapper .cateConsultFormBenefit {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+  padding: 18px 22px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.editor-styles-wrapper .cateConsultFormBenefit + .cateConsultFormBenefit {
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.editor-styles-wrapper .cateConsultFormBenefitIcon {
+  flex: 0 0 34px !important;
+  width: 34px !important;
+  height: 34px !important;
+  border: 1px solid rgba(242, 226, 73, 0.6) !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  background: rgba(242, 226, 73, 0.08) !important;
+  margin: 0 !important;
+}
+
+.editor-styles-wrapper .cateConsultFormBenefitText {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  max-width: none !important;
+  color: rgba(255, 248, 234, 0.88) !important;
+  font-size: 14.5px !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+}
+
+.editor-styles-wrapper .cateConsultFormBox {
+  width: 100% !important;
+  max-width: 640px !important;
+  padding: 36px 32px !important;
+  border-radius: 24px !important;
+  background: linear-gradient(145deg, rgba(28, 25, 23, 0.96), rgba(18, 16, 14, 0.98)) !important;
+  border: 1px solid rgba(242, 226, 73, 0.22) !important;
+  box-sizing: border-box !important;
+}
+
+
+
+
 
 
 

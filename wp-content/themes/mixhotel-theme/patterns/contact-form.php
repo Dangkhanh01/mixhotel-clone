@@ -42,8 +42,8 @@
       <input type="text" name="website_url" tabindex="-1" autocomplete="off" />
     </div>
 
-    <!-- Nonce field (Tuân thủ BUG-03 / AGENTS.md §3.1) -->
-    <?php wp_nonce_field('mixhotel_contact_nonce', '_mixhotel_contact_nonce'); ?>
+    <!-- Nonce field (Tuân thủ BUG-17 / AGENTS.md §3.1) -->
+    <input type="hidden" id="mixhotel_contact_nonce" name="_mixhotel_contact_nonce" value="" />
 
     <!-- Họ tên -->
     <div class="mixContactFormField">

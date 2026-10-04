@@ -8,17 +8,9 @@
  * Post Types: page
  */
 ?>
-<!-- wp:html -->
-<div class="mixLuxuryBreadcrumbs">
-  <div class="inner">
-    <a href="<?php echo esc_url(home_url('/')); ?>">Trang chủ</a>
-    <span>/</span>
-    <span>Chính sách</span>
-    <span>/</span>
-    <span class="current">Chính sách đặt trả phòng</span>
-  </div>
-</div>
-<!-- /wp:html -->
+<!-- wp:group {"className":"mixLuxuryBreadcrumbs"} -->
+<div class="wp-block-group mixLuxuryBreadcrumbs"><div class="inner"><a href="<?php echo esc_url(home_url('/')); ?>">Trang chủ</a> <span>/</span> <span>Chính sách</span> <span>/</span> <span class="current">Chính sách đặt trả phòng</span></div></div>
+<!-- /wp:group -->
 
 <!-- wp:group {"tagName":"main","className":"mixLuxuryContainerNarrow mix-policy-main","lock":{"move":true,"remove":true},"metadata":{"name":"Chính Sách Đặt Trả Phòng"}} -->
 <main class="wp-block-group mixLuxuryContainerNarrow mix-policy-main">
@@ -31,9 +23,9 @@
 <!-- wp:heading {"level":1,"className":"mixLuxuryTitle"} -->
 <h1 class="wp-block-heading mixLuxuryTitle">CHÍNH SÁCH ĐẶT &amp; TRẢ PHÒNG</h1>
 <!-- /wp:heading -->
-<!-- wp:html -->
-<div class="mixLuxuryTitleDivider"></div>
-<!-- /wp:html -->
+<!-- wp:group {"className":"mixLuxuryTitleDivider"} -->
+<div class="wp-block-group mixLuxuryTitleDivider"></div>
+<!-- /wp:group -->
 </div>
 <!-- /wp:group -->
 
@@ -48,19 +40,19 @@
   <span>1. Quy định về đặt phòng &amp; Giữ phòng</span>
 </h2>
 <!-- /wp:heading -->
-<!-- wp:html -->
-<ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #d4d4d8; line-height: 1.8;">
-  <li>
-    <strong>Đặt theo giờ:</strong> Mix Hotel giữ phòng tối đa <strong>15 - 20 phút</strong> kể từ giờ hẹn mà không yêu cầu đặt cọc trước.
-  </li>
-  <li>
-    <strong>Đặt qua đêm &amp; ngày lễ:</strong> Quý khách vui lòng chuyển khoản đặt cọc tối thiểu 50% tiền phòng để hệ thống khóa phòng và bảo lưu chắc chắn cho quý khách.
-  </li>
-  <li>
-    <strong>Độ tuổi quy định:</strong> Hệ thống khách sạn tình yêu chỉ phục vụ khách hàng từ <strong>đủ 18 tuổi trở lên</strong> có căn cước công dân hoặc giấy tờ tùy thân hợp lệ.
-  </li>
+<!-- wp:list {"style":{"spacing":{"padding":{"left":"20px"}}},"fontSize":"small"} -->
+<ul class="has-small-font-size" style="padding-left:20px;line-height:1.8">
+  <!-- wp:list-item -->
+  <li><strong>Đặt theo giờ:</strong> Mix Hotel giữ phòng tối đa <strong>15 - 20 phút</strong> kể từ giờ hẹn mà không yêu cầu đặt cọc trước.</li>
+  <!-- /wp:list-item -->
+  <!-- wp:list-item -->
+  <li><strong>Đặt qua đêm &amp; ngày lễ:</strong> Quý khách vui lòng chuyển khoản đặt cọc tối thiểu 50% tiền phòng để hệ thống khóa phòng và bảo lưu chắc chắn cho quý khách.</li>
+  <!-- /wp:list-item -->
+  <!-- wp:list-item -->
+  <li><strong>Độ tuổi quy định:</strong> Hệ thống khách sạn tình yêu chỉ phục vụ khách hàng từ <strong>đủ 18 tuổi trở lên</strong> có căn cước công dân hoặc giấy tờ tùy thân hợp lệ.</li>
+  <!-- /wp:list-item -->
 </ul>
-<!-- /wp:html -->
+<!-- /wp:list -->
 </div>
 <!-- /wp:group -->
 
@@ -72,18 +64,24 @@
   <span>2. Thời gian Nhận phòng &amp; Trả phòng</span>
 </h2>
 <!-- /wp:heading -->
-<!-- wp:html -->
-<div class="mix-policy-grid-2col policyGridResponsive">
-  <div class="mix-policy-card-item">
-    <strong style="color: #ffe2a0; display: block; margin-bottom: 6px;">Khung giờ theo giờ:</strong>
-    <span style="font-size: 13px; color: #d4d4d8;">Linh hoạt 24/24h theo thời gian khách hàng đến nhận chìa khóa. Tính theo block 2 giờ đầu và cộng dồn các giờ tiếp theo.</span>
-  </div>
-  <div class="mix-policy-card-item">
-    <strong style="color: #ffe2a0; display: block; margin-bottom: 6px;">Khung giờ qua đêm:</strong>
-    <span style="font-size: 13px; color: #d4d4d8;">Nhận phòng từ 21:00 tối hôm trước và trả phòng trước 12:00 trưa hôm sau (hoặc linh hoạt theo thỏa thuận trước với lễ tân).</span>
-  </div>
+<!-- wp:columns {"className":"mix-policy-grid-2col policyGridResponsive"} -->
+<div class="wp-block-columns mix-policy-grid-2col policyGridResponsive">
+<!-- wp:column {"className":"mix-policy-card-item"} -->
+<div class="wp-block-column mix-policy-card-item">
+<!-- wp:paragraph -->
+<p><strong style="color: #ffe2a0; display: block; margin-bottom: 6px;">Khung giờ theo giờ:</strong><span style="font-size: 13px; color: #d4d4d8;">Linh hoạt 24/24h theo thời gian khách hàng đến nhận chìa khóa. Tính theo block 2 giờ đầu và cộng dồn các giờ tiếp theo.</span></p>
+<!-- /wp:paragraph -->
 </div>
-<!-- /wp:html -->
+<!-- /wp:column -->
+<!-- wp:column {"className":"mix-policy-card-item"} -->
+<div class="wp-block-column mix-policy-card-item">
+<!-- wp:paragraph -->
+<p><strong style="color: #ffe2a0; display: block; margin-bottom: 6px;">Khung giờ qua đêm:</strong><span style="font-size: 13px; color: #d4d4d8;">Nhận phòng từ 21:00 tối hôm trước và trả phòng trước 12:00 trưa hôm sau (hoặc linh hoạt theo thỏa thuận trước với lễ tân).</span></p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
 </div>
 <!-- /wp:group -->
 
@@ -101,15 +99,16 @@
 </div>
 <!-- /wp:group -->
 
-<!-- wp:html -->
-<div class="mixPolicyNotice">
-  <span style="font-size: 24px; flex-shrink: 0;">⚠️</span>
-  <div>
-    <strong style="color: #ffe2a0; display: block; margin-bottom: 4px;">Trường hợp bất khả kháng:</strong>
-    Nếu phát sinh sự cố kỹ thuật về thiết bị (máy lạnh, bồn Jacuzzi) trong phòng, Mix Hotel sẽ lập tức nâng cấp miễn phí cho quý khách lên hạng phòng cao hơn hoặc hoàn trả 100% chi phí.
-  </div>
+<!-- wp:group {"className":"mixPolicyNotice"} -->
+<div class="wp-block-group mixPolicyNotice">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px"}}} -->
+<p style="font-size:24px;margin:0">⚠️</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}}} -->
+<p style="font-size:14px;margin:0"><strong style="color: #ffe2a0; display: block; margin-bottom: 4px;">Trường hợp bất khả kháng:</strong>Nếu phát sinh sự cố kỹ thuật về thiết bị (máy lạnh, bồn Jacuzzi) trong phòng, Mix Hotel sẽ lập tức nâng cấp miễn phí cho quý khách lên hạng phòng cao hơn hoặc hoàn trả 100% chi phí.</p>
+<!-- /wp:paragraph -->
 </div>
-<!-- /wp:html -->
+<!-- /wp:group -->
 
 </div>
 <!-- /wp:group -->

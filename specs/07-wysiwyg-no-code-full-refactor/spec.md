@@ -45,6 +45,7 @@
 | **Câu Hỏi Thường Gặp (`faq-accordion.php`)** | Thẻ `<details>` thô trong `wp:html` | Native Core Block `<!-- wp:details {"className":"mix-faq-details"} -->` chứa `<summary>` câu hỏi và `wp:paragraph` câu trả lời | Nhấp vào câu hỏi hoặc câu trả lời để soạn thảo nội dung no-code. |
 | **Các Banner CTA (`final-cta.php`, `about-cta.php`)** | Banner ảnh nền | `<!-- wp:cover -->` kết hợp `<!-- wp:buttons -->` | Đổi ảnh nền banner 1-click; sửa tiêu đề, mô tả và nút kêu gọi hành động. |
 
+
 ---
 
 ### 3.2. Script Nhập Ảnh Tự Động (Auto Media Importer)
@@ -62,3 +63,40 @@
 * Trong `assets/js/booking-engine.js` (hoặc modal listener):
   * Bổ sung event delegation lắng nghe sự kiện click trên mọi thẻ `<a>` hoặc button có `href="#booking"` hoặc class `.mix-btn-booking`.
   * Tự động mở modal đặt phòng (`bookingModalLite`), ngăn chặn hành vi nhảy trang `#booking` mặc định.
+
+---
+
+### 3.4. Quy Chuẩn Kỹ Thuật Gutenberg Block Validation Grammar
+
+* **Nguyên nhân cốt lõi gây lỗi "Khối chứa nội dung không hợp lệ hoặc không mong đợi":**
+  * Gutenberg sử dụng cơ chế so khớp nghiêm ngặt (Strict Schema Validation) giữa JSON comment `<!-- wp:... {attributes} -->` và thẻ HTML thực tế.
+  * Nếu thẻ HTML chứa các thuộc tính lạ không có trong schema của Core Block (như `data-contact-action="zalo"`, `data-room-title="..."` trên `wp:group`, `wp:button`), hoặc chứa inline `style="..."` không khai báo trong JSON attributes, Gutenberg sẽ từ chối render component React và hiển thị hộp thoại cảnh báo lỗi khối màu xám.
+* **Quy chuẩn sửa lỗi (Zero Validation Errors):**
+  1. **Tuyệt đối không gắn thuộc tính `data-*` trực tiếp lên Core Block HTML tags:**
+     - Thay thế bằng các semantic CSS classes (ví dụ `.mix-photo-tile`, `.mix-photo-main`, `.mix-btn-booking`, `.mix-branch-item`).
+     - Script tương tác JavaScript phía client sẽ đọc thông tin thông qua vị trí DOM hoặc class thay vì phụ thuộc `data-*` trên Core Block.
+  2. **Tuyệt đối không gắn inline `style="..."` tùy tiện vào Core Blocks:**
+     - Mọi định dạng về `font-size`, `margin`, `padding`, `line-height`, `text-align` phải được định nghĩa trong `assets/css/pages.css`, `assets/css/pages-luxury.css` và `assets/css/editor-custom.css` thông qua class của khối.
+  3. **Đảm bảo 100% Block tự nhiên (Native):**
+     - Khi mở Gutenberg, mọi khối phải ở trạng thái Native Block hoàn hảo, không có bất kỳ nút "Thử khôi phục" nào. Admin có thể click chuột vào từng dòng chữ hoặc ảnh để sửa ngay lập tức.
+
+---
+
+### 3.5. Đồng Bộ Giao Diện Editor Canvas Giống 100% Frontend (Visual Mirroring)
+
+* **Hero Section Atmosphere:**
+  * Thêm CSS trong `editor-custom.css` cho `.editor-styles-wrapper .mixLuxuryHero`:
+    * Hiển thị đầy đủ ảnh nền `hero-bg.webp` với hiệu ứng phủ tối (veil) và gradient sàn vàng (floor glow).
+    * Giữ nguyên tỷ lệ 2 cột: cột trái là tiêu đề lớn và thống kê, cột phải là khung tư vấn giữ phòng.
+* **Xử lý tiêu đề trang mặc định (`.editor-post-title`):**
+  * Trong giao diện soạn thảo trang chủ và landing, ẩn `.editor-post-title` để tránh tạo khoảng trắng thừa trên đầu Hero.
+* **Full-Width Canvas Bleed:**
+  * Thiết lập `.editor-styles-wrapper .is-root-container` mở rộng toàn màn hình (`width: 100%`) và loại bỏ giới hạn co cụm không cần thiết, giúp các dải màu nền dark luxury trải dài toàn bộ khung soạn thảo như trên web thật.
+
+---
+
+## 4. TIÊU CHÍ NGHIỆM THU MỞ RỘNG (EXPANDED ACCEPTANCE CRITERIA)
+
+1. **Zero Validation Errors:** Khi mở bất kỳ trang nào (Trang Chủ, Giới Thiệu, Khách Sạn Tình Yêu, Liên Hệ, Chi Nhánh) trong `wp-admin`, 100% khối hiển thị bình thường, KHÔNG CÒN xuất hiện hộp thoại "Khối chứa nội dung không hợp lệ hoặc không mong đợi".
+2. **True WYSIWYG Visual Fidelity:** Giao diện canvas trong Gutenberg phản ánh chính xác màu sắc Dark Luxury (`#0f0f12`), ánh sáng viền vàng (`#c5a880`), ảnh nền Hero, font chữ Questrial/Philosopher và bố cục lưới đa cột giống với giao diện người dùng xem ở frontend.
+3. **No-Code Click-to-Edit:** Mọi ảnh có nút "Thay thế" từ Thư viện Media, mọi tiêu đề/đoạn văn bản/nút bấm đều có thể nhấp chuột gõ sửa trực tiếp mà không cần chạm vào HTML code.

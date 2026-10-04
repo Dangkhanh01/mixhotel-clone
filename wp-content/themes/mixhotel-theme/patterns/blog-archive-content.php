@@ -158,24 +158,34 @@ if ($wp_posts->have_posts()) {
     wp_reset_postdata();
 }
 ?>
-<!-- wp:html -->
-<div class="mixLuxuryBreadcrumbs">
+<!-- wp:group {"className":"mixLuxuryBreadcrumbs"} -->
+<div class="wp-block-group mixLuxuryBreadcrumbs">
   <div class="inner">
     <a href="<?php echo esc_url(home_url('/')); ?>">Trang chủ</a>
     <span>/</span>
     <span class="current">Tin tức</span>
   </div>
 </div>
+<!-- /wp:group -->
 
-<main class="mixLuxuryContainer" style="padding-top: 48px; padding-bottom: 80px;">
+<!-- wp:group {"tagName":"main","className":"mixLuxuryContainer","style":{"spacing":{"padding":{"top":"48px","bottom":"80px"}}}} -->
+<main class="wp-block-group mixLuxuryContainer" style="padding-top:48px;padding-bottom:80px">
+  
   <!-- Heading & Kicker -->
-  <div class="mixLuxuryHeading">
-    <span class="mixLuxuryKicker" id="mixBlogSubtitle">CHIA SẺ &amp; CẨM NANG HẸN HÒ</span>
-    <h1 class="mixLuxuryTitle" id="mixBlogTitle">TIN TỨC &amp; BÀI VIẾT</h1>
+  <!-- wp:group {"className":"mixLuxuryHeading"} -->
+  <div class="wp-block-group mixLuxuryHeading">
+    <!-- wp:paragraph {"className":"mixLuxuryKicker"} -->
+    <p class="mixLuxuryKicker" id="mixBlogSubtitle">CHIA SẺ &amp; CẨM NANG HẸN HÒ</p>
+    <!-- /wp:paragraph -->
+    <!-- wp:heading {"level":1,"className":"mixLuxuryTitle"} -->
+    <h1 class="wp-block-heading mixLuxuryTitle" id="mixBlogTitle">TIN TỨC &amp; BÀI VIẾT</h1>
+    <!-- /wp:heading -->
     <div class="mixLuxuryTitleDivider"></div>
   </div>
+  <!-- /wp:group -->
 
-  <!-- 8 Category Pills (Tabs) -->
+  <!-- 8 Category Pills (Tabs) & Article Grid -->
+  <!-- wp:html -->
   <div class="mixBlogCategories" id="mixBlogCatTabs">
     <?php foreach ($categories as $idx => $c) : ?>
       <button 
@@ -191,7 +201,6 @@ if ($wp_posts->have_posts()) {
     <?php endforeach; ?>
   </div>
 
-  <!-- Article Grid -->
   <div class="mixBlogGrid" id="mixBlogGridContainer">
     <?php foreach ($articles as $art) : 
       $art_link = home_url('/' . $art['slug'] . '/');
@@ -235,106 +244,9 @@ if ($wp_posts->have_posts()) {
     <?php endforeach; ?>
   </div>
 
-  <!-- Pagination -->
   <div class="galleryPagination" id="mixBlogPagination" style="margin-top: 48px;"></div>
+  <!-- /wp:html -->
+
 </main>
+<!-- /wp:group -->
 
-<script>
-(function() {
-  const ITEMS_PER_PAGE = 6;
-  let currentCat = 'all';
-  let currentPage = 1;
-
-  function initBlog() {
-    const tabs = document.querySelectorAll('#mixBlogCatTabs .mixBlogCategoryPill');
-    const container = document.getElementById('mixBlogGridContainer');
-    const pagContainer = document.getElementById('mixBlogPagination');
-    const titleEl = document.getElementById('mixBlogTitle');
-    const subtitleEl = document.getElementById('mixBlogSubtitle');
-
-    if (!container || !tabs.length) return;
-
-    const allCards = Array.from(container.querySelectorAll('.mixBlogCard'));
-
-    function render() {
-      const matched = allCards.filter(card => {
-        const c = card.getAttribute('data-cat') || '';
-        return currentCat === 'all' || c === currentCat;
-      });
-
-      const totalPages = Math.ceil(matched.length / ITEMS_PER_PAGE) || 1;
-      if (currentPage > totalPages) currentPage = 1;
-
-      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-      const endIndex = startIndex + ITEMS_PER_PAGE;
-
-      allCards.forEach(c => c.style.display = 'none');
-      matched.forEach((c, idx) => {
-        if (idx >= startIndex && idx < endIndex) {
-          c.style.display = 'flex';
-        }
-      });
-
-      if (totalPages <= 1) {
-        pagContainer.innerHTML = '';
-        return;
-      }
-
-      let pagHtml = '';
-      if (currentPage > 1) {
-        pagHtml += '<button type="button" class="pageBtn prevBtn">&lsaquo;</button>';
-      }
-
-      for (let p = 1; p <= totalPages; p++) {
-        pagHtml += '<button type="button" class="pageBtn ' + (p === currentPage ? 'active' : '') + '" data-page="' + p + '">' + p + '</button>';
-      }
-
-      if (currentPage < totalPages) {
-        pagHtml += '<button type="button" class="pageBtn nextBtn">&rsaquo;</button>';
-      }
-
-      pagContainer.innerHTML = pagHtml;
-
-      pagContainer.querySelectorAll('.pageBtn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          if (this.classList.contains('prevBtn')) {
-            currentPage--;
-          } else if (this.classList.contains('nextBtn')) {
-            currentPage++;
-          } else {
-            currentPage = parseInt(this.getAttribute('data-page'), 10) || 1;
-          }
-          render();
-          container.scrollIntoView({ behavior: 'smooth' });
-        });
-      });
-    }
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', function(e) {
-        e.preventDefault();
-        tabs.forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        currentCat = this.getAttribute('data-cat') || 'all';
-        if (titleEl && this.getAttribute('data-title')) {
-          titleEl.innerText = this.getAttribute('data-title');
-        }
-        if (subtitleEl && this.getAttribute('data-subtitle')) {
-          subtitleEl.innerText = this.getAttribute('data-subtitle');
-        }
-        currentPage = 1;
-        render();
-      });
-    });
-
-    render();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initBlog);
-  } else {
-    initBlog();
-  }
-})();
-</script>
-<!-- /wp:html -->
