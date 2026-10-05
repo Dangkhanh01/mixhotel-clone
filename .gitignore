@@ -3,8 +3,25 @@
 # ==============================================================================
 
 # ==============================================================================
-# 2. WORDPRESS ENVIRONMENT & RUNTIME ARTIFACTS
-# ==============================================================================
+# WordPress Core (Chạy native Laragon / Local - Không track core vào Git)
+wp-admin/
+wp-includes/
+/index.php
+/wp-activate.php
+/wp-blog-header.php
+/wp-comments-post.php
+/wp-config-sample.php
+/wp-cron.php
+/wp-links-opml.php
+/wp-load.php
+/wp-login.php
+/wp-mail.php
+/wp-settings.php
+/wp-signup.php
+/wp-trackback.php
+/xmlrpc.php
+/.htaccess
+
 # Thư mục uploads (ảnh, tài liệu media dung lượng lớn)
 wp-content/uploads/
 wp-content/uploads-webpc/

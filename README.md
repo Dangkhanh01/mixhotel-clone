@@ -1,16 +1,14 @@
-w
-
 # HƯỚNG DẪN THỰC CHIẾN DỰ ÁN WEB BÁN HÀNG: `demo-store`
 
 > **Bộ tài liệu chuẩn từ cơ bản đến thực tế dành cho Lập trình viên WordPress & Freelancer/Agency.**
-> *Sử dụng Docker Compose, WordPress Core, WooCommerce và Trình dựng Block Editor hiện đại.*
+> *Sử dụng Docker Compose hoặc Laragon Native, WordPress Core, WooCommerce và Trình dựng Block Editor hiện đại.*
 
 ---
 
 ## MỤC LỤC
 
 1. [Khái niệm nền tảng: Docker, Container &amp; Port Mapping](#1-khái-niệm-nền-tảng-docker-container--port-mapping)
-2. [Khởi chạy dự án bằng Docker Compose](#2-khởi-chạy-dự-án-bằng-docker-compose)
+2. [Khởi chạy dự án: Docker Compose &amp; Laragon Native](#2-khởi-chạy-dự-án-docker-compose--laragon-native)
 3. [Quy trình thiết lập Website chuẩn (Click-by-Click)](#3-quy-trình-thiết-lập-website-chuẩn-click-by-click)
 4. [Tối ưu WooCommerce sang thị trường Việt Nam (VNĐ)](#4-tối-ưu-woocommerce-sang-thị-trường-việt-nam-vnđ)
 5. [Cơ chế Database trong WordPress &amp; Kết nối DBeaver](#5-cơ-chế-database-trong-wordpress--kết-nối-dbeaver)
@@ -50,23 +48,23 @@ Cú pháp port trong Docker luôn là: **`"CỔNG_MÁY_THẬT : CỔNG_CONTAINER
 
 ---
 
-## 2. KHỞI CHẠY DỰ ÁN BẰNG DOCKER COMPOSE
+## 2. KHỞI CHẠY DỰ ÁN: DOCKER COMPOSE & LARAGON NATIVE
 
-Mở Terminal (PowerShell hoặc Git Bash) tại thư mục `D:\PROJECT\demo-store` và chạy:
+### 2.1. Cách 1: Khởi chạy bằng Docker Compose
+
+Mở Terminal (PowerShell hoặc Git Bash) tại thư mục dự án và chạy:
 
 ```bash
 # Khởi động toàn bộ dịch vụ ngầm
 docker compose up -d
 ```
 
-### Các đường link truy cập dự án:
-
+#### Các đường link truy cập dự án:
 - 🌐 **Website Cửa Hàng:** [http://localhost:8888](http://localhost:8888)
 - 🛠️ **Trang Quản trị Admin:** [http://localhost:8888/wp-admin](http://localhost:8888/wp-admin)
 - 🗄️ **Quản lý Database (phpMyAdmin):** [http://localhost:8889](http://localhost:8889) *(User: `root` | Pass: `root_password_123`)*
 
-### Lệnh tắt dịch vụ khi không dùng:
-
+#### Lệnh tắt dịch vụ khi không dùng:
 ```bash
 # Tắt container (dữ liệu bài viết, sản phẩm vẫn được bảo toàn)
 docker compose down
@@ -74,6 +72,19 @@ docker compose down
 # Tắt và xóa toàn bộ dữ liệu database để làm lại từ đầu:
 docker compose down -v
 ```
+
+### 2.2. Cách 2: Khởi chạy bằng Laragon Native (Khuyên dùng trên Windows để tăng tốc x10)
+
+Do cơ chế chia sẻ volume ổ đĩa NTFS qua WSL2 của Docker Desktop thường gây nghẽn I/O khi WordPress load nhiều file PHP, chạy trực tiếp trên Laragon giúp thời gian phản hồi giảm xuống dưới **300ms**:
+
+1. **Cài đặt Laragon Full**: Tải tại [laragon.org](https://laragon.org/) hoặc chạy `winget install LeNgocKhoa.Laragon`.
+2. **Nối thư mục dự án**: Tạo liên kết Junction từ `C:\laragon\www\mixhotel` trỏ về thư mục code hiện tại:
+   ```cmd
+   mklink /J "C:\laragon\www\mixhotel" "c:\Users\maida\Code\wordpress"
+   ```
+3. **Cấu hình Apache port 8888**: Đặt file `C:\laragon\etc\apache2\sites-enabled\mixhotel.conf` lắng nghe cổng `8888` để giữ nguyên 100% URL và hình ảnh hiện tại.
+4. **Bật Zend OPcache trong `php.ini`**: Bật `zend_extension=opcache`, `opcache.enable=1`, `memory_limit=512M` để đạt hiệu năng tối đa.
+5. **Truy cập:** Mở Laragon bấm **Start All**, truy cập [http://localhost:8888/](http://localhost:8888/) hoặc [http://mixhotel.test/](http://mixhotel.test/).
 
 ---
 
