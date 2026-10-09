@@ -579,3 +579,22 @@ while ($query->have_posts()) : $query->the_post();
     ```
     Flexbox đảm bảo ngay cả khi thẻ icon bị ẩn hay cấu trúc con thay đổi, đoạn văn bản vẫn tự động co dãn chiếm trọn 100% không gian khả dụng mà không bao giờ bị bóp hẹp 34px.
 
+---
+
+## 15. PHÂN HỆ: CUSTOM POST TYPE METADATA & IMAGE FALLBACK
+
+### BUG-22: Khuyết ảnh Hero/Thumbnail trên trang chi tiết CPT do thiếu Fallback 3 tầng
+* **Triệu chứng:** Khi người dùng tạo phòng mới trong WP-Admin, chỉ tải ảnh vào Album/Gallery (Meta Box) mà quên chọn "Ảnh đại diện" (Featured Image) ở thanh bên phải, trang chi tiết phòng ngoài frontend (`/khach-san-tinh-yeu/<slug>/`) bị mất hoàn toàn khối ảnh bên phải Section Hero và ảnh nền mờ; đồng thời chức năng click thumbnail trong Album không thể đổi ảnh lớn.
+* **Root cause:** 
+  1. Template kiểm tra cứng điều kiện `if ( $thumbnail_url )` thay vì kiểm tra ảnh hợp lệ sau fallback.
+  2. Khi không có Featured Image, code không fallback sang ảnh đầu tiên trong mảng Gallery hoặc ảnh mặc định của theme.
+  3. Khi lưu post trong Admin (`save_post`), plugin không tự động đặt `set_post_thumbnail()` từ ảnh đầu tiên của Gallery nếu người dùng quên gán.
+* **Quy tắc phòng ngừa BẮT BUỘC:**
+  * **Cơ chế Fallback 3 tầng thống nhất:** Luôn truy xuất ảnh qua helper chuẩn `MixHotel_Helpers::get_room_main_image( $post_id, 'large' )`:
+    1. Ưu tiên 1: `get_post_thumbnail_id()` (Ảnh đại diện người dùng tự chọn).
+    2. Ưu tiên 2: Ảnh đầu tiên trong Album Gallery (`MixHotel_Helpers::get_room_gallery_images()` index 0).
+    3. Ưu tiên 3: Ảnh placeholder mặc định của theme (`assets/images/room-302-karma.jpg`).
+  * **Auto-set Featured Image khi lưu:** Trong `save_post` và AJAX handlers của Meta Box Gallery, luôn tự động gán `set_post_thumbnail( $post_id, $ids[0] )` nếu bài viết chưa có thumbnail.
+  * **Kiểm tra biến an toàn:** Trong HTML template, luôn dùng `<?php if ( $active_image_url ) : ?>` thay vì phụ thuộc trực tiếp vào `$thumbnail_url`.
+
+

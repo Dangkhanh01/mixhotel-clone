@@ -21,16 +21,20 @@ if ( ! $room_id ) {
 $room_title    = get_the_title( $room_id );
 $room_excerpt  = get_the_excerpt( $room_id );
 $room_content  = get_the_content( null, false, $room_id );
-$thumbnail_url = get_the_post_thumbnail_url( $room_id, 'large' );
-$thumbnail_alt = get_post_meta( get_post_thumbnail_id( $room_id ), '_wp_attachment_image_alt', true ) ?: $room_title;
 
 // Helper data
-$room_code    = MixHotel_Helpers::get_room_code( $room_id );
-$youtube_id   = MixHotel_Helpers::get_room_youtube_id( $room_id );
-$is_featured  = MixHotel_Helpers::is_room_featured( $room_id );
-$branch_data  = MixHotel_Helpers::get_room_branch_data( $room_id );
-$gallery      = MixHotel_Helpers::get_room_gallery_images( $room_id, 'large' );
+$room_code      = MixHotel_Helpers::get_room_code( $room_id );
+$youtube_id     = MixHotel_Helpers::get_room_youtube_id( $room_id );
+$is_featured    = MixHotel_Helpers::is_room_featured( $room_id );
+$branch_data    = MixHotel_Helpers::get_room_branch_data( $room_id );
+$gallery        = MixHotel_Helpers::get_room_gallery_images( $room_id, 'large' );
 $gallery_thumbs = MixHotel_Helpers::get_room_gallery_images( $room_id, 'medium' );
+
+// Lấy ảnh chính: Ưu tiên Thumbnail -> Ảnh đầu Gallery -> Ảnh fallback theme
+$main_image       = MixHotel_Helpers::get_room_main_image( $room_id, 'large' );
+$active_image_url = ! empty( $main_image['url'] ) ? $main_image['url'] : '';
+$active_image_alt = ! empty( $main_image['alt'] ) ? $main_image['alt'] : $room_title;
+$thumbnail_url    = $active_image_url;
 
 // Giá các mức
 $price_2h      = MixHotel_Helpers::get_room_price_formatted( $room_id, '2h' );
@@ -48,10 +52,6 @@ $amenities = get_the_terms( $room_id, 'room_amenity' );
 if ( is_wp_error( $amenities ) ) {
     $amenities = [];
 }
-
-// Active image = thumbnail hoặc ảnh gallery đầu tiên
-$active_image_url = $thumbnail_url ?: '';
-$active_image_alt = $thumbnail_alt;
 ?>
 
 <!-- ===================== SECTION 1: HERO ===================== -->
@@ -140,7 +140,7 @@ $active_image_alt = $thumbnail_alt;
             </div>
 
             <!-- Featured Photo -->
-            <?php if ( $thumbnail_url ) : ?>
+            <?php if ( $active_image_url ) : ?>
             <div>
                 <div class="mixDetailHeroPhoto" id="room-main-image">
                     <img src="<?php echo esc_url( $active_image_url ); ?>"

@@ -26,8 +26,8 @@ $wp_rooms_query = new WP_Query([
 
 if ($wp_rooms_query->have_posts()) {
     while ($wp_rooms_query->have_posts()) {
-        $wp_rooms_query->the_post();
-        $thumb = get_the_post_thumbnail_url(get_the_ID(), 'large');
+        $main_img = MixHotel_Helpers::get_room_main_image(get_the_ID(), 'large');
+        $thumb    = ! empty($main_img['url']) ? $main_img['url'] : '';
         if ($thumb) {
             $branch_term = get_the_terms(get_the_ID(), 'hotel_branch_tax');
             $b_name = ($branch_term && !is_wp_error($branch_term)) ? $branch_term[0]->name : '186 Hoàng Ngân';

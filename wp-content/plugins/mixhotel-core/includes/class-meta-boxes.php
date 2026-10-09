@@ -466,6 +466,10 @@ class MixHotel_Meta_Boxes {
                     delete_post_meta( $post_id, self::PREFIX . 'room_gallery' );
                 } else {
                     update_post_meta( $post_id, self::PREFIX . 'room_gallery', $ids );
+                    // Tự động đặt ảnh đầu tiên làm Featured Image nếu phòng chưa có ảnh đại diện
+                    if ( ! has_post_thumbnail( $post_id ) && ! empty( $ids[0] ) ) {
+                        set_post_thumbnail( $post_id, $ids[0] );
+                    }
                 }
             }
         }
@@ -495,6 +499,10 @@ class MixHotel_Meta_Boxes {
                 delete_post_meta( $post_id, self::PREFIX . 'room_gallery' );
             } else {
                 update_post_meta( $post_id, self::PREFIX . 'room_gallery', $ids );
+                // Tự động đặt ảnh đầu tiên làm Featured Image nếu phòng chưa có ảnh đại diện
+                if ( ! has_post_thumbnail( $post_id ) && ! empty( $ids[0] ) ) {
+                    set_post_thumbnail( $post_id, $ids[0] );
+                }
             }
             wp_send_json_success( [ 'ids' => $ids ] );
         }

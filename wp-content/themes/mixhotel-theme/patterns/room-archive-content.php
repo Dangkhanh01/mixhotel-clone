@@ -84,17 +84,9 @@ foreach ($branch_posts as $b_post) {
     }
 
     foreach ($room_posts as $r_post) {
-        $r_id    = $r_post->ID;
-        $r_thumb = get_the_post_thumbnail_url($r_id, 'large');
-        if (!$r_thumb) {
-            $gallery = MixHotel_Helpers::get_room_gallery($r_id);
-            if (!empty($gallery)) {
-                $r_thumb = wp_get_attachment_image_url($gallery[0], 'large');
-            }
-        }
-        if (!$r_thumb) {
-            $r_thumb = $theme_uri . '/assets/tassets/images/banner-home.jpg';
-        }
+        $r_id     = $r_post->ID;
+        $main_img = MixHotel_Helpers::get_room_main_image($r_id, 'large');
+        $r_thumb  = ! empty($main_img['url']) ? $main_img['url'] : ($theme_uri . '/assets/tassets/images/banner-home.jpg');
 
         $price_2h     = get_post_meta($r_id, '_mixhotel_room_price_2h', true);
         $price_extra  = get_post_meta($r_id, '_mixhotel_room_price_extra_hour', true);

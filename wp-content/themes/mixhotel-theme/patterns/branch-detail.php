@@ -133,7 +133,8 @@ if ($branch_id) {
         while ($rooms_query->have_posts()) {
             $rooms_query->the_post();
             $r_id = get_the_ID();
-            $thumb = get_the_post_thumbnail_url($r_id, 'large') ?: $theme_uri . '/assets/images/room-302-karma.jpg';
+            $main_img = MixHotel_Helpers::get_room_main_image($r_id, 'large');
+            $thumb    = ! empty($main_img['url']) ? $main_img['url'] : ($theme_uri . '/assets/images/room-302-karma.jpg');
             $price_2h = get_post_meta($r_id, '_mixhotel_room_price_first_2h', true) ?: '300.000đ';
             $price_overnight = get_post_meta($r_id, '_mixhotel_room_price_overnight', true) ?: '650.000đ';
             $price_fullday = get_post_meta($r_id, '_mixhotel_room_price_all_day', true) ?: '900.000đ';

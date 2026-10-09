@@ -144,6 +144,49 @@ class MixHotel_Helpers {
     }
 
     /**
+     * Lấy ảnh chính của phòng (Featured Image -> Ảnh gallery đầu tiên -> Ảnh fallback theme)
+     *
+     * @param int    $post_id Post ID của hotel_room.
+     * @param string $size    Kích thước ảnh WordPress (VD: 'large', 'medium').
+     * @return array Mảng ['id' => int, 'url' => string, 'alt' => string]
+     */
+    public static function get_room_main_image( $post_id, $size = 'large' ) {
+        $post_id = absint( $post_id );
+        $title   = get_the_title( $post_id );
+
+        // 1. Kiểm tra Featured Image (Ảnh đại diện)
+        $thumb_id = get_post_thumbnail_id( $post_id );
+        if ( $thumb_id ) {
+            $url = wp_get_attachment_image_url( $thumb_id, $size );
+            if ( $url ) {
+                $alt = get_post_meta( $thumb_id, '_wp_attachment_image_alt', true ) ?: $title;
+                return [
+                    'id'  => $thumb_id,
+                    'url' => $url,
+                    'alt' => $alt,
+                ];
+            }
+        }
+
+        // 2. Fallback sang ảnh đầu tiên trong Album Gallery
+        $gallery = self::get_room_gallery_images( $post_id, $size );
+        if ( ! empty( $gallery ) ) {
+            return $gallery[0];
+        }
+
+        // 3. Fallback sang ảnh mặc định của theme
+        $fallback_url = function_exists( 'get_template_directory_uri' )
+            ? get_template_directory_uri() . '/assets/images/room-302-karma.jpg'
+            : '';
+
+        return [
+            'id'  => 0,
+            'url' => $fallback_url,
+            'alt' => $title,
+        ];
+    }
+
+    /**
      * Lấy dữ liệu chi nhánh liên kết với phòng
      *
      * @param int $room_id Post ID của hotel_room.
@@ -267,3 +310,17 @@ if ( ! function_exists( 'mixhotel_get_room_gallery' ) ) {
         return MixHotel_Helpers::get_room_gallery( $post_id );
     }
 }
+
+if ( ! function_exists( 'mixhotel_get_room_main_image' ) ) {
+    /**
+     * Lấy ảnh chính của phòng (Featured Image -> Gallery 1st -> Theme fallback)
+     *
+     * @param int    $post_id Post ID.
+     * @param string $size    Kích thước ảnh.
+     * @return array
+     */
+    function mixhotel_get_room_main_image( $post_id, $size = 'large' ) {
+        return MixHotel_Helpers::get_room_main_image( $post_id, $size );
+    }
+}
+

@@ -22,8 +22,8 @@ $gallery_args = [
 $gallery_query = new WP_Query($gallery_args);
 if ($gallery_query->have_posts()) {
     while ($gallery_query->have_posts()) {
-        $gallery_query->the_post();
-        $thumb = get_the_post_thumbnail_url(get_the_ID(), 'large');
+        $main_img = MixHotel_Helpers::get_room_main_image(get_the_ID(), 'large');
+        $thumb    = ! empty($main_img['url']) ? $main_img['url'] : '';
         if ($thumb) {
             $gallery_items[] = [
                 'title' => get_the_title(),
