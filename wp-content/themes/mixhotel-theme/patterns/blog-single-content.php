@@ -13,7 +13,8 @@ $post_id     = get_the_ID();
 $post_title  = get_the_title();
 $post_link   = get_permalink();
 $post_date   = get_the_date('d/m/Y');
-$post_author = get_the_author() ?: 'Mix Boutique';
+$post_author = get_post_meta($post_id, '_mixhotel_author_name', true) ?: (get_the_author() ?: 'Mix Boutique Hotel');
+$read_time   = get_post_meta($post_id, '_mixhotel_read_time', true) ?: '5 phút đọc';
 $categories  = get_the_category();
 $cat_name    = !empty($categories) ? $categories[0]->name : 'Tin Tức';
 $cat_link    = !empty($categories) ? get_category_link($categories[0]->term_id) : home_url('/tin-tuc/');
@@ -71,7 +72,7 @@ $related_query = new WP_Query([
       </div>
       <span style="color:#3f3f46">•</span>
       <div>
-        <span>⏱ 5 phút đọc</span>
+        <span>⏱ <?php echo esc_html($read_time); ?></span>
       </div>
     </div>
 

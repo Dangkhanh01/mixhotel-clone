@@ -334,6 +334,8 @@ function mixhotel_enqueue_block_editor_assets() {
 add_action('enqueue_block_editor_assets', 'mixhotel_enqueue_block_editor_assets');
 
 /**
- * Page Seeder & Restorer Admin Tool
+ * Page & Article Seeder / Restorer Tools
  */
 require_once get_template_directory() . '/inc/seed-pages.php';
+require_once get_template_directory() . '/inc/seed-articles.php';
+

@@ -316,12 +316,31 @@ function mixhotel_render_restore_pages_admin() {
         check_admin_referer('mixhotel_restore_pages_nonce_action', 'mixhotel_restore_pages_nonce');
         
         $result = mixhotel_restore_all_pages_content();
+        if (function_exists('mixhotel_seed_articles')) {
+            mixhotel_seed_articles();
+        }
         if ($result) {
-            $message = __('Đã khôi phục thành công toàn bộ mẫu giao diện gốc cho tất cả các trang! Bây giờ bạn có thể chỉnh sửa trực quan từng khối trong Trang (Pages).', 'mixhotel-theme');
+            $message = __('Đã khôi phục thành công toàn bộ mẫu giao diện gốc cho tất cả các trang & bài viết tin tức! Bây giờ bạn có thể chỉnh sửa trực quan từng khối trong Trang & Bài viết.', 'mixhotel-theme');
             $message_type = 'success';
         } else {
             $message = __('Có lỗi xảy ra trong quá trình khôi phục trang.', 'mixhotel-theme');
             $message_type = 'error';
+        }
+    }
+
+    if (isset($_POST['mixhotel_seed_articles_submit'])) {
+        check_admin_referer('mixhotel_restore_pages_nonce_action', 'mixhotel_restore_pages_nonce');
+        
+        if (function_exists('mixhotel_seed_articles')) {
+            $res = mixhotel_seed_articles();
+            $message = sprintf(
+                __('Đã cập nhật bài viết Tin Tức thành công! (Tạo mới: %d bài, Cập nhật: %d bài, Chuyên mục: %d, Ảnh: %d).', 'mixhotel-theme'),
+                $res['articles_created'],
+                $res['articles_updated'],
+                $res['categories_created'] + $res['categories_updated'],
+                $res['images_imported']
+            );
+            $message_type = 'success';
         }
     }
 
@@ -367,10 +386,13 @@ function mixhotel_render_restore_pages_admin() {
                 </p>
             </div>
 
-            <form method="post" action="" onsubmit="return confirm('<?php echo esc_js(__('Bạn có chắc chắn muốn khôi phục lại toàn bộ nội dung mẫu gốc cho tất cả các trang?', 'mixhotel-theme')); ?>');">
+            <form method="post" action="" style="display: flex; gap: 12px; flex-wrap: wrap;">
                 <?php wp_nonce_field('mixhotel_restore_pages_nonce_action', 'mixhotel_restore_pages_nonce'); ?>
-                <button type="submit" name="mixhotel_restore_pages_submit" class="button button-primary button-hero" style="background: #1d2327; border-color: #c5a880; color: #ffe2a0; font-weight: 600; text-shadow: none; box-shadow: none;">
+                <button type="submit" name="mixhotel_restore_pages_submit" onclick="return confirm('<?php echo esc_js(__('Bạn có chắc chắn muốn khôi phục lại toàn bộ nội dung mẫu gốc cho tất cả các trang?', 'mixhotel-theme')); ?>');" class="button button-primary button-hero" style="background: #1d2327; border-color: #c5a880; color: #ffe2a0; font-weight: 600; text-shadow: none; box-shadow: none;">
                     🔄 <?php esc_html_e('Khôi phục Toàn bộ Trang Mẫu Mặc định', 'mixhotel-theme'); ?>
+                </button>
+                <button type="submit" name="mixhotel_seed_articles_submit" onclick="return confirm('<?php echo esc_js(__('Bạn có muốn đồng bộ lại 8 bài viết Tin Tức chuẩn & chuyên mục từ hệ thống?', 'mixhotel-theme')); ?>');" class="button button-secondary button-hero" style="background: #ffffff; border-color: #c5a880; color: #8e682d; font-weight: 600; text-shadow: none; box-shadow: none;">
+                    📰 <?php esc_html_e('Đồng bộ 8 Bài Viết Tin Tức & Chuyên Mục', 'mixhotel-theme'); ?>
                 </button>
             </form>
         </div>
